@@ -1,0 +1,161 @@
+{
+  "easycom": {
+    "custom": {
+      "^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
+      "^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+      "^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/register/register",
+      "style": {
+        "navigationBarTitleText": "注册",
+        "enablePullDownRefresh": true
+      },
+      "usingComponents": {
+        "t-captcha": "plugin://captcha/t-captcha"
+      }
+    },
+    {
+      "path": "pages/lostPassword/lostPassword",
+      "style": {
+        "navigationBarTitleText": "密码重置",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/verifyLogin/verifyLogin",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/classification/classificationRegions",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/topic",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/video/video",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true,
+        "app-plus": {
+          "titleNView": false,
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/home/question",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/person",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/classification/classificationMain",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/register/policy",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/register/FAQ",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/personInfo/personInfo",
+      "style": {
+        "navigationBarTitleText": "个人信息",
+        "enablePullDownRefresh": true,
+        "navigationBarBackgroundColor": "#497DF3"
+      }
+    },
+    {
+      "path": "pages/home/person/editUsername/editUsername",
+      "style": {
+        "navigationBarTitleText": "设置昵称",
+        "enablePullDownRefresh": true
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/classification/classificationRegions",
+        "iconPath": "static/menu/classification.png",
+        "selectedIconPath": "static/menu/classification.png",
+        "text": "分类"
+      },
+      {
+        "pagePath": "pages/home/topic",
+        "iconPath": "static/menu/topic.png",
+        "selectedIconPath": "static/menu/topic.png",
+        "text": "题目"
+      },
+      {
+        "pagePath": "pages/home/video/video",
+        "iconPath": "static/menu/video.png",
+        "selectedIconPath": "static/menu/video.png",
+        "text": "视频"
+      },
+      {
+        "pagePath": "pages/home/question",
+        "iconPath": "static/menu/question.png",
+        "selectedIconPath": "static/menu/question.png",
+        "text": "答疑"
+      },
+      {
+        "pagePath": "pages/home/person/person",
+        "iconPath": "static/menu/person.png",
+        "selectedIconPath": "static/menu/person.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+}
