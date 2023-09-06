@@ -46,7 +46,7 @@
       }
     },
     {
-      "path": "pages/home/topic",
+      "path": "pages/home/topic/topic",
       "style": {
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
@@ -127,7 +127,7 @@
         "text": "分类"
       },
       {
-        "pagePath": "pages/home/topic",
+        "pagePath": "pages/home/topic/topic",
         "iconPath": "static/menu/topic.png",
         "selectedIconPath": "static/menu/topic.png",
         "text": "题目"
