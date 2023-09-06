@@ -58,7 +58,13 @@
         "optimization":{
             "subPackages":true
         },
-        "lazyCodeLoading": "requiredComponents"
+        "lazyCodeLoading": "requiredComponents",
+        "plugins": {
+            "myPlugin": {
+                "version": "1.0.4", //请选择小程序插件最新版本
+                "provider": "wxb302e0fc8ab232b4"
+            }
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -72,12 +78,6 @@
     "uniStatistics": {  
         "enable": false
     },
-    "vueVersion" : "3",
-    "plugins": {
-        "captcha": {
-            "version": "1.0.4", //请选择小程序插件最新版本
-            "provider": "wx57c781afb970c150"
-        }
-    }
+    "vueVersion" : "3"
 
 }

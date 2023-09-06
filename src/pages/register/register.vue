@@ -1,6 +1,5 @@
 <template>
   <view id="body">
-
     <view id="login">
       <view id="mobile">
         <up-input
@@ -12,6 +11,14 @@
         ></up-input>
       </view>
       <view id="verifyCode">
+        <t-captcha
+            ref="captchaComponent"
+            id="captcha"
+            app-id="193939886"
+            @verify="handlerVerify"
+            @ready="handlerReady"
+            @close="handlerClose"
+            @error="handlerError" />
         <up-input
             placeholder="验证码"
             prefixIcon="lock"
@@ -20,9 +27,7 @@
             prefixIconStyle="font-size: 22px;color: #909399"
         >
           <template #suffix>
-            <view class="butt">
-              <up-button class="custom-button" @click="getCode" :disabled="countingDown">{{ buttonText }}</up-button>
-            </view>
+            <u-link href="" :text="buttonText" @click="getCode"></u-link>
           </template>
         </up-input>
       </view>
@@ -79,72 +84,57 @@ const buttonText = ref('获取验证码');
 
 let countdown = 60; // 初始倒计时秒数
 
-function loadScriptContent(url, callback) {
-  uni.request({
-    url: url,
-    success: (res) => {
-      if (res.statusCode === 200) {
-        const executeScript = new Function(res.data);
-        executeScript();
-        callback();
-      } else {
-        console.error("Failed to load script:", url);
-      }
-    },
-    fail: (error) => {
-      console.error("Failed to fetch the script:", error);
-    }
-  });
-}
-
-
+// const captchaComponent = ref(null);
 
 const getCode = async () => {
-    loadScriptContent("https://turing.captcha.qcloud.com/TCaptcha.js", function() {
-      // 使用TencentCaptcha加载并显示验证码
-      const captcha = new TencentCaptcha('199536512', function(res) {
-        console.log("验证码")
-        console.log(res)
-        if(res.ret === 0) {
-          console.log('ticket:', res.ticket);
-        }
-      });
-      captcha.show(); // 显示验证码
-    });
-    try {
-      this.selectComponent('#captcha').show();
-      countingDown.value = true;
-      buttonText.value = `${countdown}秒`;
-
-      const timer = setInterval(() => {
-        countdown--;
-        buttonText.value = `${countdown}秒`;
-
-        if (countdown <= 0) {
-          clearInterval(timer);
-          countingDown.value = false;
-          buttonText.value = '获取验证码';
-          countdown = 60; // 重置倒计时
-        }
-      }, 1000);
-    } catch (error) {
-      console.error('获取验证码失败：', error);
-      // 处理获取验证码失败的情况，例如提示用户重试等
-    }
+  const arr = getCurrentPages();
+  arr[arr.length - 1].selectComponent('#captcha').show();
 };
 
-const handlerVerify = async (ev) => {
-      // 如果使用了 mpvue，ev.detail 需要换成 ev.mp.detail
-      if (ev.detail.ret === 0) {
-        // 验证成功
-        console.log('ticket:', ev.detail.ticket)
-      } else {
-        // 验证失败
-        // 请不要在验证失败中调用refresh，验证码内部会进行相应处理
-      }
+const handlerVerify = (ev) => {
+  if(ev.detail.ret === 0) {
+    console.log('ticket:', ev.detail.ticket);
+    let data = {
+      "ticket": ev.detail.ticket,
+      "phone": userInfo.phone
+    };
 
-    }
-;
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/sms/send-sms',
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: data,
+      success: function (response) {
+        console.log(JSON.stringify(response.data));
+      },
+      fail: function (error) {
+        console.log(error);
+      }
+    });
+
+  } else {
+    // 验证失败
+    // 请不要在验证失败中调用refresh，验证码内部会进行相应处理
+  }
+};
+
+const handlerReady = () => {
+  console.log('验证码准备就绪');
+};
+
+const handlerClose = (ev) => {
+  if(ev && ev.detail.ret && ev.detail.ret === 2){
+    console.log('点击了关闭按钮，验证码弹框准备关闭');
+  } else {
+    console.log('验证完成，验证码弹框准备关闭');
+  }
+};
+
+const handlerError = (ev) => {
+  console.log(ev.detail.errMsg);
+};
 
 const navigateToPrivacyPolicy = () => {
   // 使用uni.navigateTo或其他导航方法跳转到隐私政策页面
@@ -238,9 +228,19 @@ const navigateToServiceAgreement = () => {
   .custom-button {
     &,
     button {
-      border: none;
-      color: rgba(60, 123, 251, 1);
-      /* 可以添加其他样式，如背景颜色、文字颜色等 */
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      font-size: 16px !important;
+      color: #909399 !important;
+      vertical-align: middle !important;
+      cursor: pointer !important;
+      text-decoration: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
     }
   }
 }

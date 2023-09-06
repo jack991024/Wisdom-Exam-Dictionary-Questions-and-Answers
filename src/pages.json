@@ -18,10 +18,10 @@
       "path": "pages/register/register",
       "style": {
         "navigationBarTitleText": "注册",
-        "enablePullDownRefresh": true
-      },
-      "usingComponents": {
-        "t-captcha": "plugin://captcha/t-captcha"
+        "enablePullDownRefresh": true,
+        "usingComponents": {
+          "t-captcha": "plugin://myPlugin/t-captcha"
+        }
       }
     },
     {

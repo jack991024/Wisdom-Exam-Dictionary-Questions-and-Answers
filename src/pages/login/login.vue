@@ -67,19 +67,19 @@ const login = ref({
 })
 
 function registerRouter() {
-  uni.redirectTo({
+  uni.navigateTo({
     url: '/pages/register/register'
   });
 }
 
 function lostPasswordRouter() {
-  uni.redirectTo({
+  uni.navigateTo({
     url: '/pages/lostPassword/lostPassword'
   });
 }
 
 function verifyLoginRouter() {
-  uni.redirectTo({
+  uni.navigateTo({
     url: '/pages/verifyLogin/verifyLogin'
   });
 }
