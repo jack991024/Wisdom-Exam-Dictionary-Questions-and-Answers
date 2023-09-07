@@ -85,31 +85,36 @@ function verifyLoginRouter() {
 }
 
 function loginIndex() {
-  let data = JSON.stringify({
-    "phone": login.value.userInfo.phoneMobile,
-    "password": login.value.userInfo.password,
-    "loginType": "pwd",
-    "terminal": "wx"
+  uni.switchTab({
+    url: '/pages/home/classification/classificationRegions'
   });
+  /**
+   let data = JSON.stringify({
+   "phone": login.value.userInfo.phoneMobile,
+   "password": login.value.userInfo.password,
+   "loginType": "pwd",
+   "terminal": "wx"
+   });
 
-  uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/user/login',
-    method: 'POST',
-    header: {
-      'Content-Type': 'application/json'
-    },
-    data: data,
-    success: function (response) {
-      store.commit('updateToken', response.data.data.token)
-      uni.switchTab({
-        url: '/pages/home/classification/classificationRegions'
-      });
-      // console.log(store.getters.getToken)
-    },
-    fail: function (error) {
-      console.log(error);
-    }
-  });
+   uni.request({
+   url: 'https://dev.zhikaodian.com/apiV2/user/login',
+   method: 'POST',
+   header: {
+   'Content-Type': 'application/json'
+   },
+   data: data,
+   success: function (response) {
+   store.commit('updateToken', response.data.data.token)
+   uni.switchTab({
+   url: '/pages/home/classification/classificationRegions'
+   });
+   // console.log(store.getters.getToken)
+   },
+   fail: function (error) {
+   console.log(error);
+   }
+   });
+   */
 }
 </script>
 
