@@ -85,10 +85,6 @@ function verifyLoginRouter() {
 }
 
 function loginIndex() {
-  uni.switchTab({
-    url: '/pages/home/classification/classificationRegions'
-  });
-  /**
    let data = JSON.stringify({
    "phone": login.value.userInfo.phoneMobile,
    "password": login.value.userInfo.password,
@@ -114,7 +110,6 @@ function loginIndex() {
    console.log(error);
    }
    });
-   */
 }
 </script>
 
