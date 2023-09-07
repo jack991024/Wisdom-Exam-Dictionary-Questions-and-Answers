@@ -20,6 +20,14 @@
         ></up-input>
       </view>
       <view id="password">
+        <t-captcha
+            ref="captchaComponent"
+            id="captcha"
+            app-id="193939886"
+            @verify="handlerVerify"
+            @ready="handlerReady"
+            @close="handlerClose"
+            @error="handlerError"/>
         <up-input
             placeholder="验证码"
             prefixIcon="lock"
@@ -29,7 +37,7 @@
         >
           <template #suffix>
             <view class="butt">
-              <up-button class="custom-button" @click="getCode" :disabled="countingDown">{{ buttonText }}</up-button>
+              <u-link href="" :text="buttonText" @click="getCode"></u-link>
             </view>
           </template>
         </up-input>
@@ -78,34 +86,66 @@ const buttonText = ref('获取验证码');
 let countdown = 60; // 初始倒计时秒数
 
 const getCode = async () => {
-  if (!countingDown.value) {
-    // 调用接口获取验证码，例如：
-    try {
-      await fetchVerifyCode(); // 调用获取验证码接口，这里使用示例的异步函数 fetchVerifyCode
-      countingDown.value = true;
-      buttonText.value = `${countdown}秒`;
+  const arr = getCurrentPages();
+  arr[arr.length - 1].selectComponent('#captcha').show();
+};
 
-      const timer = setInterval(() => {
-        countdown--;
+const handlerVerify = async (ev) => {
+  if (ev.detail.ret === 0) {
+    console.log('ticket:', ev.detail.ticket);
+    let data = {
+      "ticket": ev.detail.ticket,
+      "phone": login.value.userInfo.phoneMobile
+    };
+
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/sms/send-sms',
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: data,
+      success: function (response) {
+        console.log(JSON.stringify(response.data));
         buttonText.value = `${countdown}秒`;
 
-        if (countdown <= 0) {
-          clearInterval(timer);
-          countingDown.value = false;
-          buttonText.value = '获取验证码';
-          countdown = 60; // 重置倒计时
-        }
-      }, 1000);
-    } catch (error) {
-      console.error('获取验证码失败：', error);
-      // 处理获取验证码失败的情况，例如提示用户重试等
-    }
+        const timer = setInterval(() => {
+          countdown--;
+          buttonText.value = `${countdown}秒`;
+
+          if (countdown <= 0) {
+            clearInterval(timer);
+            countingDown.value = false;
+            buttonText.value = '获取验证码';
+            countdown = 60; // 重置倒计时
+          }
+        }, 1000);
+      },
+      fail: function (error) {
+        console.log(error);
+      }
+    });
+
+  } else {
+    // 验证失败
+    // 请不要在验证失败中调用refresh，验证码内部会进行相应处理
   }
 };
 
-const fetchVerifyCode = async () => {
-  // 在这里调用获取验证码的接口，使用 async/await 或其他方式处理异步操作
-  // 例如：await fetch('获取验证码的接口URL');
+const handlerReady = () => {
+  console.log('验证码准备就绪');
+};
+
+const handlerClose = (ev) => {
+  if (ev && ev.detail.ret && ev.detail.ret === 2) {
+    console.log('点击了关闭按钮，验证码弹框准备关闭');
+  } else {
+    console.log('验证完成，验证码弹框准备关闭');
+  }
+};
+
+const handlerError = (ev) => {
+  console.log(ev.detail);
 };
 
 function loginRouter() {

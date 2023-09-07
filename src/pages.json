@@ -28,14 +28,20 @@
       "path": "pages/lostPassword/lostPassword",
       "style": {
         "navigationBarTitleText": "密码重置",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": true,
+        "usingComponents": {
+          "t-captcha": "plugin://myPlugin/t-captcha"
+        }
       }
     },
     {
       "path": "pages/verifyLogin/verifyLogin",
       "style": {
         "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": true,
+        "usingComponents": {
+          "t-captcha": "plugin://myPlugin/t-captcha"
+        }
       }
     },
     {

@@ -6,7 +6,7 @@
             placeholder="请输入手机号"
             prefixIcon="phone"
             border="bottom"
-            v-model="login.userInfo.phoneMobile"
+            v-model="register.userInfo.phoneMobile"
             prefixIconStyle="font-size: 22px;color: #909399"
         ></up-input>
       </view>
@@ -18,12 +18,12 @@
             @verify="handlerVerify"
             @ready="handlerReady"
             @close="handlerClose"
-            @error="handlerError" />
+            @error="handlerError"/>
         <up-input
             placeholder="验证码"
             prefixIcon="lock"
             border="bottom"
-            v-model="login.userInfo.verifyCode"
+            v-model="register.userInfo.verifyCode"
             prefixIconStyle="font-size: 22px;color: #909399"
         >
           <template #suffix>
@@ -37,7 +37,7 @@
             placeholder="请输入密码"
             prefixIcon="lock"
             border="bottom"
-            v-model="login.userInfo.password"
+            v-model="register.userInfo.password"
             prefixIconStyle="font-size: 22px;color: #909399"
             type="password"
         >
@@ -68,9 +68,9 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref, watch, nextTick} from "vue";
 
-const login = ref({
+const register = ref({
   userInfo: {
     phoneMobile: "",
     verifyCode: "",
@@ -81,7 +81,6 @@ const login = ref({
 const verifyCode = ref('');
 const countingDown = ref(false);
 const buttonText = ref('获取验证码');
-
 let countdown = 60; // 初始倒计时秒数
 
 // const captchaComponent = ref(null);
@@ -91,12 +90,12 @@ const getCode = async () => {
   arr[arr.length - 1].selectComponent('#captcha').show();
 };
 
-const handlerVerify = (ev) => {
-  if(ev.detail.ret === 0) {
+const handlerVerify = async (ev) => {
+  if (ev.detail.ret === 0) {
     console.log('ticket:', ev.detail.ticket);
     let data = {
       "ticket": ev.detail.ticket,
-      "phone": userInfo.phone
+      "phone": register.value.userInfo.phoneMobile
     };
 
     uni.request({
@@ -108,6 +107,19 @@ const handlerVerify = (ev) => {
       data: data,
       success: function (response) {
         console.log(JSON.stringify(response.data));
+        buttonText.value = `${countdown}秒`;
+
+        const timer = setInterval(() => {
+          countdown--;
+          buttonText.value = `${countdown}秒`;
+
+          if (countdown <= 0) {
+            clearInterval(timer);
+            countingDown.value = false;
+            buttonText.value = '获取验证码';
+            countdown = 60; // 重置倒计时
+          }
+        }, 1000);
       },
       fail: function (error) {
         console.log(error);
@@ -125,7 +137,7 @@ const handlerReady = () => {
 };
 
 const handlerClose = (ev) => {
-  if(ev && ev.detail.ret && ev.detail.ret === 2){
+  if (ev && ev.detail.ret && ev.detail.ret === 2) {
     console.log('点击了关闭按钮，验证码弹框准备关闭');
   } else {
     console.log('验证完成，验证码弹框准备关闭');
