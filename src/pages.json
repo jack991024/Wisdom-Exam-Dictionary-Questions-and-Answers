@@ -118,6 +118,20 @@
         "navigationBarTitleText": "设置昵称",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/questionList",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/topic/question",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
