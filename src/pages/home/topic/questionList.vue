@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view v-for="(item,index) in questionLists" :key="index" class="question-item">
-      <view class="question-content" @click="jumpQuestion(item)">
+      <view class="question-content" @click="jumpQuestion(item.chid)">
         <text class="question-name">{{ item.name }}</text>
         <text class="question-total">本卷共{{ item.total }}卷</text>
       </view>
@@ -21,7 +21,7 @@ onLoad((options) => {
 })
 
 const jumpQuestion = (item) => {
-  let param = JSON.stringify(item)
+  let param = item
   uni.navigateTo({
     url: '/pages/home/topic/question?param=' + param
   })
