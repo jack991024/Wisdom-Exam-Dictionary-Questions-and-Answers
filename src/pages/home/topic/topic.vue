@@ -3,7 +3,8 @@
     <!-- Header Section -->
     <view class="header">
       <view>
-        <u-cell title="面板1" :border="false" :is-link="true" @click="togglePanel('panel1')" :title-style="{ textAlign: 'center' }"/>
+        <u-cell title="面板1" :border="false" :is-link="true" @click="togglePanel('panel1')"
+                :title-style="{ textAlign: 'center' }"/>
         <transition name="slide-fade">
           <view v-if="activePanels.includes('panel1')" class="panel-overlay-container">
             <view class="overlay"></view>
@@ -29,12 +30,31 @@
       ></u-swiper>
     </view>
   </view>
+
+  <view class="question">
+    <view class="question-num">
+      <u-cell title="总题数" value="17698" center/>
+      <u-cell title="已做" value="9802" center/>
+      <u-cell title="错题" value="1990" center :border="false"/>
+    </view>
+    <view class="question-rate">
+      <view class="rate-item">
+        <u-cell title="完成率" value="75%" center :border="false"/>
+        <u-line-progress :percentage="75" :showText="false"/>
+      </view>
+      <view class="rate-item">
+        <u-cell title="正确率" value="85%" center :border="false"/>
+        <u-line-progress :percentage="85" :showText="false"/>
+      </view>
+    </view>
+
+  </view>
 </template>
 
 <script setup>
 import {ref, computed} from 'vue';
 import {useStore} from 'vuex'
-import { onShow } from '@dcloudio/uni-app';
+import {onShow} from '@dcloudio/uni-app';
 
 const store = useStore()
 const activePanels = ref([]); // 默认只有面板1展开
@@ -71,7 +91,7 @@ const bannerLoads = () => {
       if (res.data && Array.isArray(res.data.data)) {
         res.data.data.forEach(img => {
           swiperLists.value.push(
-            img.image_src2
+              img.image_src2
           );
         });
         console.log(swiperLists.value)
@@ -84,7 +104,7 @@ const bannerLoads = () => {
 }
 
 
-onShow(()=>{
+onShow(() => {
   console.log("123")
   bannerLoads()
 })
@@ -148,4 +168,41 @@ onShow(()=>{
   width: 100%; /* 使 u-swiper 组件占满 .header-swiper 容器的宽度 */
   height: 100%; /* 使 u-swiper 组件占满 .header-swiper 容器的高度 */
 }
+
+.question {
+  display: flex;
+  justify-content: space-between;
+  border: 1px red solid;
+  width: calc(100% - 20px);
+  height: 150px;
+  margin: 0 10px;
+  background: #f4f7fe;
+  border-radius: 12px;
+}
+
+.question-content {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.question-num {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40%;
+}
+
+.question-rate {
+  width: 53%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.rate-item {
+  display: flex;
+  flex-direction: column;
+}
+
 </style>

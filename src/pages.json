@@ -8,6 +8,13 @@
   },
   "pages": [
     {
+      "path": "pages/home/topic/topic",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "",
@@ -46,13 +53,6 @@
     },
     {
       "path": "pages/home/classification/classificationRegions",
-      "style": {
-        "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
-      "path": "pages/home/topic/topic",
       "style": {
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
