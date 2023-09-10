@@ -15,7 +15,7 @@
             placeholder="请输入手机号"
             prefixIcon="phone"
             border="bottom"
-            v-model="login.userInfo.phoneMobile"
+            v-model="login.userInfo.phone"
             prefixIconStyle="font-size: 22px;color: #909399"
         ></up-input>
       </view>
@@ -32,7 +32,7 @@
             placeholder="验证码"
             prefixIcon="lock"
             border="bottom"
-            v-model="login.userInfo.verifyCode"
+            v-model="login.userInfo.verify"
             prefixIconStyle="font-size: 22px;color: #909399"
         >
           <template #suffix>
@@ -43,7 +43,7 @@
         </up-input>
       </view>
       <view id="submit">
-        <up-button type="primary" text="登陆"></up-button>
+        <up-button type="primary" text="登陆" @click="submit"></up-button>
       </view>
 
       <view class="footer">
@@ -65,11 +65,16 @@
 
 <script setup>
 import {ref} from "vue";
+import {useStore} from 'vuex'
 
+const store = useStore()
 const login = ref({
   userInfo: {
-    phoneMobile: "",
-    password: ""
+    phone: "",
+    password: "",
+    "loginType": "sms",
+    "terminal": "wx",
+    "verify": ""
   }
 })
 
@@ -79,7 +84,7 @@ function registerRouter() {
   });
 }
 
-const verifyCode = ref('');
+const verify = ref('');
 const countingDown = ref(false);
 const buttonText = ref('获取验证码');
 
@@ -95,7 +100,8 @@ const handlerVerify = async (ev) => {
     console.log('ticket:', ev.detail.ticket);
     let data = {
       "ticket": ev.detail.ticket,
-      "phone": login.value.userInfo.phoneMobile
+      "phone": login.value.userInfo.phone,
+      "mode": "WX_MINI"
     };
 
     uni.request({
@@ -147,6 +153,27 @@ const handlerClose = (ev) => {
 const handlerError = (ev) => {
   console.log(ev.detail);
 };
+
+const submit = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/user/login',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json'
+    },
+    data: login.value.userInfo,
+    success: (response) => {
+      console.log(response.data);
+      store.commit('updateToken', response.data.data.token)
+      uni.switchTab({
+        url: '/pages/home/classification/classificationRegions'
+      })
+    },
+    fail: (error) => {
+      console.log('error', error);
+    }
+  });
+}
 
 function loginRouter() {
   uni.redirectTo({

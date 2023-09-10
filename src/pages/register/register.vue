@@ -6,11 +6,11 @@
             placeholder="请输入手机号"
             prefixIcon="phone"
             border="bottom"
-            v-model="register.userInfo.phoneMobile"
+            v-model="register.userInfo.phone"
             prefixIconStyle="font-size: 22px;color: #909399"
         ></up-input>
       </view>
-      <view id="verifyCode">
+      <view id="verify">
         <t-captcha
             ref="captchaComponent"
             id="captcha"
@@ -23,7 +23,7 @@
             placeholder="验证码"
             prefixIcon="lock"
             border="bottom"
-            v-model="register.userInfo.verifyCode"
+            v-model="register.userInfo.verify"
             prefixIconStyle="font-size: 22px;color: #909399"
         >
           <template #suffix>
@@ -44,7 +44,8 @@
         </up-input>
       </view>
       <view id="submit">
-        <up-button type="primary" text="注册"></up-button>
+        <up-button type="primary" text="注册" @click="registerFuction"></up-button>
+
       </view>
       <view style="display: flex;align-items: center;">
         <u-radio-group>
@@ -72,13 +73,14 @@ import {ref, watch, nextTick} from "vue";
 
 const register = ref({
   userInfo: {
-    phoneMobile: "",
-    verifyCode: "",
+    username: "test",
+    phone: "",
+    verify: "",
     password: ""
   }
 })
 
-const verifyCode = ref('');
+const verify = ref('');
 const countingDown = ref(false);
 const buttonText = ref('获取验证码');
 let countdown = 60; // 初始倒计时秒数
@@ -95,9 +97,9 @@ const handlerVerify = async (ev) => {
     console.log('ticket:', ev.detail.ticket);
     let data = {
       "ticket": ev.detail.ticket,
-      "phone": register.value.userInfo.phoneMobile
+      "phone": register.value.userInfo.phone,
+      "mode": "WX_MINI"
     };
-
     uni.request({
       url: 'https://dev.zhikaodian.com/apiV2/sms/send-sms',
       method: 'POST',
@@ -148,6 +150,43 @@ const handlerError = (ev) => {
   console.log(ev.detail.errMsg);
 };
 
+
+const registerFuction = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/user/register',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json'
+    },
+    data: register.value.userInfo,
+    success: (response) => {
+      console.log(response.data);
+      if (response.data.code === 0) {
+        uni.showToast({
+          title: response.data.msg,
+          icon: 'success',
+          duration: 1000
+        })
+        setTimeout(() => {
+          uni.redirectTo({
+            url: '/pages/login/login'
+          })
+        }, 1005)
+      } else {
+        uni.showToast({
+          title: response.data.msg,
+          icon: 'error',
+          duration: 1000
+        })
+      }
+    },
+    fail: (error) => {
+      console.log('error', error);
+    }
+  });
+
+}
+
 const navigateToPrivacyPolicy = () => {
   // 使用uni.navigateTo或其他导航方法跳转到隐私政策页面
   uni.navigateTo({
@@ -196,7 +235,7 @@ const navigateToServiceAgreement = () => {
       margin-bottom: 15px;
     }
 
-    #verifyCode {
+    #verify {
       display: block;
       margin-bottom: 15px;
     }
