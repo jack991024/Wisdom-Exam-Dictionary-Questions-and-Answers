@@ -76,10 +76,9 @@
           >
             <view class="answer">
               <u-divider text="试卷详解"></u-divider>
-              <view class="correct-answer">正确答案是：{{ item.answer }}</view>
-              <view
-                  :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
-                您的答案是：{{ indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : []) }}
+              <view class="correct-answer">正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}</view>
+              <view :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
+                您的答案是：{{ indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType) }}
               </view>
               <view class="answer-key">
                 <view class="analysis">[解析]</view>
@@ -144,10 +143,14 @@ function processAnalyseContent(analyse) {
 
 const userAnswers = reactive({});
 
-function indexToLetter(indexArray) {
+function indexToLetter(indexArray, qType) {
   if (!indexArray) return '';
+  if (qType === 4) {
+    return indexArray.map(index => index === 1 ? '正确' : '错误').join(', ');
+  }
   return indexArray.map(index => String.fromCharCode(65 + index)).join(', ');
 }
+
 
 onLoad((options) => {
   console.log(options)
