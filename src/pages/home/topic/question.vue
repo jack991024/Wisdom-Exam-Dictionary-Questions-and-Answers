@@ -27,8 +27,8 @@
             >
               <text class="option-label">{{ op.label }}</text>
               <text class="option-description">{{ op.content }}</text>
-              <text v-if="item.qType===2">确认答案</text>
             </view>
+            <text v-if="item.qType===2" class="check-answer">确认答案</text>
           </view>
           <view
               v-if="currentMode === 'recite'"
@@ -193,25 +193,18 @@ function toggleOption(questionIndex, optionIndex) {
   validateAnswer(questionIndex, optionIndex);
 }
 
-function validateAnswer(questionIndex, optionIndex) {
-  const correctAnswer = questionLists.value.result[questionIndex].answer.charCodeAt(0) - 65;
-  const selectedAnswer = selectedOptions[questionIndex][0];
+
+function validateAnswer(questionIndex) {
+  const question = questionLists.value.result[questionIndex];
+  const correctAnswer = question.answer.split('').map(char => char.charCodeAt(0) - 65);
+  const selectedAnswer = selectedOptions[questionIndex];
+
   userAnswers[questionIndex] = {
     answer: selectedOptions[questionIndex],
-    isCorrect: JSON.stringify(correctAnswer) === JSON.stringify(selectedAnswer)
+    isCorrect: JSON.stringify(correctAnswer.sort()) === JSON.stringify(selectedAnswer.sort())
   };
-
-  // 将两个数组（答案和选定的选项）转换为字符串进行比较
-  if (JSON.stringify(correctAnswer) === JSON.stringify(selectedAnswer)) {
-    // 答案正确的业务逻辑
-    console.log("Correct Answer");
-    // ... 添加您的业务逻辑代码
-  } else {
-    // 答案错误的业务逻辑
-    console.log("Wrong Answer");
-    // ... 添加您的业务逻辑代码
-  }
 }
+
 
 const isModeModalOpen = ref(false);
 
@@ -430,4 +423,17 @@ rich-text {
   border-top-left-radius: 15px; /* Rounded corners at the top */
   border-top-right-radius: 15px; /* Rounded corners at the top */
 }
+
+.check-answer {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3C7BFB;
+  color: #FFFFFF;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto; /* This will center the button */
+}
+
 </style>
