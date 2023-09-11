@@ -9,7 +9,7 @@
 
         <view class="question">
           <view class="question-description">
-            <text class="question-type" v-if="item.qType===1">单选</text>
+            <text class="question-type" v-if="item.qType===1 || item.qType===4">单选</text>
             <text class="question-type" v-if="item.qType===2">多选</text>
             <view v-if="item.materials!=null" class="material-swiper-container">
               <material-swiper :materials="item.materials"
@@ -26,10 +26,12 @@
                 :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
                 @tap="() => toggleOption(itemIndex, index)"
             >
-              <text class="option-label">{{ op.label }}</text>
+              <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
+              <text class="option-label" v-else></text>
               <text class="option-description">{{ op.content }}</text>
             </view>
             <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex)">确认答案</text>
+
           </view>
           <view
               v-if="currentMode === 'recite'"
@@ -158,10 +160,28 @@ onLoad((options) => {
       console.log(res.data.data)
       // 确保响应中有数据
       if (res.data && res.data.data) {
+        let result = res.data.data.result;
+
+        // 对于每个问题，如果qType为4，则为其添加选项
+        for (let item of result) {
+          if (item.qType === 4) {
+            item.option = [
+              {
+                "label": "0",
+                "content": "错误"
+              },
+              {
+                "label": "1",
+                "content": "正确"
+              }
+            ];
+          }
+        }
+
         questionLists.value = {
           chapter_name: res.data.data.chapter_name,
           count: res.data.data.count,
-          result: res.data.data.result
+          result: result
         }
       }
       console.log(questionLists)
@@ -177,11 +197,13 @@ function toggleOption(questionIndex, optionIndex) {
     selectedOptions[questionIndex] = [];
   }
 
-  // 如果是单选题，清空当前问题的已选选项数组
-  if (questionLists.value.result[questionIndex].qType === 1) {
+  const currentQuestionType = questionLists.value.result[questionIndex].qType;
+
+  // If it's a single-choice question or qType === 4, clear the current question's selected options array
+  if (currentQuestionType === 1 || currentQuestionType === 4) {
     selectedOptions[questionIndex] = [optionIndex];
   } else {
-    // 对于其他类型的问题，保持原有的多选逻辑
+    // For other types of questions, maintain the existing multi-choice logic
     const index = selectedOptions[questionIndex].indexOf(optionIndex);
     if (index === -1) {
       selectedOptions[questionIndex].push(optionIndex);
@@ -190,9 +212,10 @@ function toggleOption(questionIndex, optionIndex) {
     }
   }
 
-  // 验证答案
+  // Validate the answer
   validateAnswer(questionIndex, optionIndex);
 }
+
 
 
 function validateAnswer(questionIndex) {
