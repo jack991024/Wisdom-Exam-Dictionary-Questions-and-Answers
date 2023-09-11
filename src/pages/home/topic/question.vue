@@ -9,8 +9,9 @@
 
         <view class="question">
           <view class="question-description">
-            <text class="question-type" v-if="item.qType===1 || item.qType===4">单选</text>
+            <text class="question-type" v-if="item.qType===1">单选</text>
             <text class="question-type" v-if="item.qType===2">多选</text>
+            <text class="question-type" v-if="item.qType===4">判断</text>
             <view v-if="item.materials!=null" class="material-swiper-container">
               <material-swiper :materials="item.materials"
                                :style="{ height: componentHeight + 'px' }"></material-swiper>
@@ -27,7 +28,16 @@
                 @tap="() => toggleOption(itemIndex, index)"
             >
               <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
-              <text class="option-label" v-else></text>
+              <option-label
+                  v-if="item.qType === 4"
+                  :class="[
+    'option-label',
+    userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
+    userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
+  ]"
+              >
+              </option-label>
+
               <text class="option-description">{{ op.content }}</text>
             </view>
             <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex)">确认答案</text>
@@ -217,17 +227,29 @@ function toggleOption(questionIndex, optionIndex) {
 }
 
 
-
 function validateAnswer(questionIndex) {
   const question = questionLists.value.result[questionIndex];
-  const correctAnswer = question.answer.split('').map(char => char.charCodeAt(0) - 65);
+  let correctAnswer;
+
+  if (question.qType === 4) {
+    // For qType 4, the correct answer is directly the value of the "answer" field
+    correctAnswer = [parseInt(question.answer)];
+  } else {
+    // For other question types, convert the letter indices to number indices
+    correctAnswer = question.answer.split('').map(char => char.charCodeAt(0) - 65);
+  }
+
   const selectedAnswer = selectedOptions[questionIndex];
 
   userAnswers[questionIndex] = {
     answer: selectedOptions[questionIndex],
-    isCorrect: JSON.stringify(correctAnswer.sort()) === JSON.stringify(selectedAnswer.sort())
+    isCorrect: JSON.stringify(correctAnswer.sort()) === JSON.stringify(selectedAnswer.sort()),
+    correctOption: correctAnswer, // Storing correct answer options
+    incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)) // Storing incorrect answer options
   };
 }
+
+
 
 
 const isModeModalOpen = ref(false);
@@ -463,6 +485,55 @@ rich-text {
   margin: 0 auto; /* This will center the button */
 }
 
+.option-correct {
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    background-color: green;
+    height: 2px;
+    transition: all 0.3s;
+  }
+
+  &::before {
+    width: 50%;
+    top: 50%;
+    left: 15%;
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    width: 25%;
+    bottom: 40%;
+    left: 15%;
+    transform: rotate(-45deg);
+  }
+}
+
+.option-incorrect {
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    background-color: red;
+    height: 2px;
+    width: 50%;
+    top: 50%;
+    left: 25%;
+    transform-origin: center center;
+    transition: all 0.3s;
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
+}
 
 
 </style>
