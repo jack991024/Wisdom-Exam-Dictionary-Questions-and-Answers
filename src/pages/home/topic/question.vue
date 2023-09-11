@@ -463,4 +463,6 @@ rich-text {
   margin: 0 auto; /* This will center the button */
 }
 
+
+
 </style>
