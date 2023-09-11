@@ -12,7 +12,7 @@
             <text class="question-type" v-if="item.qType===1">单选</text>
             <text class="question-type" v-if="item.qType===2">多选</text>
             <view v-if="item.materials!=null" class="material-swiper-container">
-              <material-swiper :materials="item.materials"></material-swiper>
+              <material-swiper :materials="item.materials" :style="{ height: componentHeight + 'px' }"></material-swiper>
             </view>
             <rich-text :nodes="processAnalyseContent(item.stem)"></rich-text>
           </view>
@@ -124,7 +124,7 @@ import {ref, reactive} from 'vue';
 
 const questionLists = ref([])
 const selectedOptions = reactive({});
-
+const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 function processAnalyseContent(analyse) {
   return analyse.replace(/\<img/gi, '<img style=max-width:100%;height:auto'); // 返回处理后的内容
 }
@@ -425,6 +425,7 @@ rich-text {
   position: fixed; /* Fixed position */
   bottom: 0; /* Align to the bottom */
   width: 100%; /* Full width */
+  right: 1px;
   background-color: white; /* Background color */
   border-top-left-radius: 15px; /* Rounded corners at the top */
   border-top-right-radius: 15px; /* Rounded corners at the top */
