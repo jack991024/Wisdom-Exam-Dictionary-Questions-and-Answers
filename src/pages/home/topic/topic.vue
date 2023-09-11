@@ -95,24 +95,24 @@
         textColor="#AEAEB2"
         lineColor="white"
     ></u-divider>
-    <view class="share-body">
-      <view class="weixin">
-        <image src="../../../static/topic/06.png" class="item-icon"></image>
-        <text class="item-text">收藏列表</text>
-      </view>
-      <view class="weixinpengyouquan">
-        <image src="../../../static/topic/06.png" class="item-icon"></image>
-        <text class="item-text">收藏列表</text>
-      </view>
-      <view class="qq">
-        <image src="../../../static/topic/06.png" class="item-icon"></image>
-        <text class="item-text">收藏列表</text>
-      </view>
-      <view class="qqzone">
-        <image src="../../../static/topic/06.png" class="item-icon"></image>
-        <text class="item-text">收藏列表</text>
-      </view>
-    </view>
+<!--    <view class="share-body">-->
+<!--      <view class="weixin">-->
+<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+<!--        <text class="item-text">收藏列表</text>-->
+<!--      </view>-->
+<!--      <view class="weixinpengyouquan">-->
+<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+<!--        <text class="item-text">收藏列表</text>-->
+<!--      </view>-->
+<!--      <view class="qq">-->
+<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+<!--        <text class="item-text">收藏列表</text>-->
+<!--      </view>-->
+<!--      <view class="qqzone">-->
+<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+<!--        <text class="item-text">收藏列表</text>-->
+<!--      </view>-->
+<!--    </view>-->
   </view>
 
 </template>

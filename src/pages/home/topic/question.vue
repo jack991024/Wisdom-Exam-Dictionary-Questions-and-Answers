@@ -30,6 +30,22 @@
       </view>
     </swiper-item>
   </swiper>
+
+  <view class="tarBar">
+    <u-tabbar
+        :value="value1"
+        @change="change1"
+        :fixed="false"
+        :placeholder="false"
+        :safeAreaInsetBottom="false"
+    >
+      <u-tabbar-item text="目录" icon="list-dot" @click="openCatalog" ></u-tabbar-item>
+      <u-tabbar-item text="题卡" icon="list-dot" @click="openQuestionCard" ></u-tabbar-item>
+      <u-tabbar-item text="收藏" icon="star" @click="toggleFavorite" ></u-tabbar-item>
+      <u-tabbar-item text="模式" icon="list" @click="changeMode" ></u-tabbar-item>
+    </u-tabbar>
+
+  </view>
 </template>
 
 <script setup>
@@ -56,6 +72,8 @@ onLoad((options) => {
     method: 'POST',
     data: data,
     success: (res) => {
+      console.log(123)
+      console.log(res.data.data)
       // 确保响应中有数据
       if (res.data && res.data.data) {
         questionLists.value = {
@@ -64,6 +82,7 @@ onLoad((options) => {
           result: res.data.data.result
         }
       }
+      console.log(questionLists)
     },
     fail: (err) => {
       console.log('error', err);
@@ -76,29 +95,29 @@ function toggleOption(questionIndex, optionIndex) {
     selectedOptions[questionIndex] = [];
   }
 
-  const optionLetter = String.fromCharCode(65 + optionIndex); // 将索引转换为字母
-
+  // 如果是单选题，清空当前问题的已选选项数组
   if (questionLists.value.result[questionIndex].qType === 1) {
-    selectedOptions[questionIndex] = [optionLetter];
+    selectedOptions[questionIndex] = [optionIndex];
   } else {
-    const index = selectedOptions[questionIndex].indexOf(optionLetter);
+    // 对于其他类型的问题，保持原有的多选逻辑
+    const index = selectedOptions[questionIndex].indexOf(optionIndex);
     if (index === -1) {
-      selectedOptions[questionIndex].push(optionLetter);
+      selectedOptions[questionIndex].push(optionIndex);
     } else {
       selectedOptions[questionIndex].splice(index, 1);
     }
   }
 
   // 验证答案
-  validateAnswer(questionIndex);
+  validateAnswer(questionIndex, optionIndex);
 }
 
 function validateAnswer(questionIndex, optionIndex) {
-  const correctAnswer = questionLists.value.result[questionIndex].answer;
-  const selectedAnswer = selectedOptions[questionIndex];
+  const correctAnswer = questionLists.value.result[questionIndex].answer.charCodeAt(0) - 65;
+  const selectedAnswer = selectedOptions[questionIndex][0];
 
   // 将两个数组（答案和选定的选项）转换为字符串进行比较
-  if (JSON.stringify(correctAnswer) === JSON.stringify(selectedAnswer[0])) {
+  if (JSON.stringify(correctAnswer) === JSON.stringify(selectedAnswer)) {
     // 答案正确的业务逻辑
     console.log("Correct Answer");
     // ... 添加您的业务逻辑代码
