@@ -12,7 +12,8 @@
             <text class="question-type" v-if="item.qType===1">单选</text>
             <text class="question-type" v-if="item.qType===2">多选</text>
             <view v-if="item.materials!=null" class="material-swiper-container">
-              <material-swiper :materials="item.materials" :style="{ height: componentHeight + 'px' }"></material-swiper>
+              <material-swiper :materials="item.materials"
+                               :style="{ height: componentHeight + 'px' }"></material-swiper>
             </view>
             <rich-text :nodes="processAnalyseContent(item.stem)"></rich-text>
           </view>
@@ -28,7 +29,7 @@
               <text class="option-label">{{ op.label }}</text>
               <text class="option-description">{{ op.content }}</text>
             </view>
-            <text v-if="item.qType===2" class="check-answer">确认答案</text>
+            <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex)">确认答案</text>
           </view>
           <view
               v-if="currentMode === 'recite'"
@@ -280,6 +281,9 @@ function selectMode(mode) {
     }
 
     .options {
+      display: flex;
+      flex-direction: column;
+
       .option-item {
         display: flex; // 使标签和描述水平对齐
         align-items: center; // 垂直居中对齐
