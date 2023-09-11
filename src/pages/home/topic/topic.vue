@@ -183,10 +183,9 @@ const loadMenus = () => {
     method: 'POST',
     header: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI1ODQyMTEyfQ.YlAp50IFMZG_7lf4MaPOF3Nj__NelB7evCRTHdmXMXA"
-    },
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI1OTcwNjc4fQ.cxl7HMUnPpWMKtzlL4yAVY7xg_64BnFJ80NYxWGi2ec"    },
     data: {
-      "tkid": "c9b2fff1-71c1-5aa2-89b0-204659d81c64"
+      "tkid": "bed19808-d286-5c6d-85e7-67d3c11f2d94"
     },
     success: (res) => {
       // 确保响应中有数据
@@ -207,10 +206,9 @@ const bannerLoads = () => {
     method: 'POST',
     header: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI1ODQyMTEyfQ.YlAp50IFMZG_7lf4MaPOF3Nj__NelB7evCRTHdmXMXA"
-    },
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI1OTcwNjc4fQ.cxl7HMUnPpWMKtzlL4yAVY7xg_64BnFJ80NYxWGi2ec"    },
     data: {
-      "tkid": "c9b2fff1-71c1-5aa2-89b0-204659d81c64"
+      "tkid": "bed19808-d286-5c6d-85e7-67d3c11f2d94"
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data)) {
