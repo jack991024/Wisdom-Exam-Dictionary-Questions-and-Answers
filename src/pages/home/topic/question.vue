@@ -28,7 +28,7 @@
                 v-for="(op, index) in item.option"
                 :key="index"
                 :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
-                @tap="() => toggleOption(itemIndex, index)"
+                @tap="() => toggleOption(itemIndex, index, item)"
             >
               <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
               <option-label
@@ -42,7 +42,9 @@
               </option-label>
               <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
             </view>
-            <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex)">确认答案</text>
+            <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
+              确认答案
+            </text>
             <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
                   class="submit-button-container">
               <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
@@ -153,14 +155,6 @@ function processAnalyseContent(analyse) {
 
 const userAnswers = reactive({});
 
-function indexToLetter(indexArray, qType) {
-  if (!indexArray) return '';
-  if (qType === 4) {
-    return indexArray.map(index => index === 1 ? '正确' : '错误').join(', ');
-  }
-  return indexArray.map(index => String.fromCharCode(65 + index)).join(', ');
-}
-
 
 onLoad((options) => {
   console.log(options)
@@ -214,7 +208,7 @@ onLoad((options) => {
   })
 })
 
-function toggleOption(questionIndex, optionIndex) {
+function toggleOption(questionIndex, optionIndex, item) {
   if (!selectedOptions[questionIndex]) {
     selectedOptions[questionIndex] = [];
   }
@@ -235,11 +229,11 @@ function toggleOption(questionIndex, optionIndex) {
   }
 
   // Validate the answer
-  validateAnswer(questionIndex, optionIndex);
+  validateAnswer(questionIndex, optionIndex, item);
 }
 
 
-function validateAnswer(questionIndex) {
+function validateAnswer(questionIndex, optionIndex, item, clickButton) {
   const question = questionLists.value.result[questionIndex];
   let correctAnswer;
 
@@ -259,8 +253,43 @@ function validateAnswer(questionIndex) {
     correctOption: correctAnswer, // Storing correct answer options
     incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)) // Storing incorrect answer options
   };
+
+  console.log("correct:", correctAnswer);
+  console.log("select:", selectedAnswer);
+  console.log("userAnswers:", userAnswers[questionIndex])
+  console.log("item:", )
+  if ((item.qType !== 2 && !clickButton) || (item.qType === 2 && clickButton === 'true')) {
+    let selectAnswer = indexToLetter(selectedAnswer, item.qType)
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/tk/submit',
+      method: 'POST',
+      header: {
+        "Authorization": store.getters.getToken,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        "chid": item.chid,
+        "qid": item.qid,
+        "answer": selectAnswer
+      },
+      success: (response) => {
+        console.log(JSON.stringify(response.data));
+      },
+      fail: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
 }
 
+const indexToLetter = (indexArray, qType) => {
+  if (!indexArray) return '';
+  if (qType === 4) {
+    return indexArray.map(index => index === 1 ? '1' : '0').join('');
+  }
+  return indexArray.map(index => String.fromCharCode(65 + index)).join('');
+}
 
 const isModeModalOpen = ref(false);
 
@@ -404,10 +433,8 @@ function handleSubmitPaper() {
   }
 
   .answer {
-    background-color: #F8F8F8; // 设置背景颜色
-    padding: 10px; // 设置内部填充
+    background-color: #ffffff; // 设置背景颜色
     border-radius: 10px; // 设置边框半径
-    margin-top: 10px; // 设置上边距
 
     .correct-answer {
       font-size: 14px; // 设置字体大小

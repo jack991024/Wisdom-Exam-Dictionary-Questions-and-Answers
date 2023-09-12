@@ -19,9 +19,7 @@ import {ref, computed} from 'vue';
 const questionLists = ref([])
 let correct = ref(0);
 onLoad((options) => {
-  console.log("param:" + options.arrayParam)
   questionLists.value = JSON.parse(options.arrayParam);
-  console.log(questionLists.value)
 })
 
 const computedCorrect = computed(() => {
