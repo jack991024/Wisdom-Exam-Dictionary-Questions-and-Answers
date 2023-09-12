@@ -12,11 +12,14 @@
             <text class="question-type" v-if="item.qType===1">单选</text>
             <text class="question-type" v-if="item.qType===2">多选</text>
             <text class="question-type" v-if="item.qType===4">判断</text>
-            <view v-if="item.materials!=null" class="material-swiper-container">
-              <material-swiper :materials="item.materials"
-                               :style="{ height: componentHeight + 'px' }"></material-swiper>
+            <view v-if="item.materials.length>0">
+              <l-floating-panel>
+                <view v-for="(material,index) in item.materials" :key="index">
+                  <rich-text :nodes="processAnalyseContent(material.content)"></rich-text>
+                </view>
+              </l-floating-panel>
             </view>
-            <rich-text :nodes="processAnalyseContent(item.stem)"></rich-text>
+            <rich-text :nodes="processAnalyseContent(item.stem)" class="stem"></rich-text>
           </view>
 
           <view class="options">
@@ -37,11 +40,13 @@
   ]"
               >
               </option-label>
-
-              <text class="option-description">{{ op.content }}</text>
+              <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
             </view>
             <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex)">确认答案</text>
-
+            <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
+                  class="submit-button-container">
+              <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
+            </view>
           </view>
           <view
               v-if="currentMode === 'recite'"
@@ -76,8 +81,11 @@
           >
             <view class="answer">
               <u-divider text="试卷详解"></u-divider>
-              <view class="correct-answer">正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}</view>
-              <view :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
+              <view class="correct-answer">
+                正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
+              </view>
+              <view
+                  :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
                 您的答案是：{{ indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType) }}
               </view>
               <view class="answer-key">
@@ -133,7 +141,9 @@
 <script setup>
 import {onLoad} from '@dcloudio/uni-app';
 import {ref, reactive} from 'vue';
+import {useStore} from 'vuex'
 
+const store = useStore()
 const questionLists = ref([])
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
@@ -164,12 +174,11 @@ onLoad((options) => {
     url: 'https://dev.zhikaodian.com/apiV2/tk/getExercise',
     header: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI2MDAxODU3fQ.8vUDSNWDx3B_bwxRj2mPK6gABzWcwUs6pw6VKRuJVgY"
+      "Authorization": store.getters.getToken
     },
     method: 'POST',
     data: data,
     success: (res) => {
-      console.log(123)
       console.log(res.data.data)
       // 确保响应中有数据
       if (res.data && res.data.data) {
@@ -253,8 +262,6 @@ function validateAnswer(questionIndex) {
 }
 
 
-
-
 const isModeModalOpen = ref(false);
 
 function changeMode() {
@@ -270,6 +277,12 @@ function selectMode(mode) {
   // 在这里添加你的模式切换逻辑...
 }
 
+function handleSubmitPaper() {
+  // Your logic to handle paper submission
+  uni.navigateTo({
+    url: '/pages/home/topic/examResult'
+  });
+}
 </script>
 
 <style lang="scss">
@@ -314,19 +327,29 @@ function selectMode(mode) {
     border-radius: 10px; // 圆角边框
 
     .question-description {
-      font-size: 16px; // 问题描述的字体大小
-      color: #333; // 深色文本
-      margin-bottom: 10px; // 问题描述和选项之间的间距
+      display: flex;
+      align-items: flex-start; // 更改为flex-start以使其与第一行对齐
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 10px;
 
       .question-type {
-        background-color: #f0f0f0; // 灰色背景
-        color: #666; // 浅色文本
-        font-size: 11px; // 字体大小
-        padding: 2px 8px; // 内部填充
-        border-radius: 12px; // 圆角边框
-        margin-right: 10px; // 标签和问题描述之间的间距
+        background-color: #f0f0f0;
+        color: #666;
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin-right: 10px;
+        display: inline-block;
+        vertical-align: middle; // 添加此属性以使其垂直居中
+      }
+
+      .stem {
+        display: inline-block;
+        vertical-align: middle; // 添加此属性以使其垂直居中
       }
     }
+
 
     .options {
       display: flex;
@@ -538,5 +561,12 @@ rich-text {
   }
 }
 
+.label {
+  background-color: #2e68f5; /* Background color of the label */
+  border-radius: 12px; /* Rounded corners */
+  padding: 8px 16px; /* Padding inside the label */
+  font-size: 16px; /* Font size */
+  color: #fff; /* Text color */
+}
 
 </style>

@@ -52,13 +52,6 @@
       }
     },
     {
-      "path": "pages/home/topic/topic",
-      "style": {
-        "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
       "path": "pages/home/video/video",
       "style": {
         "navigationBarTitleText": "",
@@ -71,6 +64,13 @@
     },
     {
       "path": "pages/home/question",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/topic/topic",
       "style": {
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
@@ -130,6 +130,13 @@
       "path": "pages/home/topic/question",
       "style": {
         "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/topic/examResult",
+      "style": {
+        "navigationBarTitleText": "检测结果",
         "enablePullDownRefresh": true
       }
     }

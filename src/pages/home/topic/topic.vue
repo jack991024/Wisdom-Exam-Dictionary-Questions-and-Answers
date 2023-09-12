@@ -3,7 +3,7 @@
     <!-- Header Section -->
     <view class="header">
       <view>
-        <u-cell title="面板1" :border="false" :is-link="true" @click="togglePanel('panel1')"
+        <u-cell title="社区工作者-行测" :border="false" :is-link="true" @click="togglePanel('panel1')"
                 :title-style="{ textAlign: 'center' }"/>
         <transition name="slide-fade">
           <view v-if="activePanels.includes('panel1')" class="panel-overlay-container">
@@ -11,8 +11,8 @@
             <view class="panel-content-container">
               <view class="panel-content"
                     :style="{ maxHeight: activePanels.includes('panel1') ? panelContentMaxHeight : '0' }">
-                <u-cell title="面板2" :is-link="true" @click="togglePanel('panel2')"/>
-                <u-cell title="面板3" :is-link="true" @click="togglePanel('panel3')"/>
+                <u-cell title="考公考编-社区工作者-居委会组织法" :is-link="true" @click="togglePanel('panel2')"/>
+                <u-cell title="查看所有题库" :is-link="true" @click="togglePanel('panel3')"/>
               </view>
             </view>
           </view>
@@ -95,24 +95,24 @@
         textColor="#AEAEB2"
         lineColor="white"
     ></u-divider>
-<!--    <view class="share-body">-->
-<!--      <view class="weixin">-->
-<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-<!--        <text class="item-text">收藏列表</text>-->
-<!--      </view>-->
-<!--      <view class="weixinpengyouquan">-->
-<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-<!--        <text class="item-text">收藏列表</text>-->
-<!--      </view>-->
-<!--      <view class="qq">-->
-<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-<!--        <text class="item-text">收藏列表</text>-->
-<!--      </view>-->
-<!--      <view class="qqzone">-->
-<!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-<!--        <text class="item-text">收藏列表</text>-->
-<!--      </view>-->
-<!--    </view>-->
+    <!--    <view class="share-body">-->
+    <!--      <view class="weixin">-->
+    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+    <!--        <text class="item-text">收藏列表</text>-->
+    <!--      </view>-->
+    <!--      <view class="weixinpengyouquan">-->
+    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+    <!--        <text class="item-text">收藏列表</text>-->
+    <!--      </view>-->
+    <!--      <view class="qq">-->
+    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+    <!--        <text class="item-text">收藏列表</text>-->
+    <!--      </view>-->
+    <!--      <view class="qqzone">-->
+    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
+    <!--        <text class="item-text">收藏列表</text>-->
+    <!--      </view>-->
+    <!--    </view>-->
   </view>
 
 </template>
@@ -183,9 +183,10 @@ const loadMenus = () => {
     method: 'POST',
     header: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI1OTcwNjc4fQ.cxl7HMUnPpWMKtzlL4yAVY7xg_64BnFJ80NYxWGi2ec"    },
+      "Authorization": store.getters.getToken
+    },
     data: {
-      "tkid": "bed19808-d286-5c6d-85e7-67d3c11f2d94"
+      "tkid": "c9b2fff1-71c1-5aa2-89b0-204659d81c64"
     },
     success: (res) => {
       // 确保响应中有数据
@@ -206,9 +207,10 @@ const bannerLoads = () => {
     method: 'POST',
     header: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImFkZGl0aW9uYWxfY2xhaW1zIjp7InRlcm1pbmFsIjoid3gifSwiZXhwIjoxNzI1OTcwNjc4fQ.cxl7HMUnPpWMKtzlL4yAVY7xg_64BnFJ80NYxWGi2ec"    },
+      "Authorization": store.getters.getToken
+    },
     data: {
-      "tkid": "bed19808-d286-5c6d-85e7-67d3c11f2d94"
+      "tkid": "c9b2fff1-71c1-5aa2-89b0-204659d81c64"
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data)) {
