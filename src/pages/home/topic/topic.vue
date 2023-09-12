@@ -3,20 +3,18 @@
     <!-- Header Section -->
     <view class="header">
       <view>
-        <u-cell title="社区工作者-行测" :border="false" :is-link="true" @click="togglePanel('panel1')"
-                :title-style="{ textAlign: 'center' }"/>
-        <transition name="slide-fade">
-          <view v-if="activePanels.includes('panel1')" class="panel-overlay-container">
-            <view class="overlay"></view>
-            <view class="panel-content-container">
-              <view class="panel-content"
-                    :style="{ maxHeight: activePanels.includes('panel1') ? panelContentMaxHeight : '0' }">
-                <u-cell title="考公考编-社区工作者-居委会组织法" :is-link="true" @click="togglePanel('panel2')"/>
-                <u-cell title="查看所有题库" :is-link="true" @click="togglePanel('panel3')"/>
-              </view>
-            </view>
-          </view>
-        </transition>
+        <zb-dropdown-menu
+            :zIndex="100"
+
+            ref="dropdown"
+        >
+          <zb-dropdown-item
+              name="two"
+              :options="option2"
+              v-model="value2"
+              @change="change1"
+          ></zb-dropdown-item>
+        </zb-dropdown-menu>
       </view>
     </view>
 
@@ -46,18 +44,18 @@
 
   <view class="question">
     <view class="question-num">
-      <u-cell title="总题数" value="17698" center/>
-      <u-cell title="已做" value="9802" center/>
-      <u-cell title="错题" value="1990" center :border="false"/>
+      <u-cell title="总题数" :value="questionNums.total" center/>
+      <u-cell title="已做" :value="questionNums.done" center/>
+      <u-cell title="错题" :value="questionNums.error" center :border="false"/>
     </view>
     <view class="question-rate">
       <view class="rate-item">
-        <u-cell title="完成率" value="75%" center :border="false" :size="small"/>
-        <u-line-progress :percentage="75" :showText="false" activeColor="#3C7BFB"/>
+        <u-cell title="完成率" :value="doneRate" center :border="false" :size="small"/>
+        <u-line-progress :percentage="done" :showText="false" activeColor="#3C7BFB"/>
       </view>
       <view class="rate-item">
-        <u-cell title="正确率" value="85%" center :border="false"/>
-        <u-line-progress :percentage="85" :showText="false" activeColor="#3C7BFB"/>
+        <u-cell title="正确率" :value="correctRate" center :border="false"/>
+        <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>
       </view>
     </view>
   </view>
@@ -118,13 +116,14 @@
 </template>
 
 <script setup>
-import {ref, computed} from 'vue';
+import {ref, computed, nextTick, watch} from 'vue';
 import {useStore} from 'vuex'
-import {onShow} from '@dcloudio/uni-app';
+import {onShow, onLoad} from '@dcloudio/uni-app';
 
 const store = useStore()
 const activePanels = ref([]); // 默认只有面板1展开
 const menus = ref([]);
+let tkid = ref("")
 
 const panelContentMaxHeight = computed(() => {
   return activePanels.value.includes('panel1') ? '100vh' : '0';
@@ -186,7 +185,7 @@ const loadMenus = () => {
       "Authorization": store.getters.getToken
     },
     data: {
-      "tkid": "c9b2fff1-71c1-5aa2-89b0-204659d81c64"
+      "tkid": tkid.value
     },
     success: (res) => {
       // 确保响应中有数据
@@ -202,6 +201,7 @@ const loadMenus = () => {
 }
 
 const bannerLoads = () => {
+  console.log("tkid:",tkid)
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/banners',
     method: 'POST',
@@ -210,7 +210,7 @@ const bannerLoads = () => {
       "Authorization": store.getters.getToken
     },
     data: {
-      "tkid": "c9b2fff1-71c1-5aa2-89b0-204659d81c64"
+      "tkid": tkid.value
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data)) {
@@ -234,9 +234,115 @@ const jumpQuestionList = (child) => {
   })
 }
 
-onShow(() => {
+
+const dropdown = ref(null)
+const dropdown1 = ref(null)
+const value2 = ref('a');
+const option2 = ref([
+  {text: '请选择学习科目', value: 'a'}
+]);
+
+const toggleItem = (val) => {
+  if (val === 1) {
+    dropdown1.value.close()
+  } else {
+    dropdown.value.close()
+  }
+}
+
+const close = () => {
+  dropdown.value.close()
+}
+
+const change1 = (val) => {
+  tkid.value = val.value
+  console.log(tkid.value)
+}
+
+const loadQuestionBanks = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/tk/myCourse',
+    method: 'GET',
+    header: {
+      "Content-Type": "application/json",
+      "Authorization": store.getters.getToken
+    },
+    success: (res) => {
+      if (res.data && Array.isArray(res.data.data)) {
+        res.data.data.forEach(option => {
+          option2.value.push(
+              {text: option.fullname, value: option.tkid}
+          )
+          ;
+        });
+      }
+    },
+    fail: (err) => {
+      console.log('error', err);
+    }
+  });
+}
+
+const questionNums = ref({
+  total: 0,
+  done: 0,
+  error: 0
+})
+let doneRate = ref('0');
+let correctRate = ref('0');
+let done = ref(0);
+let correct = ref(0);
+const loadState = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/tk/state',
+    method: 'POST',
+    header: {
+      "Content-Type": "application/json",
+      "Authorization": store.getters.getToken
+    },
+    data: {
+      "tkid": tkid.value
+    },
+    success: (res) => {
+      if (res.data && res.data.data) {
+        nextTick(() => {
+          questionNums.value = res.data.data;
+          console.log(questionNums)
+          doneRate.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2) + '%';
+          done.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2);
+
+          // 计算正确率
+          correctRate.value = ((questionNums.value.correct / questionNums.value.total) * 100).toFixed(2) + '%';
+          correct.value = ((questionNums.value.correct / questionNums.value.total) * 100).toFixed(2);
+        });
+      } else {
+        // Handle the case where the data is not available or not in the expected format.
+        console.error('Invalid data format:', res.data);
+      }
+    },
+    fail: (err) => {
+      console.log('error', err);
+    }
+  });
+
+}
+
+watch(
+    () => tkid.value, // 使用函数返回tkid的值，以确保深度监听
+    (newTkid, oldTkid) => {
+      console.log(1);
+      bannerLoads();
+      loadMenus();
+      loadQuestionBanks();
+      loadState();
+    },
+    { deep: true, immediate: true } // 使用deep和immediate选项
+);
+onLoad(() => {
   bannerLoads()
   loadMenus()
+  loadQuestionBanks()
+  loadState()
 })
 </script>
 
