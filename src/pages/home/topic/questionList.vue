@@ -1,8 +1,11 @@
 <template>
   <view class="container">
     <view v-for="(item,index) in questionLists" :key="index" class="question-item">
-      <view class="question-content" @click="jumpQuestion(item.chid)">
+      <view class="question-content" @click="jumpQuestion(item)">
         <text class="question-name">{{ item.name }}</text>
+<!--        <view :v-if="item.depth > 3">-->
+<!--          <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>-->
+<!--        </view>-->
         <text class="question-total">本卷共{{ item.total }}卷</text>
       </view>
     </view>
@@ -11,20 +14,44 @@
 
 <script setup>
 import {onLoad} from '@dcloudio/uni-app';
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 
 const questionLists = ref([])
-
+let correct = ref(0);
 onLoad((options) => {
+  console.log("param:" + options.arrayParam)
   questionLists.value = JSON.parse(options.arrayParam);
   console.log(questionLists.value)
 })
 
+const computedCorrect = computed(() => {
+  // 在这里计算correct的值，假设item的done和total属性分别表示已完成和总数
+  const done = item.done || 0;
+  const total = item.total || 0;
+
+  // 防止除以零错误
+  if (total === 0) {
+    return 0;
+  }
+
+  // 计算百分比并返回
+  return Math.floor((done / total) * 100).toFixed(2);
+});
+
 const jumpQuestion = (item) => {
-  let param = item
-  uni.navigateTo({
-    url: '/pages/home/topic/question?param=' + param
-  })
+  if (item.children && item.children.length > 0) {
+    // 如果有子节点，继续跳转到当前页面
+    console.log(item.children)
+    uni.navigateTo({
+      url: '/pages/home/topic/questionList?arrayParam=' + JSON.stringify(item.children)
+    })
+  } else {
+    // 否则跳转到做题页面
+    let param = item.chid
+    uni.navigateTo({
+      url: '/pages/home/topic/question?param=' + param
+    })
+  }
 }
 </script>
 
