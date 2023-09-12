@@ -256,7 +256,8 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
     answer: selectedOptions[questionIndex],
     isCorrect: JSON.stringify(correctAnswer.sort()) === JSON.stringify(selectedAnswer.sort()),
     correctOption: correctAnswer, // Storing correct answer options
-    incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)) // Storing incorrect answer options
+    incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)), // Storing incorrect answer options
+    qType: item.qType
   };
 
   console.log("correct:", correctAnswer);

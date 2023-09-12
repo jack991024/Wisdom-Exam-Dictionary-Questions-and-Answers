@@ -61,8 +61,8 @@ import {useStore} from 'vuex'
 const store = useStore()
 const login = ref({
   userInfo: {
-    phoneMobile: "",
-    password: ""
+    phoneMobile: "13600000000",
+    password: "ABC123"
   }
 })
 
