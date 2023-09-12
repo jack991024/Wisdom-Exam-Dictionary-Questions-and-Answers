@@ -28,7 +28,7 @@
                 v-for="(op, index) in item.option"
                 :key="index"
                 :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
-                @tap="() => toggleOption(itemIndex, index, item)"
+                @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
             >
               <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
               <option-label
@@ -209,6 +209,11 @@ onLoad((options) => {
 })
 
 function toggleOption(questionIndex, optionIndex, item) {
+  if (currentMode.value === 'recite') {
+    // If the current mode is 'recite', don't allow toggling options
+    return;
+  }
+
   if (!selectedOptions[questionIndex]) {
     selectedOptions[questionIndex] = [];
   }
@@ -257,7 +262,7 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
   console.log("correct:", correctAnswer);
   console.log("select:", selectedAnswer);
   console.log("userAnswers:", userAnswers[questionIndex])
-  console.log("item:", )
+  console.log("item:", item)
   if ((item.qType !== 2 && !clickButton) || (item.qType === 2 && clickButton === 'true')) {
     let selectAnswer = indexToLetter(selectedAnswer, item.qType)
     uni.request({
@@ -274,6 +279,10 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
       },
       success: (response) => {
         console.log(JSON.stringify(response.data));
+        // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
+        if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
+          handleSubmitPaper(userAnswers);
+        }
       },
       fail: (error) => {
         console.log(error);
@@ -307,9 +316,8 @@ function selectMode(mode) {
 }
 
 function handleSubmitPaper() {
-  // Your logic to handle paper submission
   uni.navigateTo({
-    url: '/pages/home/topic/examResult'
+    url: '/pages/home/topic/examResult?param=' + JSON.stringify(userAnswers)
   });
 }
 </script>
