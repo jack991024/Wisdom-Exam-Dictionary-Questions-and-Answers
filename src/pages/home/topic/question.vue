@@ -1,119 +1,123 @@
 <template>
   <swiper class="swiper-container" :indicator-dots="false">
     <swiper-item style="overflow: auto" v-for="(item,index,itemIndex) in questionLists.result" :key="index">
-      <view class="main">
-        <view class="title-and-count">
-          <text class="chapter-name">{{ questionLists.chapter_name }}</text>
-          <text class="count-info">{{ index + 1 }}/{{ questionLists.count }}</text>
-        </view>
-
-        <view class="question">
-          <view class="question-description">
-            <text class="question-type" v-if="item.qType===1">单选</text>
-            <text class="question-type" v-if="item.qType===2">多选</text>
-            <text class="question-type" v-if="item.qType===4">判断</text>
-            <view v-if="item.materials.length>0">
-              <l-floating-panel>
-                <view v-for="(material,index) in item.materials" :key="index">
-                  <rich-text :nodes="processAnalyseContent(material.content)"></rich-text>
-                </view>
-              </l-floating-panel>
-            </view>
-            <rich-text :nodes="processAnalyseContent(item.stem)" class="stem"></rich-text>
+      <scroll-view scroll-y style="height: 100%">
+        <view class="main">
+          <view class="title-and-count">
+            <text class="chapter-name">{{ questionLists.chapter_name }}</text>
+            <text class="count-info">{{ index + 1 }}/{{ questionLists.count }}</text>
           </view>
 
-          <view class="options">
-            <!-- 使用v-for来循环渲染所有选项 -->
-            <view
-                v-for="(op, index) in item.option"
-                :key="index"
-                :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
-                @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
-            >
-              <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
-              <option-label
-                  v-if="item.qType === 4"
-                  :class="[
+          <view class="question">
+            <view class="question-description">
+              <text class="question-type" v-if="item.qType===1">单选</text>
+              <text class="question-type" v-if="item.qType===2">多选</text>
+              <text class="question-type" v-if="item.qType===4">判断</text>
+              <view v-if="item.materials.length>0">
+                <l-floating-panel>
+                  <scroll-view scroll-y style="height: 100%">
+                    <rich-text :nodes="processAnalyseContent(item.materials[0].content)"></rich-text>
+                  </scroll-view>
+                </l-floating-panel>
+              </view>
+              <rich-text :nodes="processAnalyseContent(item.stem)" class="stem"></rich-text>
+            </view>
+
+            <view class="options">
+              <!-- 使用v-for来循环渲染所有选项 -->
+              <view
+                  v-for="(op, index) in item.option"
+                  :key="index"
+                  :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
+                  @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
+              >
+                <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
+                <option-label
+                    v-if="item.qType === 4"
+                    :class="[
     'option-label',
     userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
     userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
   ]"
-              >
-              </option-label>
-              <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
+                >
+                </option-label>
+                <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
+              </view>
+              <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
+                确认答案
+              </text>
+              <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
+                    class="submit-button-container">
+                <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
+              </view>
             </view>
-            <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
-              确认答案
-            </text>
-            <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
-                  class="submit-button-container">
-              <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
-            </view>
-          </view>
-          <view
-              v-if="currentMode === 'recite'"
-              class="answer"
-          >
-            <view class="answer">
-              <u-divider text="试卷详解"></u-divider>
-              <view class="correct-answer">正确答案是：{{ item.answer }}</view>
-              <view class="answer-key">
-                <view class="analysis">[解析]</view>
-                <view class="analysis-parse">
-                  <rich-text :nodes="processAnalyseContent(item.analyse)"></rich-text>
+            <view
+                v-if="currentMode === 'recite'"
+                class="answer"
+            >
+              <view class="answer">
+                <u-divider text="试卷详解"></u-divider>
+                <view class="correct-answer">正确答案是：{{ item.answer }}</view>
+                <view class="answer-key">
+                  <view class="analysis">[解析]</view>
+                  <view class="analysis-parse">
+                    <rich-text :nodes="processAnalyseContent(item.analyse)"></rich-text>
+                  </view>
                 </view>
               </view>
-            </view>
 
-            <view class="my-note" v-if="false">
-              <view>我的笔记</view>
-              <view>
-                <up-button type="primary" icon="map" text="添加笔记"></up-button>
+              <view class="my-note" v-if="false">
+                <view>我的笔记</view>
+                <view>
+                  <up-button type="primary" icon="map" text="添加笔记"></up-button>
+                </view>
+              </view>
+
+              <view class="question-friend-interaction" v-if="false">
+                <view>题友互动</view>
               </view>
             </view>
 
-            <view class="question-friend-interaction" v-if="false">
-              <view>题友互动</view>
+            <view
+                v-else-if="currentMode === 'practice' && userAnswers[itemIndex]"
+                class="answer"
+            >
+              <view class="answer">
+                <u-divider text="试卷详解"></u-divider>
+                <view class="correct-answer">
+                  正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
+                </view>
+                <view
+                    :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
+                  您的答案是：{{
+                    indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
+                  }}
+                </view>
+                <view class="answer-key">
+                  <view class="analysis">[解析]</view>
+                  <view class="analysis-parse">
+                    <rich-text :nodes="processAnalyseContent(item.analyse)"></rich-text>
+                  </view>
+                </view>
+              </view>
+
+              <view class="my-note" v-if="false">
+                <view class="note">
+                  <u-text text="我的笔记" size="18" align="center"></u-text>
+                  <view class="button">
+                    <up-button type="primary" icon="edit-pen" text="添加笔记"></up-button>
+                  </view>
+                </view>
+              </view>
+
+              <view class="question-friend-interaction" v-if="false">
+                <view>题友互动</view>
+              </view>
             </view>
           </view>
 
-          <view
-              v-else-if="currentMode === 'practice' && userAnswers[itemIndex]"
-              class="answer"
-          >
-            <view class="answer">
-              <u-divider text="试卷详解"></u-divider>
-              <view class="correct-answer">
-                正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
-              </view>
-              <view
-                  :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
-                您的答案是：{{ indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType) }}
-              </view>
-              <view class="answer-key">
-                <view class="analysis">[解析]</view>
-                <view class="analysis-parse">
-                  <rich-text :nodes="processAnalyseContent(item.analyse)"></rich-text>
-                </view>
-              </view>
-            </view>
-
-            <view class="my-note" v-if="false">
-              <view class="note">
-                <u-text text="我的笔记" size="18" align="center"></u-text>
-                <view class="button">
-                  <up-button type="primary" icon="edit-pen" text="添加笔记"></up-button>
-                </view>
-              </view>
-            </view>
-
-            <view class="question-friend-interaction" v-if="false">
-              <view>题友互动</view>
-            </view>
-          </view>
         </view>
-
-      </view>
+      </scroll-view>
     </swiper-item>
   </swiper>
 
@@ -121,9 +125,9 @@
     <u-tabbar
         value=""
         @change=""
-        :fixed="false"
-        :placeholder="false"
-        :safeAreaInsetBottom="false"
+        :fixed="true"
+        :placeholder="true"
+        :safeAreaInsetBottom="true"
     >
       <u-tabbar-item text="目录" icon="list-dot" @click="openCatalog"></u-tabbar-item>
       <u-tabbar-item text="题卡" icon="list-dot" @click="openQuestionCard"></u-tabbar-item>
@@ -477,7 +481,7 @@ function handleSubmitPaper() {
 
 .mode-modal {
   position: fixed;
-  bottom: 50px;
+  bottom: 84px;
   left: 273px;
   background-color: rgba(0, 0, 0, 0.5); // Semi-transparent background
   display: flex;
