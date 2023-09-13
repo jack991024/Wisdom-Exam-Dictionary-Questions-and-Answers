@@ -38,6 +38,7 @@ const answeredCorrectly = ref();
 const answeredIncorrectly = ref();
 const notAnswered = ref();
 const correctRate = ref()
+const chapter_name=ref()
 
 onLoad((options) => {
   userAnswers.value = options.param
@@ -47,7 +48,7 @@ onLoad((options) => {
   totalQuestions.value = 0;
   answeredCorrectly.value = 0;
   answeredIncorrectly.value = 0;
-  notAnswered.value = userAnswers.value["3"].count; // 从数据中获取总题数
+  notAnswered.value = userAnswers.value[Object.keys(userAnswers.value)[0]].count; // 从数据中获取总题数
 
 // 迭代JSON对象的每个条目
   for (let key in userAnswers.value) {

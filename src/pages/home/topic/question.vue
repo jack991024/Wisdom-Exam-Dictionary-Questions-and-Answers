@@ -258,7 +258,8 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
     correctOption: correctAnswer, // Storing correct answer options
     incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)), // Storing incorrect answer options
     qType: item.qType,
-    count: questionLists.value.result.length
+    count: questionLists.value.result.length,
+    chapter_name: questionLists.chapter_name
   };
 
   console.log("correct:", correctAnswer);
