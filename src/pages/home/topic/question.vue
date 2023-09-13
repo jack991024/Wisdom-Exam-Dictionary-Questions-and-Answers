@@ -32,7 +32,7 @@
                   @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
               >
                 <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
-                <option-label
+                <text
                     v-if="item.qType === 4"
                     :class="[
     'option-label',
@@ -40,7 +40,7 @@
     userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
   ]"
                 >
-                </option-label>
+                </text>
                 <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
               </view>
               <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
