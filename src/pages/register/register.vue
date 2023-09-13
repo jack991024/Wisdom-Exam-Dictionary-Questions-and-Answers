@@ -48,7 +48,7 @@
 
       </view>
       <view style="display: flex;align-items: center;">
-        <u-radio-group>
+        <u-radio-group v-model="isRadioSelected">
           <u-radio shape="square"/>
         </u-radio-group>
         <view>
@@ -84,7 +84,7 @@ const verify = ref('');
 const countingDown = ref(false);
 const buttonText = ref('获取验证码');
 let countdown = 60; // 初始倒计时秒数
-
+const isRadioSelected = ref(false);
 // const captchaComponent = ref(null);
 
 const getCode = async () => {
