@@ -6,7 +6,13 @@
           <text>练习报告</text>
         </view>
         <view class="percent-body">
-          <LCircularProgress :value="35"/>
+          <LCircularProgress :value="35" />
+          <view class="score">
+            <text>准确率</text>
+            <text class="score-value">90%</text>
+            <text class="">/</text>
+            <text class="">100</text>
+          </view>
         </view>
         <u-line></u-line>
         <view class="exam-title">
@@ -30,10 +36,62 @@ const userAnswers = ref()
 onLoad((options) => {
   let param = options.param
   userAnswers.value = param
-  console.log(userAnswers)
+  console.log(userAnswers.value)
+
+  // 定义一些变量来存储计算结果
+  let totalQuestions = 0;
+  let answeredCorrectly = 0;
+  let answeredIncorrectly = 0;
+  let notAnswered = userAnswers.value["3"].count; // 从数据中获取总题数
+
+// 迭代JSON对象的每个条目
+  for (let key in userAnswers.value) {
+    totalQuestions += 1; // 每次迭代时增加题目总数
+
+    if (data[key].isCorrect === true) {
+      answeredCorrectly += 1; // 如果答对了，增加答对的题数
+    } else if (data[key].answer.length !== 0) {
+      answeredIncorrectly += 1; // 如果答错了（但有答案），增加答错的题数
+    }
+  }
+
+// 计算没有回答的问题的数量
+  notAnswered -= totalQuestions;
+
+// 计算正确率
+  let correctRate = (answeredCorrectly / totalQuestions) * 100;
+
+// 打印结果
+  console.log("Total questions: ", totalQuestions);
+  console.log("Number of correct answers: ", answeredCorrectly);
+  console.log("Number of incorrect answers: ", answeredIncorrectly);
+  console.log("Number of unanswered questions: ", notAnswered);
+  console.log("Correct rate: ", correctRate.toFixed(2) + "%");
 })
 </script>
 
 <style lang="scss">
+.percent-body {
+  position: relative;
+  margin-bottom: 20px; // 添加底部边距
 
+  .score {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    text {
+      color: #333; // 根据您的图片选择的字体颜色
+    }
+
+    .score-value {
+      font-size: 30px; // 根据您的图片选择的字体大小
+    }
+  }
+}
 </style>
