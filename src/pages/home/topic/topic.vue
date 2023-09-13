@@ -49,11 +49,11 @@
       <u-cell title="错题" :value="questionNums.error" center :border="false"/>
     </view>
     <view class="question-rate">
-      <view class="rate-item">
+      <view class="rate-item-done">
         <u-cell title="完成率" :value="doneRate" center :border="false" :size="small"/>
         <u-line-progress :percentage="done" :showText="false" activeColor="#3C7BFB"/>
       </view>
-      <view class="rate-item">
+      <view class="rate-item-correct">
         <u-cell title="正确率" :value="correctRate" center :border="false"/>
         <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>
       </view>
@@ -358,85 +358,54 @@ onLoad(() => {
   width: 100%;
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明灰色背景 */
-}
-
-.panel-content-container {
-  position: relative; /* 以确保它位于.overlay之上 */
-  background-color: #fff;
-  z-index: 1000; /* 确保它位于.overlay之上 */
-}
-
-.panel-overlay-container {
-  position: fixed;
-  top: 42px; /* 或更多，以避免覆盖面板1 */
-  left: 0;
-  width: 100%;
-  z-index: 999;
-}
-
-.panel-content {
-  transition: max-height 0.3s ease;
-  overflow: hidden;
-  max-height: 0;
-}
-
-.slide-fade-enter-active, .slide-fade-leave-active {
-  transition: max-height 0.3s ease;
-}
-
-.slide-fade-enter-to, .slide-fade-leave-to {
-  max-height: 100vh;
-}
-
 .header-swiper {
-  width: 100%; /* 设置宽度为100%，使其占满容器宽度 */
-  height: 130px; /* 设置一个固定的高度，你可以根据需求调整这个值 */
-}
+  width: 100%;
+  height: 130px;
 
-.u-swiper {
-  width: 100%; /* 使 u-swiper 组件占满 .header-swiper 容器的宽度 */
-  height: 100%; /* 使 u-swiper 组件占满 .header-swiper 容器的高度 */
+  .u-swiper {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .question {
   display: flex;
   justify-content: space-between;
+  align-items: stretch;
   width: calc(100% - 20px);
-  margin: 16px 10px 0px 10px;
+  margin: 16px 10px 0 10px;
   background: #f4f7fe;
   border-radius: 12px;
-}
 
-.question-content {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-}
+  .question-num, .question-rate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-.question-num {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 40%;
-}
+    .u-cell {
+      display: flex;
+      align-items: center;
+      height: 50%;
+    }
+  }
 
-.question-rate {
-  width: 53%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
+  .question-num {
+    width: 40%;
+  }
 
-.rate-item {
-  display: flex;
-  flex-direction: column;
+  .question-rate {
+    width: 53%;
+
+    .rate-item-done, .rate-item-correct {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .u-line-progress {
+        height: 100%;
+      }
+    }
+  }
 }
 
 .question-menu {
@@ -445,53 +414,53 @@ onLoad(() => {
   align-items: center;
   width: 100%;
   margin-top: 20px;
-}
 
-.menu-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
-
-.menu-image {
-  width: 35px;
-  height: 35px;
+    .menu-image {
+      width: 35px;
+      height: 35px;
+    }
+  }
 }
 
 .topic-body {
   margin-top: 13px;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 两列等宽 */
-  grid-template-rows: 1fr 1fr 1fr; /* 三行等高 */
-  gap: 10px; /* 设置网格间距 */
-  background-color: white; /* 设置背景色 */
-  padding: 10px; /* 设置内边距 */
-  border-radius: 10px; /* 设置圆角 */
-}
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
 
-.item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f7f7f7; /* 为每个区块设置一个背景色来区分它们 */
-  border-radius: 10px; /* 为每个区块设置圆角 */
-  padding: 10px; /* 为每个区块设置内边距 */
-}
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 10px;
 
-.item-icon {
-  width: 40px; /* 设置图标宽度 */
-  height: 40px; /* 设置图标高度 */
-}
+    .item-icon {
+      width: 40px;
+      height: 40px;
+    }
 
-.item-text {
-  margin-top: 10px; /* 设置文本和图标之间的间距 */
-  text-align: center; /* 让文本居中显示 */
-  font-size: 14px; /* 设置字体大小 */
+    .item-text {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+  }
 }
 
 .share {
   margin-top: 12px;
 }
+
 </style>
