@@ -2,7 +2,7 @@
   <view id="app">
     <view class="swiper" indicator-active-color="#fff">
       <view class="avatar-wrapper">
-        <up-avatar :text="text" :size="64"></up-avatar>
+        <up-avatar :icon="account-fill" :size="64"></up-avatar>
       </view>
       <view class="desc">
         <text class="name">{{ name }}</text>
@@ -25,7 +25,7 @@
               <up-avatar
                   shape="square"
                   size="35"
-                  :text="text"
+                  :icon="item.url"
                   customStyle="margin: -3px 5px -3px 0"
               ></up-avatar>
             </template>
@@ -47,18 +47,17 @@ const indexList = reactive([]);
 const urls = [
   {
     title: '个人信息',
-    url: 'https://cdn.uviewui.com/uview/album/1.jpg',
+    url: 'account',
     path: '/pages/home/person/personInfo/personInfo'
   },
-  {title: '我的课程', url: 'https://cdn.uviewui.com/uview/album/2.jpg'},
-  {title: '我的题库', url: 'https://cdn.uviewui.com/uview/album/3.jpg'},
-  {title: '激活码', url: 'https://cdn.uviewui.com/uview/album/4.jpg'},
-  {title: '短视频', url: 'https://cdn.uviewui.com/uview/album/5.jpg'},
-  {title: '联系客服', url: 'https://cdn.uviewui.com/uview/album/6.jpg'},
-  {title: '招商加盟', url: 'https://cdn.uviewui.com/uview/album/7.jpg'},
-  {title: '问题解答', url: 'https://cdn.uviewui.com/uview/album/8.jpg'},
-  {title: '注册协议', url: 'https://cdn.uviewui.com/uview/album/9.jpg'},
-  {title: '关于我们', url: 'https://cdn.uviewui.com/uview/album/10.jpg'}
+  {title: '我的课程', url: 'play-circle'},
+  {title: '我的题库', url: 'file-text', path: '/pages/home/person/personInfo/tiku'},
+  {title: '激活码', url: 'gift'},
+  {title: '短视频', url: 'photo'},
+  {title: '联系客服', url: 'kefu-ermai'},
+  {title: '招商加盟', url: 'checkbox-mark'},
+  {title: '问题解答', url: 'question-circle'},
+  {title: '关于我们', url: 'info-circle'}
   // '../../../..//static/person/personInfo.png',
 ];
 

@@ -139,6 +139,13 @@
         "navigationBarTitleText": "检测结果",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/person/personInfo/tiku",
+      "style": {
+        "navigationBarTitleText": "我的题库",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

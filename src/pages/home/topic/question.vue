@@ -116,6 +116,15 @@
             </view>
           </view>
 
+          <view class="catalog">
+            <u-popup :show="show" @close="close" @open="open" mode="left">
+              <view>
+                <text>目录</text>
+              </view>
+
+            </u-popup>
+          </view>
+
         </view>
       </scroll-view>
     </swiper-item>
@@ -129,9 +138,9 @@
         :placeholder="true"
         :safeAreaInsetBottom="true"
     >
-      <u-tabbar-item text="目录" icon="list-dot" @click="openCatalog"></u-tabbar-item>
+      <u-tabbar-item text="目录" icon="list-dot" @click="open"></u-tabbar-item>
       <u-tabbar-item text="题卡" icon="list-dot" @click="openQuestionCard"></u-tabbar-item>
-      <u-tabbar-item text="收藏" icon="star" @click="toggleFavorite"></u-tabbar-item>
+      <u-tabbar-item text="收藏" icon="star" @click=""></u-tabbar-item>
       <u-tabbar-item text="模式" icon="list" @click="changeMode"></u-tabbar-item>
     </u-tabbar>
 
@@ -153,6 +162,17 @@ const store = useStore()
 const questionLists = ref([])
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
+let show = ref(false); // 初始化为未收藏状态
+const open = () => {
+  console.log('open');
+  show.value = true
+}
+
+const close = () => {
+  console.log('close')
+  show.value = false
+}
+
 function processAnalyseContent(analyse) {
   return analyse.replace(/\<img/gi, '<img style=max-width:100%;height:auto'); // 返回处理后的内容
 }
