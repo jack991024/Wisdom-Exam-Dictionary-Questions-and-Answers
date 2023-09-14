@@ -65,7 +65,8 @@ onLoad(() => {
   align-items: flex-start;
   padding: 10px;
   background-color: #f0f0f0;
-  height: 100vh;
+  min-height: 100vh; /* 修改此行 */
+  overflow-y: auto; /* 允许垂直滚动 */
 }
 
 .tab {

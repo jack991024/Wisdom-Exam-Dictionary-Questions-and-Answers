@@ -47,8 +47,8 @@ const indexList = reactive([]);
 const urls = [
   {
     title: '个人信息',
-    url: 'account',
-    path: '/pages/home/person/personInfo/personInfo'
+    url: 'account'
+    // , path: '/pages/home/person/personInfo/personInfo'
   },
   {title: '我的课程', url: 'play-circle'},
   {title: '我的题库', url: 'file-text', path: '/pages/home/person/personInfo/tiku'},

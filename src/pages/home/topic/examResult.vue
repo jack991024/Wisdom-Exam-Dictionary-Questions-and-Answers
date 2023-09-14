@@ -29,75 +29,103 @@
 <script setup>
 import LCircularProgress from './CustomProgress.vue'
 import {onLoad} from '@dcloudio/uni-app';
-import {ref} from 'vue';
+import {reactive, ref} from 'vue';
 
-const userAnswers = ref()
 
-const totalQuestions = ref();
-const answeredCorrectly = ref();
-const answeredIncorrectly = ref();
-const notAnswered = ref();
-const correctRate = ref()
-const chapter_name=ref()
-
+let chapterName = { value: "" };
+let totalQuestions = { value: 0 };
+let answeredCorrectly = { value: 0 };
+let answeredIncorrectly = { value: 0 };
+let notAnswered = { value: 0 };
+let correctRate = { value: 0 };
+let groupedData = reactive()
 onLoad((options) => {
-  userAnswers.value = options.param
-  console.log(userAnswers.value)
+  let data = JSON.parse(options.param)
 
-  // 定义一些变量来存储计算结果
-  totalQuestions.value = 0;
-  answeredCorrectly.value = 0;
-  answeredIncorrectly.value = 0;
-  notAnswered.value = userAnswers.value[Object.keys(userAnswers.value)[0]].count; // 从数据中获取总题数
-
-// 迭代JSON对象的每个条目
-  for (let key in userAnswers.value) {
-    totalQuestions.value += 1; // 每次迭代时增加题目总数
-
-    if (data[key].isCorrect === true) {
-      answeredCorrectly.value += 1; // 如果答对了，增加答对的题数
-    } else if (data[key].answer.length !== 0) {
-      answeredIncorrectly.value += 1; // 如果答错了（但有答案），增加答错的题数
+  groupedData = Object.values(data).reduce((acc, item) => {
+    if (!acc[item.qType]) {
+      acc[item.qType] = [];
     }
-  }
+    acc[item.qType].push(item);
+    return acc;
+  }, {});
 
-// 计算没有回答的问题的数量
-  notAnswered.value -= totalQuestions;
+  const stats = calculateStatistics(data);
 
-// 计算正确率
-  correctRate.value = (answeredCorrectly / totalQuestions) * 100;
-
-// 打印结果
-  console.log("Total questions: ", totalQuestions);
-  console.log("Number of correct answers: ", answeredCorrectly);
-  console.log("Number of incorrect answers: ", answeredIncorrectly);
-  console.log("Number of unanswered questions: ", notAnswered);
-  console.log("Correct rate: ", correctRate.toFixed(2) + "%");
+  console.log("Chapter Name:", stats.chapterName);
+  console.log("Total Questions:", stats.totalQuestions);
+  console.log("Answered Correctly:", stats.answeredCorrectly);
+  console.log("Answered Incorrectly:", stats.answeredIncorrectly);
+  console.log("Not Answered:", stats.notAnswered);
+  console.log("Correct Rate:", stats.correctRate.toFixed(2));
 })
+
+
+function calculateStatistics(data) {
+  const totalQuestions = Object.keys(data).length;
+  const answeredCorrectly = Object.values(data).filter(item => item.isCorrect).length;
+  const answeredIncorrectly = Object.values(data).filter(item => !item.isCorrect).length;
+  const notAnswered = totalQuestions - (answeredCorrectly + answeredIncorrectly);
+  const correctRate = (answeredCorrectly / totalQuestions) * 100;
+  const chapterName = data[Object.keys(data)[0]].chapter_name;
+
+  return {
+    chapterName,
+    totalQuestions,
+    answeredCorrectly,
+    answeredIncorrectly,
+    notAnswered,
+    correctRate
+  };
+}
+
 </script>
 
 <style lang="scss">
-.percent-body {
-  position: relative;
-  margin-bottom: 20px; // 添加底部边距
+.exam-report {
+  width: 692rpx;
+  height: 458rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+  border-radius: 22rpx 22rpx 22rpx 22rpx;
+  opacity: 1;
+  margin: 23rpx 29rpx 0rpx 29rpx;
 
-  .score {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .percent-letter {
+    width: 116rpx;
+    height: 40rpx;
+    font-size: 29rpx;
+    font-family: PingFang SC-Bold, PingFang SC;
+    font-weight: bold;
+    color: #262626;
+    line-height: 0rpx;
+    padding-top: 45rpx;
+    padding-left: 22rpx;
+  }
 
-    text {
-      color: #333; // 根据您的图片选择的字体颜色
-    }
+  .percent-body {
+    position: relative;
+    margin-bottom: 20px; // 添加底部边距
 
-    .score-value {
-      font-size: 30px; // 根据您的图片选择的字体大小
+    .score {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      text {
+        color: #333; // 根据您的图片选择的字体颜色
+      }
+
+      .score-value {
+        font-size: 30px; // 根据您的图片选择的字体大小
+      }
     }
   }
 }
+
 </style>
