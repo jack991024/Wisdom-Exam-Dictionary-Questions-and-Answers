@@ -76,7 +76,7 @@ onMounted(() => {
 
 const mainRouter = () => {
   uni.navigateTo({
-    url: "/pages/home/classification/classificationMain",
+    // url: "/pages/home/classification/classificationMain",
   });
 };
 </script>
