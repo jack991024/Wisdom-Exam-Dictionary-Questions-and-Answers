@@ -60,6 +60,7 @@ const jumpQuestion = (item) => {
   align-items: center;
   padding: 10px;
   background-color: #f5f5f5; // 一个淡灰色背景
+  height: 100vh;
 }
 
 .question-item {
