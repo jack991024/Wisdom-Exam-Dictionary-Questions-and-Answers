@@ -154,12 +154,12 @@
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
-//      {
-//        "pagePath": "pages/home/classification/classificationRegions",
-//        "iconPath": "static/menu/classification.png",
-//        "selectedIconPath": "static/menu/classification.png",
-//        "text": "分类"
-//      },
+      {
+        "pagePath": "pages/home/classification/classificationRegions",
+        "iconPath": "static/menu/classification.png",
+        "selectedIconPath": "static/menu/classification.png",
+        "text": "分类"
+      },
       {
         "pagePath": "pages/home/topic/topic",
         "iconPath": "static/menu/topic.png",
