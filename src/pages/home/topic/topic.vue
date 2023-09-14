@@ -201,7 +201,7 @@ const loadMenus = () => {
 }
 
 const bannerLoads = () => {
-  console.log("tkid:",tkid)
+  console.log("tkid:", tkid)
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/banners',
     method: 'POST',
@@ -336,8 +336,21 @@ watch(
       loadQuestionBanks();
       loadState();
     },
-    { deep: true, immediate: true } // 使用deep和immediate选项
+    {deep: true, immediate: true} // 使用deep和immediate选项
 );
+
+onShow(() => {
+  let tikuFromLocal = uni.getStorageSync('tiku')
+  if (tikuFromLocal != null) {
+    let tiku = JSON.parse(tikuFromLocal)
+    option2.value.push(
+        {text: tiku.fullname, value: tiku.tkid}
+    )
+    value2.value = tiku.tkid
+    tkid.value = tiku.tkid
+  }
+})
+
 onLoad(() => {
   bannerLoads()
   loadMenus()
