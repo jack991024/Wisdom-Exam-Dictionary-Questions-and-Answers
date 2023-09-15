@@ -116,7 +116,7 @@ function calculateStatistics(data) {
       flex-direction: column;
       align-items: center;
       text-align: center;
-
+      margin-top: -20rpx;
       text {
         color: #333; // 根据您的图片选择的字体颜色
       }
