@@ -57,6 +57,42 @@
         </view>
       </view>
     </view>
+
+    <view class="exam-info-card">
+      <view class="card-header">
+        <text>答题卡</text>
+      </view>
+      <view class="card-status">
+        <view class="status-item">
+          <view class="status-icon" style="background-color: grey;"></view>
+          <text>未做</text>
+        </view>
+        <view class="status-item">
+          <view class="status-icon" style="background-color: #4CDA94;"></view>
+          <text>正确</text>
+        </view>
+        <view class="status-item">
+          <view class="status-icon" style="background-color: #FF3B30;"></view>
+          <text>错误</text>
+        </view>
+      </view>
+      <view class="card-body">
+        <view class="question-category" v-for="(questions, qType) in groupedData" :key="qType">
+          <view class="category-header">
+            <text>{{ qType == '1' ? '单选题' : '多选题' }}</text>
+          </view>
+          <view class="category-body">
+            <view
+                v-for="(item, index) in questions"
+                :key="index"
+                :class="['question-block', item.isCorrect ? 'correct' : item.answer.length === 0 ? 'not-done' : 'incorrect']"
+            >
+              <text>{{ parseInt(item.questionNumber) + 1 }}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -249,5 +285,86 @@ function calculateStatistics(data) {
     }
   }
 }
+
+.exam-info-card {
+  width: 692rpx;
+  margin: 20rpx 29rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+  border-radius: 22rpx;
+  padding: 20rpx;
+
+  .card-header {
+    font-size: 30rpx;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20rpx;
+  }
+
+  .card-status {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20rpx;
+
+    .status-item {
+      display: flex;
+      align-items: center;
+
+      .status-icon {
+        width: 20rpx;
+        height: 20rpx;
+        border-radius: 10rpx;
+        margin-right: 10rpx;
+      }
+
+      text {
+        font-size: 22rpx;
+      }
+    }
+  }
+
+  .card-body {
+    .question-category {
+      margin-bottom: 20rpx;
+
+      .category-header {
+        font-size: 26rpx;
+        font-weight: bold;
+        margin-bottom: 10rpx;
+      }
+
+      .category-body {
+        display: flex;
+        flex-wrap: wrap;
+
+        .question-block {
+          width: 60rpx;
+          height: 60rpx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 5rpx;
+          font-size: 22rpx;
+          font-weight: bold;
+          border-radius: 10rpx;
+          text-align: center;
+
+          &.not-done {
+            background-color: grey;
+          }
+
+          &.correct {
+            background-color: #4CDA94;
+          }
+
+          &.incorrect {
+            background-color: #FF3B30;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 </style>
