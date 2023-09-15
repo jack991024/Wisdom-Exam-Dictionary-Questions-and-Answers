@@ -52,7 +52,7 @@ const urls = [
   },
   {title: '我的课程', url: 'play-circle'},
   {title: '我的题库', url: 'file-text', path: '/pages/home/person/personInfo/tiku'},
-  {title: '激活码', url: 'gift'},
+  {title: '激活码', url: 'gift', path: '/pages/home/person/personInfo/activationCode'},
   {title: '短视频', url: 'photo'},
   {title: '联系客服', url: 'kefu-ermai'},
   {title: '招商加盟', url: 'checkbox-mark'},
