@@ -9,17 +9,51 @@
           <LCircularProgress :value="35"/>
           <view class="score">
             <text>准确率</text>
-            <text class="score-value">{{ correctRate.value.toFixed(2) }}%</text>
+            <text class="score-value">{{ stats.correctRate }}%</text>
             <text class="">/</text>
             <text class="">100</text>
           </view>
         </view>
-        <u-line></u-line>
+        <view class="line">
+          <u-line length="610rpx"></u-line>
+        </view>
         <view class="exam-title">
-          <text>练习类型：{{}}</text>
+          <text>练习类型：{{ stats.chapterName }}</text>
         </view>
         <view class="exam-time">
-          <text>交卷时间：{{}}</text>
+          <text>交卷时间：{{ stats.currentDate }}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="exam-person-info">
+      <view class="title" style="padding-top: 22rpx;padding-left: 22rpx;">
+        考试情况
+      </view>
+      <view class="body">
+        <view class="info-item">
+          <view class="info-label">一共</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #1D65FE;">{{ stats.totalQuestions }}</view>
+        </view>
+
+        <view class="info-item">
+          <view class="info-label">答对</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #4CDA94;">{{ stats.answeredCorrectly }}</view>
+        </view>
+
+        <view class="info-item">
+          <view class="info-label">答错</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #FF3B30;">{{ stats.answeredIncorrectly }}</view>
+        </view>
+
+        <view class="info-item">
+          <view class="info-label">未答</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #FFA041;">{{ stats.notAnswered }}</view>
+        </view>
+
+        <view class="info-item">
+          <view class="info-label">准确率</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #E068FF;">{{ stats.correctRate }}%</view>
         </view>
       </view>
     </view>
@@ -32,37 +66,62 @@ import {onLoad} from '@dcloudio/uni-app';
 import {reactive, ref} from 'vue';
 
 
-let chapterName = { value: "" };
-let totalQuestions = { value: 0 };
-let answeredCorrectly = { value: 0 };
-let answeredIncorrectly = { value: 0 };
-let notAnswered = { value: 0 };
-let correctRate = { value: 0 };
+let chapterName = {value: ""};
+let totalQuestions = {value: 0};
+let answeredCorrectly = {value: 0};
+let answeredIncorrectly = {value: 0};
+let notAnswered = {value: 0};
+let correctRate = {value: 0};
 let groupedData = reactive()
+let stats = reactive({})
 onLoad((options) => {
   let data = JSON.parse(options.param)
 
-  groupedData = Object.values(data).reduce((acc, item) => {
+  console.log(JSON.stringify(data))
+
+
+  groupedData = Object.entries(data).reduce((acc, [questionNumber, item]) => {
     if (!acc[item.qType]) {
       acc[item.qType] = [];
     }
-    acc[item.qType].push(item);
+    acc[item.qType].push({...item, questionNumber});
     return acc;
   }, {});
 
-  const stats = calculateStatistics(data);
+  console.log(JSON.stringify(groupedData))
+
+  const calculatedStats = calculateStatistics(data);
+
+  stats.chapterName = calculatedStats.chapterName;
+  stats.totalQuestions = calculatedStats.totalQuestions;
+  stats.answeredCorrectly = calculatedStats.answeredCorrectly;
+  stats.answeredIncorrectly = calculatedStats.answeredIncorrectly;
+  stats.notAnswered = calculatedStats.notAnswered;
+  stats.correctRate = calculatedStats.correctRate.toFixed(2);
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+
+  stats.currentDate = `${year}:${month}:${day} ${hours}:${minutes}:${seconds}`;
+
 
   console.log("Chapter Name:", stats.chapterName);
   console.log("Total Questions:", stats.totalQuestions);
   console.log("Answered Correctly:", stats.answeredCorrectly);
   console.log("Answered Incorrectly:", stats.answeredIncorrectly);
   console.log("Not Answered:", stats.notAnswered);
-  console.log("Correct Rate:", stats.correctRate.toFixed(2));
+  console.log("Correct Rate:", stats.correctRate);
+  console.log("Current Date:", stats.currentDate);
 })
 
 
 function calculateStatistics(data) {
-  const totalQuestions = Object.keys(data).length;
+  const totalQuestions = data[Object.keys(data)[0]].total;
   const answeredCorrectly = Object.values(data).filter(item => item.isCorrect).length;
   const answeredIncorrectly = Object.values(data).filter(item => !item.isCorrect).length;
   const notAnswered = totalQuestions - (answeredCorrectly + answeredIncorrectly);
@@ -84,7 +143,7 @@ function calculateStatistics(data) {
 <style lang="scss">
 .exam-report {
   width: 692rpx;
-  height: 458rpx;
+  height: 505rpx;
   background: #FFFFFF;
   box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
   border-radius: 22rpx 22rpx 22rpx 22rpx;
@@ -117,12 +176,75 @@ function calculateStatistics(data) {
       align-items: center;
       text-align: center;
       margin-top: -20rpx;
+
       text {
         color: #333; // 根据您的图片选择的字体颜色
       }
 
       .score-value {
         font-size: 30px; // 根据您的图片选择的字体大小
+      }
+    }
+  }
+
+  .line {
+    margin-top: -215rpx;
+    margin-left: 22rpx;
+  }
+
+  .exam-title {
+    font-size: 25rpx;
+    color: #262626;
+    margin-left: 22rpx;
+    margin-top: 22rpx;
+    font-family: PingFang SC-Regular, PingFang SC;
+  }
+
+  .exam-time {
+    font-size: 25rpx;
+    margin-top: 22rpx;
+    margin-left: 22rpx;
+    font-family: PingFang SC-Regular, PingFang SC;
+  }
+
+}
+
+.exam-person-info {
+  width: 692rpx;
+  height: 208rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+  border-radius: 22rpx 22rpx 22rpx 22rpx;
+  opacity: 1;
+  margin: 23rpx 29rpx 0rpx 29rpx;
+
+  .body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20rpx;
+    width: 612rpx;
+    height: 109rpx;
+    background: rgba(28, 101, 254, 0.05);
+    border-radius: 7rpx 7rpx 7rpx 7rpx;
+    opacity: 1;
+    margin-left: 22rpx;
+    margin-top: 12rpx;
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 100rpx; // 调整为适合的宽度
+
+      .info-label,
+      .info-value {
+        text-align: center; // 使文本居中对齐
+      }
+
+      .info-label {
+        font-size: 22rpx;
       }
     }
   }

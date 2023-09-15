@@ -340,7 +340,7 @@ watch(
 );
 
 onShow(() => {
-  let tikuFromLocal = uni.getStorageSync('tiku')
+  let tikuFromLocal = store.getters.getTiKu
   if (tikuFromLocal != null) {
     let tiku = JSON.parse(tikuFromLocal)
     option2.value.push(
@@ -349,13 +349,15 @@ onShow(() => {
     value2.value = tiku.tkid
     tkid.value = tiku.tkid
   }
-})
 
-onLoad(() => {
   bannerLoads()
   loadMenus()
   loadQuestionBanks()
   loadState()
+})
+
+onLoad(() => {
+
 })
 </script>
 

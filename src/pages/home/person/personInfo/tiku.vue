@@ -28,7 +28,7 @@ let data = reactive([]);
 
 const goToLearn = (item) => {
   console.log('前往学习', item);
-  uni.setStorageSync('tiku', JSON.stringify(item));
+  store.commit('updateTiKu', JSON.stringify(item))
   uni.switchTab({url: '/pages/home/topic/topic'})
 };
 
