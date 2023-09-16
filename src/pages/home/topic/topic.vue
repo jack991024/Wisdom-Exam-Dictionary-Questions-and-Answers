@@ -63,27 +63,45 @@
   <view class="topic-body">
     <view class="item exam-information">
       <image src="../../../static/topic/01.png" class="item-icon"></image>
-      <text class="item-text">考试信息</text>
+      <view class="text-container">
+        <text class="item-text">考试信息</text>
+        <text class="item-text-value">前沿考试资讯</text>
+      </view>
     </view>
     <view class="item free-information">
       <image src="../../../static/topic/02.png" class="item-icon"></image>
-      <text class="item-text">免费信息</text>
+      <view class="text-container">
+        <text class="item-text">免费信息</text>
+        <text class="item-text-value">各类优质免费资料</text>
+      </view>
     </view>
     <view class="item my-wrong-question">
       <image src="../../../static/topic/03.png" class="item-icon"></image>
-      <text class="item-text">我的错题</text>
+      <view class="text-container">
+        <text class="item-text">我的错题</text>
+        <text class="item-text-value">所有错题在这查看</text>
+      </view>
     </view>
     <view class="item my-collection">
       <image src="../../../static/topic/04.png" class="item-icon"></image>
-      <text class="item-text">我的收藏</text>
+      <view class="text-container">
+        <text class="item-text">我的收藏</text>
+        <text class="item-text-value">所有收藏在这查看</text>
+      </view>
     </view>
     <view class="item wrong-question-list">
       <image src="../../../static/topic/05.png" class="item-icon"></image>
-      <text class="item-text">错题列表</text>
+      <view class="text-container">
+        <text class="item-text">错题列表</text>
+        <text class="item-text-value">哪些题最容易踩坑</text>
+      </view>
     </view>
     <view class="item collection-list">
       <image src="../../../static/topic/06.png" class="item-icon"></image>
-      <text class="item-text">收藏列表</text>
+      <view class="text-container">
+        <text class="item-text">收藏列表</text>
+        <text class="item-text-value">哪些题才是收藏之最</text>
+      </view>
     </view>
   </view>
 
@@ -455,21 +473,38 @@ onLoad(() => {
 
   .item {
     display: flex;
-    flex-direction: column;
     align-items: center;
     background-color: #f7f7f7;
     border-radius: 10px;
     padding: 10px;
+    height: 155rpx;
+    width: 300rpx;
+    background: #F7F7F7;
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
+    justify-content: center;
 
     .item-icon {
       width: 40px;
       height: 40px;
+      margin-right: 10px; // 增加与文本区域的间距
     }
 
-    .item-text {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 14px;
+    .text-container {
+      display: flex;
+      flex-direction: column; // 设置文本容器为垂直布局
+      align-items: flex-start; // 从顶部开始布局
+
+      .item-text {
+        margin-bottom: 6px; // 增加与下方文本的间距
+        font-size: 14px;
+        color: #333333; // 设置深色字体
+      }
+
+      .item-text-value {
+        font-size: 11px;
+        color: #9A9A9A; // 设置浅色字体
+      }
     }
   }
 }
