@@ -111,24 +111,28 @@
         textColor="#AEAEB2"
         lineColor="white"
     ></u-divider>
-    <!--    <view class="share-body">-->
-    <!--      <view class="weixin">-->
-    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-    <!--        <text class="item-text">收藏列表</text>-->
-    <!--      </view>-->
-    <!--      <view class="weixinpengyouquan">-->
-    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-    <!--        <text class="item-text">收藏列表</text>-->
-    <!--      </view>-->
-    <!--      <view class="qq">-->
-    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-    <!--        <text class="item-text">收藏列表</text>-->
-    <!--      </view>-->
-    <!--      <view class="qqzone">-->
-    <!--        <image src="../../../static/topic/06.png" class="item-icon"></image>-->
-    <!--        <text class="item-text">收藏列表</text>-->
-    <!--      </view>-->
-    <!--    </view>-->
+    <view class="share-body">
+      <view class="weixin">
+        <image src="../../..//static/topic/share_1.png" class="share-icon"></image>
+        <text class="item-text">微信好友</text>
+      </view>
+      <view class="weixinpengyouquan">
+        <image src="../../../static/topic/share_2.png" class="share-icon"></image>
+        <text class="item-text">朋友圈</text>
+      </view>
+      <view class="qq">
+        <image src="../../../static/topic/share_3.png" class="share-icon"></image>
+        <text class="item-text">QQ好友</text>
+      </view>
+      <view class="qqzone">
+        <image src="../../../static/topic/share_4.png" class="share-icon"></image>
+        <text class="item-text">QQ空间</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="end">
+    <u-divider text="爱学出勤奋 勤奋出天才"></u-divider>
   </view>
 
 </template>
@@ -511,6 +515,40 @@ onLoad(() => {
 
 .share {
   margin-top: 12px;
+
+  .share-body {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .weixin, .weixinpengyouquan, .qq, .qqzone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .share-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .item-text {
+        text-align: center;
+        height: 31rpx;
+        font-size: 22rpx;
+        font-family: PingFang SC-Regular, PingFang SC;
+        color: #262626;
+        margin-top: 18rpx;
+      }
+    }
+  }
+}
+
+.end{
+  width: 693rpx;
+  margin-left: 29rpx;
+  margin-top: 50rpx;
+  margin-bottom: 100rpx;
+  height: 70rpx;
 }
 
 </style>
