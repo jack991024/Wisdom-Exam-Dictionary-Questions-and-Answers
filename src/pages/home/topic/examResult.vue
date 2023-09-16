@@ -99,7 +99,7 @@
                 :key="index"
                 :class="['question-block', item.isCorrect ? 'correct' : item.answer.length === 0 ? 'not-done' : 'incorrect']"
             >
-              <text>{{ parseInt(item.questionNumber) + 1 }}</text>
+              <text style="color: white">{{ parseInt(item.questionNumber) + 1 }}</text>
             </view>
           </view>
         </view>
@@ -306,7 +306,6 @@ function calculateStatistics(data) {
   background: #FFFFFF;
   box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
   border-radius: 22rpx;
-  padding: 20rpx;
 
   .card-header-container {
     display: flex;
@@ -345,6 +344,8 @@ function calculateStatistics(data) {
 
 
   .card-body {
+    margin-top: 22rpx;
+    margin-left: 22rpx;
     .question-category {
       margin-bottom: 20rpx;
 
@@ -357,17 +358,18 @@ function calculateStatistics(data) {
       .category-body {
         display: flex;
         flex-wrap: wrap;
+        justify-content: flex-start;
 
         .question-block {
-          width: 60rpx;
-          height: 60rpx;
+          width: 90.58rpx; // 调整为适当的宽度以适应5个元素每行
+          height: 90.58rpx; // 调整高度以保持它为圆形
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 5rpx;
+          margin: 20rpx 40rpx 20rpx 0rpx;
           font-size: 22rpx;
           font-weight: bold;
-          border-radius: 10rpx;
+          border-radius: 50%; // 设置为圆形
           text-align: center;
 
           &.not-done {
@@ -383,6 +385,7 @@ function calculateStatistics(data) {
           }
         }
       }
+
     }
   }
 }
