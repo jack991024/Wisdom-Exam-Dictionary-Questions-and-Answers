@@ -344,7 +344,7 @@ function selectMode(mode) {
 
 function handleSubmitPaper() {
   uni.navigateTo({
-    url: '/pages/home/topic/examResult?param=' + JSON.stringify(userAnswers)
+    url: '/pages/home/topic/examResult?param=' + JSON.stringify(userAnswers) + '&questionList=' + JSON.stringify(questionLists.value)
   });
 }
 </script>

@@ -33,47 +33,59 @@
       <view class="body">
         <view class="info-item">
           <view class="info-label">一共</view>
-          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #1D65FE;">{{ stats.totalQuestions }}</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #1D65FE;">
+            {{ stats.totalQuestions }}
+          </view>
         </view>
 
         <view class="info-item">
           <view class="info-label">答对</view>
-          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #4CDA94;">{{ stats.answeredCorrectly }}</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #4CDA94;">
+            {{ stats.answeredCorrectly }}
+          </view>
         </view>
 
         <view class="info-item">
           <view class="info-label">答错</view>
-          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #FF3B30;">{{ stats.answeredIncorrectly }}</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #FF3B30;">
+            {{ stats.answeredIncorrectly }}
+          </view>
         </view>
 
         <view class="info-item">
           <view class="info-label">未答</view>
-          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #FFA041;">{{ stats.notAnswered }}</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #FFA041;">
+            {{ stats.notAnswered }}
+          </view>
         </view>
 
         <view class="info-item">
           <view class="info-label">准确率</view>
-          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #E068FF;">{{ stats.correctRate }}%</view>
+          <view class="info-value" style="font-family: DIN-Bold, DIN;font-weight: bold;color: #E068FF;">
+            {{ stats.correctRate }}%
+          </view>
         </view>
       </view>
     </view>
 
     <view class="exam-info-card">
-      <view class="card-header">
-        <text>答题卡</text>
-      </view>
-      <view class="card-status">
-        <view class="status-item">
-          <view class="status-icon" style="background-color: grey;"></view>
-          <text>未做</text>
+      <view class="card-header-container">
+        <view class="card-header">
+          <text>答题卡</text>
         </view>
-        <view class="status-item">
-          <view class="status-icon" style="background-color: #4CDA94;"></view>
-          <text>正确</text>
-        </view>
-        <view class="status-item">
-          <view class="status-icon" style="background-color: #FF3B30;"></view>
-          <text>错误</text>
+        <view class="card-status">
+          <view class="status-item">
+            <view class="status-icon" style="background-color: #f6f6f6;"></view>
+            <text>未做</text>
+          </view>
+          <view class="status-item">
+            <view class="status-icon" style="background-color: #4CDA94;"></view>
+            <text>正确</text>
+          </view>
+          <view class="status-item">
+            <view class="status-icon" style="background-color: #FF3B30;"></view>
+            <text>错误</text>
+          </view>
         </view>
       </view>
       <view class="card-body">
@@ -109,11 +121,13 @@ let answeredIncorrectly = {value: 0};
 let notAnswered = {value: 0};
 let correctRate = {value: 0};
 let groupedData = reactive()
+let questionList = reactive()
 let stats = reactive({})
 onLoad((options) => {
   let data = JSON.parse(options.param)
-
+  questionList = JSON.parse(options.questionList)
   console.log(JSON.stringify(data))
+  console.log(JSON.stringify(questionList))
 
 
   groupedData = Object.entries(data).reduce((acc, [questionNumber, item]) => {
@@ -294,34 +308,41 @@ function calculateStatistics(data) {
   border-radius: 22rpx;
   padding: 20rpx;
 
-  .card-header {
-    font-size: 30rpx;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20rpx;
-  }
-
-  .card-status {
+  .card-header-container {
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20rpx;
     margin-bottom: 20rpx;
 
-    .status-item {
+    .card-header {
+      font-size: 30rpx;
+      font-weight: bold;
+    }
+
+    .card-status {
       display: flex;
       align-items: center;
 
-      .status-icon {
-        width: 20rpx;
-        height: 20rpx;
-        border-radius: 10rpx;
-        margin-right: 10rpx;
-      }
+      .status-item {
+        display: flex;
+        align-items: center;
+        margin-left: 20rpx;
 
-      text {
-        font-size: 22rpx;
+        .status-icon {
+          width: 20rpx;
+          height: 20rpx;
+          border-radius: 10rpx;
+          margin-right: 10rpx;
+        }
+
+        text {
+          font-size: 22rpx;
+        }
       }
     }
   }
+
 
   .card-body {
     .question-category {
