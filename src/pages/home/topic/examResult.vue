@@ -91,7 +91,10 @@
       <view class="card-body">
         <view class="question-category" v-for="(questions, qType) in groupedData" :key="qType">
           <view class="category-header">
-            <text>{{ qType == '1' ? '单选题' : '多选题' }}</text>
+            <text v-if="qType === '1'">{{ '单选题'}}</text>
+            <text v-if="qType === '2'">{{ '多选题'}}</text>
+            <text v-if="qType === '3'">{{ '材料题'}}</text>
+            <text v-if="qType === '4'">{{ '判断题'}}</text>
           </view>
           <view class="category-body">
             <view
