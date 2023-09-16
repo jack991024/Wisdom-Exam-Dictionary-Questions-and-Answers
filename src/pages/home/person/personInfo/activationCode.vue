@@ -10,18 +10,73 @@
           v-model="activCode"
       ></up-input>
     </view>
-    <view class="activation-code-button">
-      <text>立即激活</text>
+    <u-modal :show="show" title="" :content="content" confirmText="确定" cancelText="取消" showConfirmButton
+             showCancelButton @confirm="click" @cancel="cance"></u-modal>
+    <view class="activation-code-button-active" @click="submitActivCode()">
+      <text style="color: #fff;">立即激活</text>
     </view>
   </view>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {reactive, ref} from "vue";
+import {useStore} from "vuex";
 
-let activCode = ref('')
+const store = useStore()
+
+const activCode = ref('')
+
+const show = ref(false)
+
+const content = ref('')
+
+const resp = reactive({
+  code: 0,
+  msg: ""
+})
 
 
+const submitActivCode = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/tk/useActivate',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json',
+      "Authorization": store.getters.getToken
+    },
+    data: {
+      code: activCode.value
+    },
+    success: (response) => {
+      console.log(JSON.stringify(response.data));
+      resp.value = response.data
+      console.log(resp.value)
+      if (resp.value.code === 0) {
+        show.value = true
+        content.value = '激活成功'
+      } else {
+        show.value = true
+        content.value = resp.value.msg
+        console.log(content.value)
+      }
+    },
+    fail: (error) => {
+      console.log(error);
+    }
+  });
+}
+
+const click = () => {
+  if (resp.value.code === 0) {
+    uni.redirectTo({url: '/pages/home/person/personInfo/tiku'})
+  } else {
+    show.value = false
+  }
+}
+
+const cance = () => {
+  show.value = false
+}
 </script>
 
 <style lang="scss">
@@ -30,7 +85,6 @@ let activCode = ref('')
   height: 53rpx;
   font-size: 38rpx;
   font-family: PingFang SC-Bold, PingFang SC;
-  font-weight: bold;
   color: #262626;
   line-height: 480rpx;
   margin: 167rpx 0rpx 0rpx 29rpx;
@@ -40,6 +94,7 @@ let activCode = ref('')
   margin: -180rpx 0rpx 0rpx 29rpx;
 }
 
+/*
 .activation-code-button {
   text-align: center;
   margin: 57rpx 29rpx 0rpx 29rpx;
@@ -48,5 +103,18 @@ let activCode = ref('')
   background: #D8D8D8;
   border-radius: 7rpx 7rpx 7rpx 7rpx;
   opacity: 1;
+  padding-top: 19rpx;
+}
+*/
+
+.activation-code-button-active {
+  background: #3C7BFB !important; /* 添加 !important 来提高优先级 */
+  text-align: center;
+  margin: 70rpx 29rpx 0rpx 29rpx;
+  width: 692rpx;
+  height: 72rpx;
+  border-radius: 7rpx 7rpx 7rpx 7rpx;
+  opacity: 1;
+  padding-top: 19rpx;
 }
 </style>
