@@ -68,7 +68,7 @@
         <text class="item-text-value">前沿考试资讯</text>
       </view>
     </view>
-    <view class="item free-information">
+    <view class="item free-information" @click="navigateToPath('FreeMaterials')">
       <image src="../../../static/topic/02.png" class="item-icon"></image>
       <view class="text-container">
         <text class="item-text">免费信息</text>
@@ -378,9 +378,11 @@ onShow(() => {
   loadState()
 })
 
-onLoad(() => {
-
-})
+const navigateToPath = (param) => {
+  uni.navigateTo({
+    url:'/pages/home/topic/'+param
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -543,7 +545,7 @@ onLoad(() => {
   }
 }
 
-.end{
+.end {
   width: 693rpx;
   margin-left: 29rpx;
   margin-top: 50rpx;

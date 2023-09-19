@@ -153,6 +153,13 @@
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/FreeMaterials",
+      "style": {
+        "navigationBarTitleText": "免费资料",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
