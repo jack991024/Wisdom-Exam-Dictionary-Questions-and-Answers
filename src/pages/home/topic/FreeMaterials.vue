@@ -33,6 +33,7 @@
               </view>
             </view>
           </view>
+          <view class="gap"></view>
         </view>
       </uv-vtabs-item>
     </uv-vtabs>
@@ -159,6 +160,10 @@ onMounted(async () => {
         }
       }
     }
+  }
+  .gap {
+    height: 2rpx;
+    border-top: 2rpx solid #E5E5E5; // 使用border-top来创建一个顶部边框
   }
 }
 
