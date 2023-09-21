@@ -16,7 +16,7 @@
               </view>
               <view class="item-container">
                 <view class="thumb-box" v-for="(item, index) in item.regions" :key="index">
-                  <u-button class="item-menu-name" @click="mainRouter">{{ item.name }}</u-button>
+                  <u-button class="item-menu-name" @click="mainRouter(item.id)">{{ item.name }}</u-button>
                 </view>
               </view>
             </view>
@@ -74,9 +74,9 @@ onMounted(() => {
   // You can perform any initial setup here
 });
 
-const mainRouter = () => {
+const mainRouter = (id) => {
   uni.navigateTo({
-    // url: "/pages/home/classification/classificationMain",
+    url: "/pages/home/classification/classificationMain?id="+id,
   });
 };
 </script>
