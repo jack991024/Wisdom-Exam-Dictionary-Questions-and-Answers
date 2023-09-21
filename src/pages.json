@@ -160,6 +160,13 @@
         "navigationBarTitleText": "免费资料",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/classification/TiKuItem",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

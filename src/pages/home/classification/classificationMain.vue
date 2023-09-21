@@ -11,9 +11,10 @@
           <view
               class="item"
               v-for="(item2,index2) in list2"
-              :key="index2">
+              :key="index2"
+              @click="navigatorToItem(item2)">
             <view class="item-body">
-              <text style="font-size: 25rpx;">{{ item2.name }}</text>
+              <text style="font-size: 25rpx;color: #262626;">{{ item2.name }}</text>
             </view>
           </view>
         </view>
@@ -34,7 +35,6 @@ const value = ref(0);
 
 const list2 = computed(() => {
   const _list = list.value[value.value]?.children;
-  console.log("_list", _list)
   return _list ? _list : [];
 });
 
@@ -51,16 +51,18 @@ const scrolltolower = (index) => {
   console.log('内容滚动到底部触发：', index);
 };
 
+let regionId = ""
+
 onLoad(async (options) => {
   uni.showLoading({
     title: '加载中'
   });
-
+  regionId = options.id
   try {
     // 第一次请求获取name和fcid
     const response1 = await uni.request({
       url: 'https://dev.zhikaodian.com/apiV2/course/classify',
-      data: {region_id: options.id},
+      data: {region_id: regionId},
       method: "POST"
     });
     const responseData1 = response1.data.data.courses;
@@ -79,6 +81,9 @@ onLoad(async (options) => {
   }
 });
 
+const navigatorToItem = (item) => {
+  uni.navigateTo({url: "/pages/home/classification/TiKuItem?itemName=" + item.name + "&itemCoid=" + item.coid + "&regionId=" + regionId})
+}
 </script>
 
 <style scoped lang="scss">
