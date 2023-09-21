@@ -40,19 +40,66 @@
                 @click="toggleSelect(item)">
             <text>{{ item.name }}</text>
           </view>
-
         </view>
       </view>
     </view>
+    <view v-if="curNow===1">
+      <image src="https://cdn.zhikaodian.com/tk/details/6c/ab/6cab94c1d979a420fa823629f416db33.png" mode="widthFix" style="width: 100%"></image>
+      <image src="https://cdn.zhikaodian.com/tk/details/10/74/107434ca744e30849198f63c7bd504c8.png" mode="widthFix" style="width: 100%"></image>
+      <image src="https://cdn.zhikaodian.com/tk/details/6e/73/6e732c7cdd52c8e82803b86484fac2ba.png" mode="widthFix" style="width: 100%"></image>
+      <image src="https://cdn.zhikaodian.com/tk/details/b7/61/b761f94c723c3dad38675c1320c99863.png" mode="widthFix" style="width: 100%"></image>
+      <image src="https://cdn.zhikaodian.com/tk/details/51/f5/51f5ba41a518dc133ef09d19b7c58a2b.png" mode="widthFix" style="width: 100%"></image>
+    </view>
+    <!-- 底部导航栏 -->
+    <view class="bottom-nav">
+      <view class="zixun">咨询</view>
+      <view class="shiyong" @click="shiyong">点击试用</view>
+      <view class="buy">立即购买</view>
+    </view>
+
+    <u-modal
+        :show="showModal"
+        :showConfirmButton="false"
+        :showCancelButton="false" style="width: 280px;">
+      <template v-slot:default>
+        <text>{{ modalContent }}</text>
+      </template>
+      <template v-slot:confirmButton>
+        <view class="modal-button-group">
+          <view class="modal-button" @click="goToHome">返回首页</view>
+          <view class="modal-button" @click="tryNow">立即试用</view>
+        </view>
+      </template>
+    </u-modal>
   </view>
 </template>
 
 <script setup>
 import {onLoad} from "@dcloudio/uni-app";
 import {reactive, ref} from "vue";
+import {useStore} from "vuex";
 
+const store = useStore()
 const list = ref(['套餐', '介绍']);
 const curNow = ref(0);
+const showModal = ref(false);  // 控制模态框的显示
+const modalContent = '添加成功！';  // 模态框的内容
+
+// 返回首页的函数
+const goToHome = () => {
+  // 在这里添加跳转到首页的代码
+  console.log('返回首页');
+  showModal.value = false;  // 关闭模态框
+  uni.switchTab({url: "/pages/home/classification/classificationRegions"})
+};
+
+// 立即试用的函数
+const tryNow = () => {
+  // 在这里添加立即试用的代码
+  console.log('立即试用');
+  showModal.value = false;  // 关闭模态框
+  uni.navigateTo({url: "/pages/home/person/personInfo/tiku"})
+};
 
 const sectionChange = (index) => {
   curNow.value = index;
@@ -94,6 +141,29 @@ const toggleSelect = (item) => {
 const isSelected = (item) => {
   return selectedItems.value.some(selectedItem => selectedItem.name === item.name);
 };
+
+const shiyong = () => {
+  const tksuids = selectedItems.value.map(item => item.tksuid);
+  console.log(store.getters.getToken)
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/tk/evaluateTksuid',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json',
+      "Authorization": store.getters.getToken
+    },
+    data: {
+      "tksuids": tksuids
+    },
+    success: (response) => {
+      showModal.value = true;
+    },
+    fail: (error) => {
+      console.log('error', error);
+    }
+  });
+
+}
 </script>
 
 <style lang="scss">
@@ -228,4 +298,59 @@ const isSelected = (item) => {
   }
 }
 
+.bottom-nav {
+  position: fixed;
+  bottom: 15rpx;
+  left: 0;
+  width: 100%;
+  height: 60rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1rpx solid #ccc;
+
+  .zixun {
+    width: 150rpx;
+    height: 109rpx;
+    background: #FFFFFF;
+    border-radius: 0rpx 0rpx 0rpx 0rpx;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .shiyong {
+    width: 312rpx;
+    height: 109rpx;
+    background: #FF9957;
+    border-radius: 0rpx 0rpx 0rpx 0rpx;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .buy {
+    width: 312rpx;
+    height: 109rpx;
+    background: #3C7BFB;
+    box-shadow: 0rpx 4rpx 9rpx 2rpx rgba(0, 0, 0, 0.5);
+    border-radius: 0rpx 0rpx 0rpx 0rpx;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.modal-button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-button {
+  /* 你的按钮样式 */
+}
 </style>
