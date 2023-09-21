@@ -167,6 +167,13 @@
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/classification/package",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
