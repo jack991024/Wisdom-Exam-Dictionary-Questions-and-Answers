@@ -64,7 +64,7 @@
     <view class="item exam-information">
       <image src="../../../static/topic/01.png" class="item-icon"></image>
       <view class="text-container">
-        <text class="item-text">考试信息</text>
+        <text class="item-text">考试资讯</text>
         <text class="item-text-value">前沿考试资讯</text>
       </view>
     </view>
