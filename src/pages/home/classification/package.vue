@@ -185,9 +185,8 @@ const shiyong = () => {
     .label {
       width: 123rpx;
       height: 33rpx;
-      background: #3D7BFB;
+      background: #E1EAFD;
       border-radius: 16rpx 16rpx 16rpx 16rpx;
-      opacity: 0.16;
       display: flex; // 添加这一行
       justify-content: center; // 添加这一行
       align-items: center; // 添加这一行
@@ -201,15 +200,27 @@ const shiyong = () => {
       }
 
       &:nth-child(3n+1) {
-        background: #3D7BFB;
+        background: #E1EAFD;
+
+        text {
+          color: #3D7BFB;
+        }
       }
 
       &:nth-child(3n+2) {
-        background: #FF5756;
+        background: #FBE5E4;
+
+        text {
+          color: #FF5756;
+        }
       }
 
       &:nth-child(3n+3) {
-        background: #FF9957;
+        background: #FCEFE5;
+
+        text {
+          color: #FF9957;
+        }
       }
     }
   }
