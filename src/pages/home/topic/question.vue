@@ -666,12 +666,14 @@ rich-text {
   }
 }
 
+/*
 .label {
-  background-color: #2e68f5; /* Background color of the label */
-  border-radius: 12px; /* Rounded corners */
-  padding: 8px 16px; /* Padding inside the label */
-  font-size: 16px; /* Font size */
-  color: #fff; /* Text color */
+  background-color: #2e68f5; !* Background color of the label *!
+  border-radius: 12px; !* Rounded corners *!
+  padding: 8px 16px; !* Padding inside the label *!
+  font-size: 16px; !* Font size *!
+  color: #fff; !* Text color *!
 }
+*/
 
 </style>
