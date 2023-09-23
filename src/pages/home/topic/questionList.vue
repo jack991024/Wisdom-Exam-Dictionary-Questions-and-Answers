@@ -1,12 +1,15 @@
 <template>
   <view class="container">
-    <view v-for="(item,index) in questionLists" :key="index" class="question-item">
+    <view v-for="(item,index) in questionLists" :key="index" class="question-item"
+          :style="item.depth === 2 ? {'background-image': 'url(../../../static/topic/five-stars.png)'} : {}">
       <view class="question-content" @click="jumpQuestion(item)">
         <text class="question-name">{{ item.name }}</text>
-<!--        <view :v-if="item.depth > 3">-->
-<!--          <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>-->
-<!--        </view>-->
-        <text class="question-total">本卷共{{ item.total }}卷</text>
+        <view v-if="item.depth > 2">
+          <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>
+        </view>
+        <view v-else>
+          <text class="question-total">本卷共{{ item.total }}卷</text>
+        </view>
       </view>
     </view>
   </view>
@@ -69,6 +72,7 @@ const jumpQuestion = (item) => {
   border-radius: 10px; // 圆角
   margin-bottom: 10px; // 一些底部边距，以分隔各个项目
   padding: 15px; // 内部填充，使内容不紧贴边缘
+  background-repeat: no-repeat;
 
   .question-content {
     display: flex;
