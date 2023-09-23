@@ -19,7 +19,8 @@
         <view class="footer">
           <view class="price">
             <view class="priceNow">
-              <text>折后{{ item.detail?.min_price }}</text>
+              <text class="label" style="color: #FF3B30;font-size: 25.36rpx;">折后 ¥</text>
+              <text class="value" style="color: #FF3B30;font-size: 38.04rpx;">{{ item.detail?.min_price }}</text>
             </view>
             <view class="priceOld">
               <text>¥{{ item.detail?.max_price }}</text>
@@ -60,7 +61,14 @@
     </view>
     <!-- 底部导航栏 -->
     <view class="bottom-nav">
-      <view class="zixun">咨询</view>
+      <view class="zixun">
+        <view>
+          <image src="./static/fenlei/zixun.png" style="width: 45.29rpx;height: 45.29rpx;"></image>
+        </view>
+        <view>
+          <text>咨询</text>
+        </view>
+      </view>
       <view class="shiyong" @click="shiyong">点击试用</view>
       <view class="buy">立即购买</view>
     </view>
@@ -68,7 +76,7 @@
     <u-modal
         :show="showModal"
         :showConfirmButton="false"
-        :showCancelButton="false" style="width: 280px;">
+        :showCancelButton="false" width="507.25rpx" height="362.32rpx">
       <template v-slot:default>
         <text>{{ modalContent }}</text>
       </template>
@@ -259,6 +267,7 @@ const shiyong = () => {
           font-size: 25rpx;
           color: #AEAEB2;
           text-decoration: line-through;
+          margin-top: 5rpx;
         }
       }
     }
@@ -289,7 +298,7 @@ const shiyong = () => {
       width: 210rpx;
       height: 94rpx;
       background: #F7F7F7;
-      border-radius: 7rpx;
+      border-radius: 10rpx;
       opacity: 1;
       margin-right: 31rpx;
       margin-bottom: 31rpx;
@@ -323,7 +332,7 @@ const shiyong = () => {
   bottom: 15rpx;
   left: 0;
   width: 100%;
-  height: 60rpx;
+  height: 161.23rpx;
   background-color: #fff;
   display: flex;
   justify-content: space-around;
@@ -339,13 +348,15 @@ const shiyong = () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
   }
 
   .shiyong {
-    width: 312rpx;
-    height: 109rpx;
-    background: #FF9957;
-    border-radius: 0rpx 0rpx 0rpx 0rpx;
+    color: #fff;
+    width: 283rpx;
+    height: 87rpx;
+    background: #F19D64;
+    border-radius: 14rpx 14rpx 14rpx 14rpx;
     opacity: 1;
     display: flex;
     justify-content: center;
@@ -353,11 +364,11 @@ const shiyong = () => {
   }
 
   .buy {
-    width: 312rpx;
-    height: 109rpx;
-    background: #3C7BFB;
-    box-shadow: 0rpx 4rpx 9rpx 2rpx rgba(0, 0, 0, 0.5);
-    border-radius: 0rpx 0rpx 0rpx 0rpx;
+    color: #fff;
+    width: 283rpx;
+    height: 87rpx;
+    background: #497DF3;
+    border-radius: 14rpx 14rpx 14rpx 14rpx;
     opacity: 1;
     display: flex;
     justify-content: center;
