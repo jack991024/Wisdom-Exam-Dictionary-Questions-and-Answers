@@ -452,7 +452,7 @@ function handleSubmitPaper() {
           padding: 1px 8px;
           margin-bottom: 5rpx;
           border-radius: 12px;
-          margin-right: 10px;
+          margin-right: 5px;
           display: inline-block;
           vertical-align: middle; // 添加此属性以使其垂直居中
           flex: none;
