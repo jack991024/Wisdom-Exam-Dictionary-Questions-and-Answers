@@ -4,8 +4,13 @@
           :style="item.depth === 2 ? {'background-image': 'url(../../../static/topic/five-stars.png)'} : {}">
       <view class="question-content" @click="jumpQuestion(item)">
         <text class="question-name">{{ item.name }}</text>
-        <view v-if="item.depth > 2">
-          <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>
+        <view v-if="item.depth > 2" style="display: flex;align-items: center;">
+          <view style="width: 318.84rpx;margin-right: 15rpx">
+            <u-line-progress :percentage="30" :showText="false" activeColor="#3C7BFB" height="4.5"/>
+          </view>
+          <view class="done-info" style="font-size: 24.74rpx;color: #262626;">
+            {{ item.done }}/{{ item.total }}
+          </view>
         </view>
         <view v-else>
           <text class="question-total">本卷共{{ item.total }}卷</text>
@@ -79,8 +84,8 @@ const jumpQuestion = (item) => {
     flex-direction: column;
 
     .question-name {
-      font-size: 16px; // 第一个文本元素（问题名称）的字体较大
-      color: #333; // 深色文本
+      font-size: 33rpx; // 第一个文本元素（问题名称）的字体较大
+      color: #262626; // 深色文本
       margin-bottom: 5px; // 在两行文本之间添加一些空间
       overflow: hidden; // 隐藏超出容器的内容
       white-space: nowrap; // 阻止文本换行
@@ -89,8 +94,8 @@ const jumpQuestion = (item) => {
     }
 
     .question-total {
-      font-size: 12px; // 第二个文本元素（总卷数）的字体稍小
-      color: #666; // 浅色文本
+      font-size: 25rpx; // 第二个文本元素（总卷数）的字体稍小
+      color: #AEAEB2; // 浅色文本
     }
   }
 }
