@@ -42,67 +42,72 @@
 </template>
 
 <script>
-	export default {
-		emits: ['onClickItem'],
-		props: {
-			//选项数组
-			values: {
-				type: Array,
-				default: ''
-			},
-			//当前选中的tab索引值，从0计数
-			current: {
-				type: Number,
-				default: 0
-			},
-			//选中的标签背景色与边框颜色
-			activeColor: {
-				type: String,
-				default: '#409efe'
-			},
-			//样式类型，text/button/inlineButton
-			styleType: {
-				type: String,
-				default: 'text'
-			},
-		},
-		data() {
-			return {
-				scrollLeft:0,
-				isvisited: this.current, //当前选中的tab索引值
-				topHeight: '', //slot距离顶部高度
-			}
-		},
-		computed: {
-			//动态获取数组个数分布宽度
-			width: function() {
-				if (this.values.length > 4) {
-					return Number(25) + '%';
-				} else {
-					return Number(100) / this.values.length + '%';
-				}
-			},
-		},
-		mounted() {
-			//app端获取分段器高度
-			const query = uni.createSelectorQuery().in(this)
-			query
-				.select('#header')
-				.boundingClientRect(data => {
-					this.topHeight = data.height + 'px'
-				})
-				.exec();
-		},
-		methods: {
-			// 组件触发点击事件时触发
-			onClickItem(index) {
-				this.isvisited = index;
-				this.scrollLeft = 60 * index - 60
-				this.$emit('onClickItem', this.isvisited)
-			}
-		}
-	}
+import { ref, computed, onMounted } from 'vue';
+export default {
+  emits: ['onClickItem'],
+  props: {
+    values: {
+      type: Array,
+      default: () => []
+    },
+    current: {
+      type: Number,
+      default: 0
+    },
+    activeColor: {
+      type: String,
+      default: '#3C7BFB'
+    },
+    styleType: {
+      type: String,
+      default: 'text'
+    },
+  },
+  setup(props, { emit }) {
+    const scrollLeft = ref(0);
+    const isvisited = ref(props.current);
+    const topHeight = ref('');
+
+    const width = computed(() => {
+      if (props.values.length > 4) {
+        return '25%';
+      } else {
+        return `${100 / props.values.length}%`;
+      }
+    });
+
+    onMounted(() => {
+      const query = uni.createSelectorQuery();
+      query
+          .select('#header')
+          .boundingClientRect(data => {
+            if (data) {
+              topHeight.value = `${data.height}px`;
+            } else {
+              console.warn("Unable to find element with id 'header'");
+            }
+          })
+          .exec();
+    });
+
+
+    const onClickItem = (index) => {
+      isvisited.value = index;
+      scrollLeft.value = 60 * index - 60;
+      emit('onClickItem', isvisited.value);
+    }
+
+    return {
+      scrollLeft,
+      isvisited,
+      topHeight,
+      width,
+      onClickItem
+    }
+  }
+}
 </script>
+
 
 <style lang="scss" scoped>
 	@import './index.scss';
