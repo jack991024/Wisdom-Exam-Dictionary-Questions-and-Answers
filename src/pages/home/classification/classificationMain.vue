@@ -1,7 +1,7 @@
 <template>
   <view class="header">
-    <view class="region">
-      <text>北京</text>
+    <view class="region" @click="navigatorToRegion">
+      <text>{{ regionName }}</text>
       <image src="./static/fenlei/jiantou.png" style="width: 21.74rpx;height: 13.57rpx;"></image>
     </view>
     <view class="search">
@@ -37,7 +37,7 @@
 
 <script setup>
 import {ref, computed, onMounted, reactive} from 'vue';
-import {onLoad} from "@dcloudio/uni-app"
+import {onLoad, onShow} from "@dcloudio/uni-app"
 import {useStore} from 'vuex'
 
 const store = useStore()
@@ -47,7 +47,7 @@ const list = ref([]);
 const chain = ref(false);
 const value = ref(0);
 
-let keyword=""
+let keyword = ""
 
 const list2 = computed(() => {
   const _list = list.value[value.value]?.children;
@@ -68,15 +68,23 @@ const scrolltolower = (index) => {
 };
 
 let regionId = ""
-
-onLoad(async (options) => {
+let regionName = ""
+onShow(async () => {
+  let region = {};
+  const item = uni.getStorageSync('item');
+  console.log("itemmmmm:", item)
+  if (item != null && item !== "") {
+    region = JSON.parse(item)
+  }
   uni.showLoading({
     title: '加载中'
   });
-  if (!options.id) {
+  if (!region.id) {
     regionId = "110000000000"
+    regionName = "北京"
   } else {
-    regionId = options.id
+    regionId = region.id
+    regionName = region.name
   }
   try {
     // 第一次请求获取name和fcid
@@ -102,7 +110,17 @@ onLoad(async (options) => {
 });
 
 const navigatorToItem = (item) => {
-  uni.navigateTo({url: "/pages/home/classification/TiKuItem?itemName=" + item.name + "&itemCoid=" + item.coid + "&regionId=" + regionId})
+  uni.navigateTo(
+      {
+        url: "/pages/home/classification/TiKuItem?itemName=" + item.name + "&itemCoid=" + item.coid + "&regionId=" + regionId
+      }
+  )
+}
+
+const navigatorToRegion = () => {
+  uni.navigateTo({
+    url: "/pages/home/classification/classificationRegions"
+  })
 }
 </script>
 
@@ -110,16 +128,16 @@ const navigatorToItem = (item) => {
 .header {
   height: 95rpx;
 
-  display: flex;          // Convert the container to a flexbox container.
-  flex-direction: row;    // This is the default value, but added for clarity.
+  display: flex; // Convert the container to a flexbox container.
+  flex-direction: row; // This is the default value, but added for clarity.
   justify-content: flex-start; // Position children to the start.
-  align-items: center;    // Center children vertically.
-  padding-left: 29rpx;    // Add padding to the left side to make .region start after 29rpx from the left.
+  align-items: center; // Center children vertically.
+  padding-left: 29rpx; // Add padding to the left side to make .region start after 29rpx from the left.
 
   .region {
     display: flex;
     align-items: center;
-    margin-right: 22rpx;  // Create a gap between .region and .search.
+    margin-right: 22rpx; // Create a gap between .region and .search.
 
     text {
       margin-right: 6rpx;

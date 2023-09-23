@@ -16,7 +16,7 @@
               </view>
               <view class="item-container">
                 <view class="thumb-box" v-for="(item, index) in item.regions" :key="index">
-                  <u-button class="item-menu-name" @click="mainRouter(item.id)">{{ item.name }}</u-button>
+                  <u-button class="item-menu-name" @click="mainRouter(item)">{{ item.name }}</u-button>
                 </view>
               </view>
             </view>
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import {ref, onMounted} from "vue";
 import classifyData from "../../../common/regions.js";
 
 const tabbar = ref(classifyData);
@@ -44,15 +44,15 @@ const swichMenu = async (index) => {
     await getElRect("u-tab-item", "menuItemHeight");
   }
   scrollTop.value =
-    index * menuItemHeight.value +
-    menuItemHeight.value / 2 -
-    menuHeight.value / 2;
+      index * menuItemHeight.value +
+      menuItemHeight.value / 2 -
+      menuHeight.value / 2;
 };
 
 const getElRect = async (elClass, dataVal) => {
   const query = uni.createSelectorQuery().in(this);
   const res = await new Promise((resolve) => {
-    query.select("." + elClass).fields({ size: true }, (res) => {
+    query.select("." + elClass).fields({size: true}, (res) => {
       resolve(res);
     }).exec();
   });
@@ -74,9 +74,11 @@ onMounted(() => {
   // You can perform any initial setup here
 });
 
-const mainRouter = (id) => {
-  uni.navigateTo({
-    url: "/pages/home/classification/classificationMain?id="+id,
+const mainRouter = (item) => {
+  console.log("item", item)
+  uni.setStorageSync('item', JSON.stringify(item));
+  uni.switchTab({
+    url: "/pages/home/classification/classificationMain",
   });
 };
 </script>
