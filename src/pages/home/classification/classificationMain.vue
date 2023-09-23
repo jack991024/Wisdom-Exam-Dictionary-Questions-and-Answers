@@ -75,6 +75,7 @@ onShow(async () => {
   console.log("itemmmmm:", item)
   if (item != null && item !== "") {
     region = JSON.parse(item)
+    uni.removeStorageSync("item")
   }
   uni.showLoading({
     title: '加载中'

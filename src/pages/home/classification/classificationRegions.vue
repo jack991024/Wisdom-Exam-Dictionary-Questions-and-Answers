@@ -2,8 +2,7 @@
   <view class="u-wrap">
     <view class="u-search-box">
       <view class="u-search-inner">
-        <u-icon name="search" color="#909399" :size="28"></u-icon>
-        <text class="u-search-text">搜索考试地区</text>
+        <u-search placeholder="搜索考试地区" action-style="color: #3C7BFB;"></u-search>
       </view>
     </view>
     <view class="u-menu-wrap">
@@ -104,8 +103,6 @@ const mainRouter = (item) => {
 }
 
 .u-search-inner {
-  background-color: rgb(234, 234, 234);
-  border-radius: 100rpx;
   display: flex;
   align-items: center;
   padding: 10rpx 16rpx;
