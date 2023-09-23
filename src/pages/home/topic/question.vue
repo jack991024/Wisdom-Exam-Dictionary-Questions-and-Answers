@@ -13,6 +13,7 @@
               <text class="question-type" v-if="item.qType===1">单选</text>
               <text class="question-type" v-if="item.qType===2">多选</text>
               <text class="question-type" v-if="item.qType===4">判断</text>
+              <text class="question-type" v-if="item.qType===5">简答</text>
               <view v-if="item.materials.length>0">
                 <l-floating-panel>
                   <scroll-view scroll-y style="height: 100%">
@@ -24,8 +25,19 @@
             </view>
 
             <view class="options">
+              <view v-if="item.qType===5" class="jianda">
+                <text class="label">请作答</text>
+                <view class="textArea">
+                  <u-textarea v-model="jiandaAnswer" placeholder="请输入您的解答"
+                              placeholderClass="font-size: 25rpx;color: #AEAEB2;"></u-textarea>
+                </view>
+                <view class="subButton">
+                  <text>确认答案</text>
+                </view>
+              </view>
               <!-- 使用v-for来循环渲染所有选项 -->
               <view
+                  v-if="item.qType!==5"
                   v-for="(op, index) in item.option"
                   :key="index"
                   :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
@@ -163,6 +175,7 @@ const questionLists = ref([])
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
+let jiandaAnswer = ""
 const open = () => {
   console.log('open');
   show.value = true
@@ -418,6 +431,36 @@ function handleSubmitPaper() {
     .options {
       display: flex;
       flex-direction: column;
+
+      .jianda {
+        margin-top: 10rpx;
+
+        .label {
+          font-size: 29rpx;
+          color: #636363;
+        }
+
+        .textArea {
+          margin-top: 22rpx;
+          width: 634rpx;
+          height: 163rpx;
+          border-radius: 7rpx 7rpx 7rpx 7rpx;
+          opacity: 1;
+        }
+
+        .subButton {
+          width: 199rpx;
+          height: 51rpx;
+          background: #3C7BFB;
+          border-radius: 25rpx 25rpx 25rpx 25rpx;
+          opacity: 1;
+          margin-top: 45rpx;
+          color: #fff;
+          justify-content: center;
+          align-items: center;
+          display: flex;
+        }
+      }
 
       .option-item {
         display: flex; // 使标签和描述水平对齐
