@@ -10,10 +10,11 @@
 
           <view class="question">
             <view class="question-description">
-              <text class="question-type" v-if="item.qType===1">单选</text>
-              <text class="question-type" v-if="item.qType===2">多选</text>
-              <text class="question-type" v-if="item.qType===4">判断</text>
-              <text class="question-type" v-if="item.qType===5">简答</text>
+              <view class="type-and-stem">
+                <view class="stam">
+                  <mp-html :content="processAnalyseContentTitle(item.stem, item.qType)"/>
+                </view>
+              </view>
               <view v-if="item.materials.length>0">
                 <l-floating-panel>
                   <scroll-view scroll-y style="height: 100%">
@@ -21,18 +22,20 @@
                   </scroll-view>
                 </l-floating-panel>
               </view>
-              <rich-text :nodes="processAnalyseContent(item.stem)" class="stem"></rich-text>
             </view>
 
             <view class="options">
               <view v-if="item.qType===5" class="jianda">
                 <text class="label">请作答</text>
+
                 <view class="textArea">
                   <u-textarea v-model="jiandaAnswer" placeholder="请输入您的解答"
                               placeholderClass="font-size: 25rpx;color: #AEAEB2;"></u-textarea>
                 </view>
-                <view class="subButton">
-                  <text>确认答案</text>
+                <view style="display: flex;flex-direction: column;align-items: center;">
+                  <view class="subButton">
+                    <text style="font-size: 25rpx;">确认答案</text>
+                  </view>
                 </view>
               </view>
               <!-- 使用v-for来循环渲染所有选项 -->
@@ -184,6 +187,34 @@ const open = () => {
 const close = () => {
   console.log('close')
   show.value = false
+}
+
+function processAnalyseContentTitle(analyse, qType) {
+  let questionTypeText = '';
+
+  switch (qType) {
+    case 1:
+      questionTypeText = '单选';
+      break;
+    case 2:
+      questionTypeText = '多选';
+      break;
+    case 4:
+      questionTypeText = '判断';
+      break;
+    case 5:
+      questionTypeText = '简答';
+      break;
+    default:
+      break;
+  }
+
+  return `
+    <view class="flex-container">
+      <text class="question-type">${questionTypeText}</text>
+      ${analyse.replace(/\<img/gi, '<img style=max-width:100%;height:auto')}
+    </view>
+  `;
 }
 
 function processAnalyseContent(analyse) {
@@ -410,20 +441,34 @@ function handleSubmitPaper() {
       color: #333;
       margin-bottom: 10px;
 
-      .question-type {
-        background-color: #f0f0f0;
-        color: #666;
-        font-size: 11px;
-        padding: 2px 8px;
-        border-radius: 12px;
-        margin-right: 10px;
-        display: inline-block;
-        vertical-align: middle; // 添加此属性以使其垂直居中
-      }
+      .type-and-stem {
+        display: flex;
+        align-items: flex-start;
 
-      .stem {
-        display: inline-block;
-        vertical-align: middle; // 添加此属性以使其垂直居中
+        .question-type {
+          background: #3C7BFB;
+          color: #FFF;
+          font-size: 11px;
+          padding: 1px 8px;
+          margin-bottom: 5rpx;
+          border-radius: 12px;
+          margin-right: 10px;
+          display: inline-block;
+          vertical-align: middle; // 添加此属性以使其垂直居中
+          flex: none;
+        }
+
+        .stem {
+          flex: 1; /* This allows the stem to take up the remaining width */
+          position: relative;
+        }
+
+        .stem::before {
+          content: '';
+          width: calc(11px + 2px + 8px + 10px); /* Font size + padding + margin of question-type */
+          display: block;
+          visibility: hidden;
+        }
       }
     }
 
@@ -446,6 +491,7 @@ function handleSubmitPaper() {
           height: 163rpx;
           border-radius: 7rpx 7rpx 7rpx 7rpx;
           opacity: 1;
+          width: 692.03rpx;
         }
 
         .subButton {
