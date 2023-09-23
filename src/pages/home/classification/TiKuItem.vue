@@ -17,8 +17,8 @@
         </view>
       </view>
       <view class="footer">
-        <view>共{{ item.detail.count }}科</view>
-        <view>共{{ item.detail.people }}人已学习</view>
+        <view><text>共{{ item.detail.count }}科</text></view>
+        <view><text>{{ item.detail.people }}人已学习</text></view>
       </view>
     </view>
   </view>
@@ -79,17 +79,24 @@ const naviToPackage = (item) => {
 }
 
 .tikuItem {
+  width: 692rpx;
+  height: 230rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+  border-radius: 22rpx 22rpx 22rpx 22rpx;
+  opacity: 1;
+  margin-left: 30rpx;
+  margin-top: 36rpx;
+
   .tikuDetail {
-    width: 692rpx;
-    height: 230rpx;
-    background: #FFFFFF;
-    box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
-    border-radius: 22rpx 22rpx 22rpx 22rpx;
-    opacity: 1;
-    margin-left: 30rpx;
+    &::before {
+      content: "";
+      display: block;
+      height: 22rpx;
+      visibility: hidden; // 使其不可见
+    }
 
     .title {
-      margin-top: 22rpx;
       margin-left: 22rpx;
       font-size: 33rpx;
       font-weight: bold;
@@ -111,9 +118,8 @@ const naviToPackage = (item) => {
       .label {
         width: 123rpx;
         height: 33rpx;
-        background: #3D7BFB;
+        background: #E1EAFD;
         border-radius: 16rpx 16rpx 16rpx 16rpx;
-        opacity: 0.16;
         display: flex; // 添加这一行
         justify-content: center; // 添加这一行
         align-items: center; // 添加这一行
@@ -127,15 +133,27 @@ const naviToPackage = (item) => {
         }
 
         &:nth-child(3n+1) {
-          background: #3D7BFB;
+          background: #E1EAFD;
+
+          text {
+            color: #3D7BFB;
+          }
         }
 
         &:nth-child(3n+2) {
-          background: #FF5756;
+          background: #FBE5E4;
+
+          text {
+            color: #FF5756;
+          }
         }
 
         &:nth-child(3n+3) {
-          background: #FF9957;
+          background: #FCEFE5;
+
+          text {
+            color: #FF9957;
+          }
         }
       }
     }
@@ -143,9 +161,14 @@ const naviToPackage = (item) => {
     .footer {
       margin-top: 18rpx;
       margin-left: 22rpx;
+      margin-right: 22rpx;
       display: flex;
       font-size: 21.74rpx;
+      justify-content: space-between;
 
+      text {
+        color: #898989;
+      }
       view:not(:last-child) {
         margin-right: 29rpx; // 添加这一行
       }

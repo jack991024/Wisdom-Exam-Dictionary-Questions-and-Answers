@@ -1,11 +1,23 @@
 <template>
+  <view class="header">
+    <view class="region">
+      <text>北京</text>
+      <image src="./static/fenlei/jiantou.png" style="width: 21.74rpx;height: 13.57rpx;"></image>
+    </view>
+    <view class="search">
+      <u-search placeholder="搜索考试科目" v-model="keyword" action-style="color: #3C7BFB;"></u-search>
+    </view>
+
+  </view>
   <view class="content">
     <uv-vtabs
         :chain="chain"
         :list="list"
         :barItemBadgeStyle="{right:'20px',top:'12px'}"
         @change="change"
-        @scrolltolower="scrolltolower">
+        @scrolltolower="scrolltolower"
+        barBgColor="#FFF"
+    >
       <uv-vtabs-item>
         <view class="root">
           <view
@@ -26,12 +38,16 @@
 <script setup>
 import {ref, computed, onMounted, reactive} from 'vue';
 import {onLoad} from "@dcloudio/uni-app"
+import {useStore} from 'vuex'
 
+const store = useStore()
 const getList = reactive([]);
 
 const list = ref([]);
 const chain = ref(false);
 const value = ref(0);
+
+let keyword=""
 
 const list2 = computed(() => {
   const _list = list.value[value.value]?.children;
@@ -57,7 +73,11 @@ onLoad(async (options) => {
   uni.showLoading({
     title: '加载中'
   });
-  regionId = options.id
+  if (!options.id) {
+    regionId = "110000000000"
+  } else {
+    regionId = options.id
+  }
   try {
     // 第一次请求获取name和fcid
     const response1 = await uni.request({
@@ -88,17 +108,36 @@ const navigatorToItem = (item) => {
 
 <style scoped lang="scss">
 .header {
-  padding: 30rpx;
-  font-size: 30rpx;
-  color: #333;
+  height: 95rpx;
+
+  display: flex;          // Convert the container to a flexbox container.
+  flex-direction: row;    // This is the default value, but added for clarity.
+  justify-content: flex-start; // Position children to the start.
+  align-items: center;    // Center children vertically.
+  padding-left: 29rpx;    // Add padding to the left side to make .region start after 29rpx from the left.
+
+  .region {
+    display: flex;
+    align-items: center;
+    margin-right: 22rpx;  // Create a gap between .region and .search.
+
+    text {
+      margin-right: 6rpx;
+    }
+  }
+
+  .search {
+    flex: 1; // Let the search take up all the remaining space.
+  }
 }
+
 
 .root {
   display: flex;
   flex-wrap: wrap;
 
   .item {
-    padding: 10rpx 20rpx;
+    padding: 10rpx 23rpx;
 
     .item-body {
       width: 225rpx;

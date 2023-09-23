@@ -61,8 +61,8 @@ import {useStore} from 'vuex'
 const store = useStore()
 const login = ref({
   userInfo: {
-    phoneMobile: "",
-    password: ""
+    phoneMobile: "13600000000",
+    password: "ABC123"
   }
 })
 
@@ -102,7 +102,7 @@ function loginIndex() {
    success: function (response) {
    store.commit('updateToken', response.data.data.token)
    uni.switchTab({
-   url: '/pages/home/classification/classificationRegions'
+   url: '/pages/home/classification/classificationMain'
    });
    // console.log(store.getters.getToken)
    },

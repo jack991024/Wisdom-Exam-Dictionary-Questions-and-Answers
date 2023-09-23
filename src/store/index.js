@@ -5,7 +5,8 @@ import {
 export default createStore({
     state: {
         token: '',
-        tiku: ''
+        tiku: '',
+        regionId: ''
     },
     mutations: {
         // 定义mutations，用于修改状态(同步)
@@ -14,8 +15,10 @@ export default createStore({
         },
         updateTiKu(state, payload) {
             state.tiku = payload
+        },
+        updateRegionId(state, payload) {
+            state.regionId = payload
         }
-
     },
     actions: {},
     getters: {
@@ -25,6 +28,9 @@ export default createStore({
         },
         getTiKu(state) {
             return state.tiku
+        },
+        getRegionId(state) {
+            return state.regionId
         }
     },
     modules: {}

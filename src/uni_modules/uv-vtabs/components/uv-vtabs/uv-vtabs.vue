@@ -389,6 +389,7 @@
 		@include flex;
 		&__bar {
 			background: $uv-bg-color;
+      border-right: 2rpx solid #E5E5E5;  // 这是添加的分割线样式
 			&-item {
 				position: relative;
 				@include flex;
@@ -399,23 +400,27 @@
 					/* #ifdef APP-NVUE */
 					padding: 0 12rpx;
 					/* #endif */
-					font-size: 14px;
-					color: $uv-content-color;
+					font-size: 28.99rpx;
+					color: #262626;
+          margin-bottom: 2px;  // 更改为2px，与线条的高度相同
 				}
 				&-active {
 					background: #fff;
 					&--value {
-						color: $uv-primary;
+						color: #3C7BFB;
 					}
 				}
 				&--line {
-					position: absolute;
-					width: 2px;
-					left: 0;
-					top: 0;
-					bottom: 0;
-					z-index: 1;
-					background-color: $uv-primary;
+          position: absolute;
+          left: 10%;
+          right: 10%;
+          bottom: 32rpx;
+          z-index: 1;
+          width: 116rpx;
+          height: 7rpx;
+          background: #3C7BFB;
+          border-radius: 4rpx 4rpx 4rpx 4rpx;
+          opacity: 1;
 				}
 				&--badge {
 					position: absolute;

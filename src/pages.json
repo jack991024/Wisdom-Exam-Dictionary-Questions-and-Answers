@@ -190,7 +190,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/home/classification/classificationRegions",
+        "pagePath": "pages/home/classification/classificationMain",
         "iconPath": "static/menu/classification.png",
         "selectedIconPath": "static/menu/classification.png",
         "text": "分类"
