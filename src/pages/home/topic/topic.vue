@@ -96,7 +96,7 @@
         <text class="item-text-value">哪些题最容易踩坑</text>
       </view>
     </view>
-    <view class="item collection-list">
+    <view class="item collection-list" @click="navigateToPath('favourite-board')">
       <image src="../../../static/topic/06.png" class="item-icon"></image>
       <view class="text-container">
         <text class="item-text">收藏列表</text>
