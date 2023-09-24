@@ -89,7 +89,7 @@
         <text class="item-text-value">所有收藏在这查看</text>
       </view>
     </view>
-    <view class="item wrong-question-list">
+    <view class="item wrong-question-list" @click="navigateToPath('error-board')">
       <image src="../../../static/topic/05.png" class="item-icon"></image>
       <view class="text-container">
         <text class="item-text">错题列表</text>
