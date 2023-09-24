@@ -15,15 +15,20 @@
 						</view>
 					</view>
 					<!-- 分段器类型为button -->
-					<view :style="{borderColor:activeColor}" :class="{'zy_segmented_control_values_button_left_borderRadius':index==0,'zy_segmented_control_values_button_right_borderRadius':index==(values.length
-				 	- 1),'zy_segmented_control_values_button_border':index!==(values.length- 1)}" v-else-if="styleType=='button'">
-						<view
-							:style="{backgroundColor:isvisited==index?activeColor:'#fff',color:isvisited==index?'#fff':activeColor}"
-							class="zy_segmented_control_values_button_item" :class="{'zy_segmented_control_values_button_item_left_borderRadius':index==0,'zy_segmented_control_values_button_item_right_borderRadius':index==(values.length
-				 	- 1)}">
-							{{item}}
-						</view>
-					</view>
+          <view
+                :class="{'zy_segmented_control_values_button_left_borderRadius':index==0,
+               'zy_segmented_control_values_button_right_borderRadius':index==(values.length - 1),
+               'zy_segmented_control_values_button_border':index!==(values.length- 1)}"
+                v-else-if="styleType=='button'">
+            <view
+                :style="{fontSize: '29rpx',
+                 color: isvisited==index ? '#3C7BFB' : '#000'}"
+                class="zy_segmented_control_values_button_item"
+                :class="{'zy_segmented_control_values_button_item_left_borderRadius':index==0,
+                 'zy_segmented_control_values_button_item_right_borderRadius':index==(values.length - 1)}">
+              {{item}}
+            </view>
+          </view>
 					<!-- 分段器为内嵌button -->
 					<view v-else-if="styleType=='inlineButton'">
 						<view

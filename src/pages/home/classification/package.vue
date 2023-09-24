@@ -3,8 +3,9 @@
     <view class="header">
       <image :src="item.detail?.cover" style="width:750rpx;height:422rpx;"></image>
     </view>
-    <zy-segmented :values="list" :current="curNow" @onClickItem="sectionChange"></zy-segmented>
-
+    <view style="border-bottom: 2rpx solid #C7C7CC;">
+      <zy-segmented :values="list" :current="curNow" @onClickItem="sectionChange"></zy-segmented>
+    </view>
     <u-gap height="1" bgColor="#f6f6f6"></u-gap>
     <view v-if="curNow===0">
       <view class="info">
