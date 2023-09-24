@@ -333,6 +333,7 @@ function calculateStatistics(param, questionList) {
     .card-status {
       display: flex;
       align-items: center;
+      margin-right: 188rpx;
 
       .status-item {
         display: flex;
@@ -362,8 +363,8 @@ function calculateStatistics(param, questionList) {
       margin-bottom: 20rpx;
 
       .category-header {
-        font-size: 26rpx;
-        font-weight: bold;
+        font-size: 30rpx;
+        color: #636363;
         margin-bottom: 10rpx;
       }
 
