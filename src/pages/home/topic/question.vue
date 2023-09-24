@@ -427,6 +427,8 @@ function selectMode(mode) {
 function handleSubmitPaper() {
   uni.setStorageSync("questionList", JSON.stringify(questionLists.value));
   uni.setStorageSync("param", JSON.stringify(userAnswers));
+  console.log("JSON.stringify(userAnswers):::", JSON.stringify(userAnswers))
+  console.log("JSON.stringify(questionList):::", JSON.stringify(questionLists.value))
   uni.navigateTo({
     url: '/pages/home/topic/examResult'
   });

@@ -49,15 +49,15 @@
 			},
 			bg_color: {
 				type: String,
-				default: '#FFF7EC'
+				default: '#D5E2FF'
 			},
 			start_color: {
 				type: String,
-				default: '#FFD743'
+				default: '#1C65FE'
 			},
 			end_color: {
 				type: String,
-				default: '#FF7F36'
+				default: '#1C65FE'
 			},
 		},
 		data() {

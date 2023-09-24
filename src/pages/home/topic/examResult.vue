@@ -6,7 +6,7 @@
           <text>练习报告</text>
         </view>
         <view class="percent-body">
-          <LCircularProgress :value="35"/>
+          <LCircularProgress :value="stats.correctRate"/>
           <view class="score">
             <text>准确率</text>
             <text class="score-value">{{ stats.correctRate }}%</text>
@@ -101,13 +101,14 @@
             <view
                 v-for="(item, index) in questions"
                 :key="index"
-                :class="['question-block', item.isCorrect ? 'correct' : item.answer.length === 0 ? 'not-done' : 'incorrect']"
+                :class="['question-block', item.status === '正确' ? 'correct' : item.status === '错误' ? 'incorrect' : 'not-done']"
             >
-              <text style="color: white">{{ parseInt(item.questionNumber) + 1 }}</text>
+              <text>{{ parseInt(index) + 1 }}</text>
             </view>
           </view>
         </view>
       </view>
+
     </view>
   </view>
 </template>
@@ -117,43 +118,54 @@ import LCircularProgress from './CustomProgress.vue'
 import {onLoad} from '@dcloudio/uni-app';
 import {reactive, ref} from 'vue';
 
+let stats = reactive({
+  chapterName: '',
+  totalQuestions: 0,
+  answeredCorrectly: 0,
+  answeredIncorrectly: 0,
+  notAnswered: 0,
+  correctRate: 0,
+  currentDate: ''
+});
+let groupedData = reactive({});
 
-let chapterName = {value: ""};
-let totalQuestions = {value: 0};
-let answeredCorrectly = {value: 0};
-let answeredIncorrectly = {value: 0};
-let notAnswered = {value: 0};
-let correctRate = {value: 0};
-let groupedData = reactive()
-let questionList = reactive()
-let stats = reactive({})
-onLoad((options) => {
-  let param = uni.getStorageSync("param")
-  let questionList = uni.getStorageSync("questionList")
-  let data = JSON.parse(param)
-  questionList = JSON.parse(questionList)
-  console.log(JSON.stringify(data))
-  console.log(JSON.stringify(questionList))
+onLoad(() => {
+  const param = JSON.parse(uni.getStorageSync("param"));
+  const questionList = JSON.parse(uni.getStorageSync("questionList")).result;
 
-
-  groupedData = Object.entries(data).reduce((acc, [questionNumber, item]) => {
-    if (!acc[item.qType]) {
-      acc[item.qType] = [];
+  // 初始化一个新的对象，其中每个题目的默认状态都是"未做"。
+  let questionStatus = [];
+  for (let question of questionList) {
+    questionStatus.push({
+      ...question,
+      status: "未做"
+    });
+  }
+  console.log("questionStatus:", questionStatus)
+  console.log("param:", param)
+  // 遍历param，并更新每个题目的状态为"已做"或"做错"。
+  for (let qid in param) {
+    console.log("qid:", qid);
+    console.log("questionStatus[qid]", questionStatus[qid])
+    if (questionStatus[qid]) {
+      questionStatus[qid].status = param[qid].isCorrect ? "正确" : "错误";
     }
-    acc[item.qType].push({...item, questionNumber});
+  }
+
+  // 使用新的对象来更新groupedData，这样它就会包含所有题目的状态。
+  groupedData = questionStatus.reduce((acc, question) => {
+    const qType = question.qType;
+    if (!acc[qType]) {
+      acc[qType] = [];
+    }
+    acc[qType].push(question);
     return acc;
   }, {});
 
-  console.log(JSON.stringify(groupedData))
+  console.log("groupedData:", groupedData)
 
-  const calculatedStats = calculateStatistics(data);
-
-  stats.chapterName = calculatedStats.chapterName;
-  stats.totalQuestions = calculatedStats.totalQuestions;
-  stats.answeredCorrectly = calculatedStats.answeredCorrectly;
-  stats.answeredIncorrectly = calculatedStats.answeredIncorrectly;
-  stats.notAnswered = calculatedStats.notAnswered;
-  stats.correctRate = calculatedStats.correctRate.toFixed(2);
+  const calculatedStats = calculateStatistics(param, questionList);
+  Object.assign(stats, calculatedStats);
 
   const now = new Date();
   const year = now.getFullYear();
@@ -163,29 +175,19 @@ onLoad((options) => {
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
 
-  stats.currentDate = `${year}:${month}:${day} ${hours}:${minutes}:${seconds}`;
+  stats.currentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
+  uni.removeStorageSync("param");
+  uni.removeStorageSync("questionList");
+});
 
-  console.log("Chapter Name:", stats.chapterName);
-  console.log("Total Questions:", stats.totalQuestions);
-  console.log("Answered Correctly:", stats.answeredCorrectly);
-  console.log("Answered Incorrectly:", stats.answeredIncorrectly);
-  console.log("Not Answered:", stats.notAnswered);
-  console.log("Correct Rate:", stats.correctRate);
-  console.log("Current Date:", stats.currentDate);
-
-  uni.removeStorageSync("param")
-  uni.removeStorageSync("questionList")
-})
-
-
-function calculateStatistics(data) {
-  const totalQuestions = data[Object.keys(data)[0]].total;
-  const answeredCorrectly = Object.values(data).filter(item => item.isCorrect).length;
-  const answeredIncorrectly = Object.values(data).filter(item => !item.isCorrect).length;
-  const notAnswered = totalQuestions - (answeredCorrectly + answeredIncorrectly);
+function calculateStatistics(param, questionList) {
+  const totalQuestions = questionList.length;
+  const answeredCorrectly = Object.values(param).filter(item => item.isCorrect).length;
+  const notAnswered = totalQuestions - Object.keys(param).length;
+  const answeredIncorrectly = totalQuestions - answeredCorrectly - notAnswered;
   const correctRate = (answeredCorrectly / totalQuestions) * 100;
-  const chapterName = data[Object.keys(data)[0]].chapter_name;
+  const chapterName = questionList[0].chapter_name;
 
   return {
     chapterName,
@@ -193,11 +195,11 @@ function calculateStatistics(data) {
     answeredCorrectly,
     answeredIncorrectly,
     notAnswered,
-    correctRate
+    correctRate: correctRate.toFixed(2)
   };
 }
-
 </script>
+
 
 <style lang="scss">
 .exam-report {
@@ -383,15 +385,27 @@ function calculateStatistics(data) {
           text-align: center;
 
           &.not-done {
-            background-color: grey;
+            background-color: #F7F7F7;
+
+            text {
+              color: #AEAEB2;
+            }
           }
 
           &.correct {
             background-color: #4CDA94;
+
+            text {
+              color: #FFFFFF;
+            }
           }
 
           &.incorrect {
             background-color: #FF3B30;
+
+            text {
+              color: #FFFFFF;
+            }
           }
         }
       }
