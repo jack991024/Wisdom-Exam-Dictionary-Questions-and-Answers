@@ -154,15 +154,12 @@
         :placeholder="true"
         :safeAreaInsetBottom="true"
     >
-      <u-tabbar-item text="目录" icon="list-dot" @click="open"></u-tabbar-item>
-      <u-tabbar-item text="题卡" icon="list-dot" @click=""></u-tabbar-item>
+      <u-tabbar-item text="目录" icon="../../../../static/topic/menu.png" @click="open"></u-tabbar-item>
+      <u-tabbar-item text="题卡" icon="../../../../static/topic/tika.png" @click="toggleTiKa"></u-tabbar-item>
       <u-tabbar-item text="收藏" v-if="!isFavorited.value"
                      icon="../../../../static/topic/fav.png"
                      @click="toggleFavorite"></u-tabbar-item>
-      <u-tabbar-item text="收藏" v-if="isFavorited.value"
-                     icon='../../../../static/topic/isFav.png'
-                     @click="toggleFavorite"></u-tabbar-item>
-      <u-tabbar-item text="模式" icon="list" @click="changeMode"></u-tabbar-item>
+      <u-tabbar-item text="模式" icon="../../../../static/topic/mode.png" @click="changeMode"></u-tabbar-item>
     </u-tabbar>
 
     <view v-if="isModeModalOpen" class="mode-modal">
@@ -170,14 +167,16 @@
       <u-button :plain="true" icon="search" text="检测模式" @click="selectMode('exam')"></u-button>
       <u-button :plain="true" icon="grid" text="背题模式" @click="selectMode('recite')"></u-button>
     </view>
-
   </view>
+
+  <ExamInfoCard :groupedData="groupedData" v-if="isTiKa"/>
 </template>
 
 <script setup>
 import {onLoad} from '@dcloudio/uni-app';
-import {ref, reactive, onMounted} from 'vue';
+import {ref, reactive, onMounted, watch} from 'vue';
 import {useStore} from 'vuex'
+import ExamInfoCard from "../../../components/ExamInfoCard.vue";
 
 const store = useStore()
 const questionLists = ref([])
@@ -404,6 +403,34 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
     });
   }
 
+}
+
+//todo 构造data
+const groupedData = ref([])
+watch(userAnswers, () => {
+  // 初始化groupedData
+  for (let question of questionLists) {
+    groupedData.value.push({
+      ...question,
+      status: "未做"
+    });
+  }
+
+  for (let qid in userAnswers) {
+    console.log("qid:", qid);
+    console.log("questionStatus[qid]", groupedData[qid])
+    if (groupedData[qid]) {
+      groupedData[qid].status = userAnswers[qid].isCorrect ? "正确" : "错误";
+    }
+  }
+
+}, {deep: true});
+
+
+const isTiKa = ref(false); // 初始化为未展开状态
+
+const toggleTiKa = () => {
+  isTiKa.value = !isTiKa.value
 }
 
 const isFavorited = ref(false); // 初始化为未收藏状态
