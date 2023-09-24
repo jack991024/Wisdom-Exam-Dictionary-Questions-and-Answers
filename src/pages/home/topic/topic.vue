@@ -82,7 +82,7 @@
         <text class="item-text-value">所有错题在这查看</text>
       </view>
     </view>
-    <view class="item my-collection">
+    <view class="item my-collection" @click="navigateToPath('my-favorite-question')">
       <image src="../../../static/topic/04.png" class="item-icon"></image>
       <view class="text-container">
         <text class="item-text">我的收藏</text>

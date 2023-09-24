@@ -202,6 +202,13 @@
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/my-favorite-question",
+      "style": {
+        "navigationBarTitleText": "收藏排行",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
