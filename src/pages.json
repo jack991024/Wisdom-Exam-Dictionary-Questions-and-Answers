@@ -188,6 +188,13 @@
         "navigationBarTitleText": "资讯详情",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/my-wrong-question",
+      "style": {
+        "navigationBarTitleText": "错题排行",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

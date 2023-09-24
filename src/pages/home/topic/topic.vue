@@ -75,7 +75,7 @@
         <text class="item-text-value">各类优质免费资料</text>
       </view>
     </view>
-    <view class="item my-wrong-question">
+    <view class="item my-wrong-question" @click="navigateToPath('my-wrong-question')">
       <image src="../../../static/topic/03.png" class="item-icon"></image>
       <view class="text-container">
         <text class="item-text">我的错题</text>
@@ -223,7 +223,6 @@ const loadMenus = () => {
 }
 
 const bannerLoads = () => {
-  console.log("tkid:", tkid)
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/banners',
     method: 'POST',
@@ -352,7 +351,7 @@ const loadState = () => {
 watch(
     () => tkid.value, // 使用函数返回tkid的值，以确保深度监听
     (newTkid, oldTkid) => {
-      console.log(1);
+      uni.setStorageSync("tkid", newTkid)
       bannerLoads();
       loadMenus();
       loadQuestionBanks();
@@ -371,7 +370,8 @@ onShow(() => {
     value2.value = tiku.tkid
     tkid.value = tiku.tkid
   }
-
+  console.log("tkid:", tkid.value)
+  uni.setStorageSync("tkid", tkid.value)
   bannerLoads()
   loadMenus()
   loadQuestionBanks()
@@ -380,7 +380,7 @@ onShow(() => {
 
 const navigateToPath = (param) => {
   uni.navigateTo({
-    url:'/pages/home/topic/'+param
+    url: '/pages/home/topic/' + param
   })
 }
 </script>
