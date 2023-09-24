@@ -244,6 +244,7 @@ const bannerLoads = () => {
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data)) {
+        swiperLists.value = []
         res.data.data.forEach(img => {
           swiperLists.value.push(
               img.image_src2
@@ -458,7 +459,6 @@ const navigateToPath = (param) => {
 
 .question-menu {
   display: flex;
-  justify-content: space-around;
   align-items: center;
   width: 100%;
   margin-top: 20px;
@@ -468,6 +468,7 @@ const navigateToPath = (param) => {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    margin-right: 74rpx;
 
     .menu-image {
       width: 35px;

@@ -155,8 +155,13 @@
         :safeAreaInsetBottom="true"
     >
       <u-tabbar-item text="目录" icon="list-dot" @click="open"></u-tabbar-item>
-      <u-tabbar-item text="题卡" icon="list-dot" @click="openQuestionCard"></u-tabbar-item>
-      <u-tabbar-item text="收藏" icon="star" @click=""></u-tabbar-item>
+      <u-tabbar-item text="题卡" icon="list-dot" @click=""></u-tabbar-item>
+      <u-tabbar-item text="收藏" v-if="!isFavorited.value"
+                     icon="../../../../static/topic/fav.png"
+                     @click="toggleFavorite"></u-tabbar-item>
+      <u-tabbar-item text="收藏" v-if="isFavorited.value"
+                     icon='../../../../static/topic/isFav.png'
+                     @click="toggleFavorite"></u-tabbar-item>
       <u-tabbar-item text="模式" icon="list" @click="changeMode"></u-tabbar-item>
     </u-tabbar>
 
@@ -401,6 +406,13 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
 
 }
 
+const isFavorited = ref(false); // 初始化为未收藏状态
+
+const toggleFavorite = () => {
+  isFavorited.value = !isFavorited.value;
+  console.log(isFavorited)
+}
+
 const indexToLetter = (indexArray, qType) => {
   if (!indexArray) return '';
   if (qType === 4) {
@@ -633,7 +645,7 @@ function handleSubmitPaper() {
 .mode-modal {
   position: fixed;
   bottom: 84px;
-  left: 273px;
+  right: 0rpx;
   background-color: rgba(0, 0, 0, 0.5); // Semi-transparent background
   display: flex;
   flex-direction: column;
