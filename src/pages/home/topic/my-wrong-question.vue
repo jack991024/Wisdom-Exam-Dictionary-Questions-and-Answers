@@ -3,21 +3,23 @@
     <view class="header">
       <zy-segmented :values="list" :current="curNow" @onClickItem="sectionChange"></zy-segmented>
     </view>
-    <view class="list">
-      <view v-for="(item,index) in wrongQuestionList" :key="index" class="item">
-        <view class="title">
-          <text>{{ item.stem }}</text>
-        </view>
-
-        <view class="footer">
-          <view class="left">
-            <view class="sources">
-              <text>来源：{{ item.source }}</text>
-            </view>
+    <view v-if="curNow!==1">
+      <view class="list">
+        <view v-for="(item,index) in wrongQuestionList" :key="index" class="item">
+          <view class="title">
+            <text>{{ item.stem }}</text>
           </view>
-          <view class="right">
-            <view class="createTime">
-              <text>{{ formatDate(item.update_at) }}</text>
+
+          <view class="footer">
+            <view class="left">
+              <view class="sources">
+                <text>来源：{{ item.source }}</text>
+              </view>
+            </view>
+            <view class="right">
+              <view class="createTime">
+                <text>{{ formatDate(item.update_at) }}</text>
+              </view>
             </view>
           </view>
         </view>
@@ -102,7 +104,6 @@ onShow((options) => {
     .title {
       margin-top: 22rpx;
       font-size: 29rpx;
-      font-weight: bold;
       color: #262626;
       display: -webkit-box;
       -webkit-line-clamp: 2;
