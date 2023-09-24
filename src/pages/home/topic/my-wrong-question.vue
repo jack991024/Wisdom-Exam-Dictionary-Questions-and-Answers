@@ -31,7 +31,13 @@
         <zy-segmented :values="listMenus" :current="curNowMenus" @onClickItem="sectionChangeMenus"
                       styleType='button'></zy-segmented>
       </view>
+      <view class="list">
+        <view v-for="(item,index) in getCurrentChildren()" :key="index" class="itemTwo">
+          <u-cell :title="item.name" :value="item.count" :isLink="true" :center="true" :border="false"></u-cell>
+        </view>
+      </view>
     </view>
+
   </view>
 </template>
 
@@ -56,6 +62,24 @@ const sectionChangeMenus = (index) => {
   console.log("value", curNowMenus.value)
 }
 
+// 创建一个响应式变量用于存储分类后的数据
+const menuData = ref({});
+
+// 当data更新时，更新menuData
+const updateMenuData = (data) => {
+  const newData = {};
+  data.forEach(item => {
+    newData[item.name] = item.children;
+  });
+  menuData.value = newData;
+};
+
+// 当用户在分段器中切换菜单时，显示对应的children内容
+const getCurrentChildren = () => {
+  return menuData.value[listMenus.value[curNowMenus.value]] || [];
+};
+
+
 const sectionChange = (index) => {
   curNow.value = index;
   console.log("value", curNow.value)
@@ -76,7 +100,7 @@ const sectionChange = (index) => {
         let data = response.data.data;
         listMenus.value = uni.getStorageSync("menus").map(item => item.menu)
         console.log("listMenus:", listMenus.value)//["预测试卷","模拟预测","章节训练"]
-        wrongQuestionAllList.value = "";
+        updateMenuData(data);
       },
       fail: (error) => {
         console.log(error);
@@ -176,6 +200,20 @@ onShow((options) => {
         margin-right: 22rpx;
       }
     }
+  }
+
+  .itemTwo {
+    width: 692rpx;
+    height: 167rpx;
+    background: #FFFFFF;
+    box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
+    margin-left: 29rpx;
+    display: flex; // 添加这一行
+    flex-direction: column; // 添加这一行
+    justify-content: center; // 添加这一行
+    margin-bottom: 29rpx;
   }
 }
 </style>
