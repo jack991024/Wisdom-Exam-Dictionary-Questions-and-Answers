@@ -110,6 +110,13 @@ onShow((options) => {
       overflow: hidden;
       margin-right: 22rpx;
       margin-left: 22rpx;
+      height: 80rpx;
+
+      &::after {
+        content: "";
+        display: block;
+        height: 40rpx;
+      }
     }
 
     .footer {
