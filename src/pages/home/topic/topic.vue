@@ -112,19 +112,19 @@
         lineColor="white"
     ></u-divider>
     <view class="share-body">
-      <view class="weixin">
+      <view class="weixin" @click="onShareAppMessage">
         <image src="../../..//static/topic/share_1.png" class="share-icon"></image>
         <text class="item-text">微信好友</text>
       </view>
-      <view class="weixinpengyouquan">
+      <view class="weixinpengyouquan" @click="onShareAppMessage">
         <image src="../../../static/topic/share_2.png" class="share-icon"></image>
         <text class="item-text">朋友圈</text>
       </view>
-      <view class="qq">
+      <view class="qq" @click="onShareAppMessage">
         <image src="../../../static/topic/share_3.png" class="share-icon"></image>
         <text class="item-text">QQ好友</text>
       </view>
-      <view class="qqzone">
+      <view class="qqzone" @click="onShareAppMessage">
         <image src="../../../static/topic/share_4.png" class="share-icon"></image>
         <text class="item-text">QQ空间</text>
       </view>
@@ -170,6 +170,14 @@ const imagePaths = [
 ];
 
 let imageIndex = 0;
+
+const onShareAppMessage = (res) => {
+  return {
+    title: '智考典题库',
+    path: '/pages/login/login'//分享的页面路径
+  }
+}
+
 
 function processData(data) {
   return data.map((item, index) => {
