@@ -237,6 +237,13 @@
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/jump-items-fav",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

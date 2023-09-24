@@ -5,7 +5,8 @@
     </view>
     <view v-if="curNow!==1">
       <view class="list">
-        <view v-for="(item,index) in wrongQuestionList" :key="index" class="item">
+        <view v-for="(item,index) in wrongQuestionList" :key="index" class="item"
+              @click="navigateToQuestionFavNew(item,index)">
           <view class="title">
             <text>{{ item.stem }}</text>
           </view>
@@ -42,7 +43,7 @@
       <view class="list">
         <view v-for="(item,index) in getCurrentChildren()" :key="index" class="itemTwo">
           <u-cell :title="item.name" :value="item.count" :isLink="true" :center="true" :border="false"
-                  @click="open"></u-cell>
+                  @click="jumpToItems(item)"></u-cell>
         </view>
       </view>
     </view>
@@ -75,15 +76,49 @@ const handleOverlayClick = () => {
 };
 
 const reviewMistakes = () => {
-  console.log('进行错题回顾');
+  console.log('进行收藏回顾');
+  navigateToQuestion(currentItem.value, 0)
   close();
 };
 
 const redoMistakes = () => {
-  console.log('进行错题重做');
+  console.log('进行收藏重做');
+  navigateToQuestion2(currentItem.value, 0)
   close();
 };
 
+const navigateToQuestionFavNew = (item, index) => {
+  const result = wrongQuestionList.value.map(item => ({
+    chid: item.chid,
+    qid: item.qid
+  }));
+
+  uni.setStorageSync("favQuestionListsNew", result);
+
+  uni.navigateTo({url: "/pages/home/topic/question-jump?title=最近收藏&type=4&currentIndex=" + index})
+}
+
+const navigateToQuestion = (item, index) => {
+  const result = {
+    chid: item.chid,
+    qid: item.qid
+  };
+
+  uni.setStorageSync("favQuestionLists", result);
+
+  uni.navigateTo({url: "/pages/home/topic/question-jump?title=" + item.name + "&type=5&currentIndex=" + index})
+}
+
+const navigateToQuestion2 = (item, index) => {
+  const result = {
+    chid: item.chid,
+    qid: item.qid
+  };
+
+  uni.setStorageSync("wrongQuestionLists", result);
+
+  uni.navigateTo({url: "/pages/home/topic/question-jump?title=" + item.name + "&type=3&currentIndex=" + index})
+}
 
 const list = ref(['最新收藏', '全部收藏']);
 const listMenus = ref([]);
@@ -114,6 +149,20 @@ const getCurrentChildren = () => {
   return menuData.value[listMenus.value[curNowMenus.value]] || [];
 };
 
+const currentItem = ref(null)
+const jumpToItems = (item) => {
+  console.log("item:", item)
+  if (item.children.length !== 0) {
+    uni.setStorageSync("item", item)
+    console.log("item.name", item.name)
+    uni.navigateTo({
+      url: "/pages/home/topic/jump-items-fav?name=" + item.name
+    })
+  } else {
+    currentItem.value = item;
+    open()
+  }
+}
 
 const sectionChange = (index) => {
   curNow.value = index;
