@@ -34,7 +34,8 @@
                 </view>
                 <view style="display: flex;flex-direction: column;align-items: center;">
                   <view class="subButton">
-                    <text style="font-size: 25rpx;">确认答案</text>
+                    <text style="font-size: 25rpx;" @click="validateAnswer(itemIndex,itemIndex,item,'true')">确认答案
+                    </text>
                   </view>
                 </view>
               </view>
@@ -320,21 +321,31 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
 
   const selectedAnswer = selectedOptions[questionIndex];
 
-  userAnswers[questionIndex] = {
-    answer: selectedOptions[questionIndex],
-    isCorrect: JSON.stringify(correctAnswer.sort()) === JSON.stringify(selectedAnswer.sort()),
-    correctOption: correctAnswer, // Storing correct answer options
-    incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)), // Storing incorrect answer options
-    qType: item.qType,
-    total: questionLists.value.result.length,
-    chapter_name: questionLists.value.chapter_name
-  };
+  if (item.qType !== 5) {
+    userAnswers[questionIndex] = {
+      answer: selectedOptions[questionIndex],
+      isCorrect: JSON.stringify(correctAnswer.sort()) === JSON.stringify(selectedAnswer.sort()),
+      correctOption: correctAnswer, // Storing correct answer options
+      incorrectOption: selectedAnswer.filter(option => !correctAnswer.includes(option)), // Storing incorrect answer options
+      qType: item.qType,
+      total: questionLists.value.result.length,
+      chapter_name: questionLists.value.chapter_name
+    };
+  } else if (item.qType === 5) {
+    userAnswers[questionIndex] = {
+      answer: jiandaAnswer,
+      isCorrect: true,
+      qType: item.qType,
+      total: questionLists.value.result.length,
+      chapter_name: questionLists.value.chapter_name
+    };
+  }
 
   console.log("correct:", correctAnswer);
   console.log("select:", selectedAnswer);
   console.log("userAnswers:", userAnswers[questionIndex])
   console.log("item:", item)
-  if ((item.qType !== 2 && !clickButton) || (item.qType === 2 && clickButton === 'true')) {
+  if ((item.qType !== 2 && item.qType !== 5 && !clickButton) || (item.qType === 2 && clickButton === 'true')) {
     let selectAnswer = indexToLetter(selectedAnswer, item.qType)
     uni.request({
       url: 'https://dev.zhikaodian.com/apiV2/tk/submit',
@@ -352,6 +363,33 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
         console.log(JSON.stringify(response.data));
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
+          handleSubmitPaper(userAnswers);
+        }
+      },
+      fail: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  if (item.qType === 5) {
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/tk/submit',
+      method: 'POST',
+      header: {
+        "Authorization": store.getters.getToken,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        "chid": item.chid,
+        "qid": item.qid,
+        "answer": jiandaAnswer
+      },
+      success: (response) => {
+        console.log(JSON.stringify(response.data));
+        // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
+        if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
+          console.log("questionLists:", JSON.stringify(questionLists.value))
           handleSubmitPaper(userAnswers);
         }
       },
@@ -387,8 +425,10 @@ function selectMode(mode) {
 }
 
 function handleSubmitPaper() {
+  uni.setStorageSync("questionList", JSON.stringify(questionLists.value));
+  uni.setStorageSync("param", JSON.stringify(userAnswers));
   uni.navigateTo({
-    url: '/pages/home/topic/examResult?param=' + JSON.stringify(userAnswers) + '&questionList=' + JSON.stringify(questionLists.value)
+    url: '/pages/home/topic/examResult'
   });
 }
 </script>

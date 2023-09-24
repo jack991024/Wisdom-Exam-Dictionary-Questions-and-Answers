@@ -91,10 +91,11 @@
       <view class="card-body">
         <view class="question-category" v-for="(questions, qType) in groupedData" :key="qType">
           <view class="category-header">
-            <text v-if="qType === '1'">{{ '单选题'}}</text>
-            <text v-if="qType === '2'">{{ '多选题'}}</text>
-            <text v-if="qType === '3'">{{ '材料题'}}</text>
-            <text v-if="qType === '4'">{{ '判断题'}}</text>
+            <text v-if="qType === '1'">{{ '单选题' }}</text>
+            <text v-if="qType === '2'">{{ '多选题' }}</text>
+            <text v-if="qType === '3'">{{ '材料题' }}</text>
+            <text v-if="qType === '4'">{{ '判断题' }}</text>
+            <text v-if="qType === '5'">{{ '简答题' }}</text>
           </view>
           <view class="category-body">
             <view
@@ -127,8 +128,10 @@ let groupedData = reactive()
 let questionList = reactive()
 let stats = reactive({})
 onLoad((options) => {
-  let data = JSON.parse(options.param)
-  questionList = JSON.parse(options.questionList)
+  let param = uni.getStorageSync("param")
+  let questionList = uni.getStorageSync("questionList")
+  let data = JSON.parse(param)
+  questionList = JSON.parse(questionList)
   console.log(JSON.stringify(data))
   console.log(JSON.stringify(questionList))
 
@@ -170,6 +173,9 @@ onLoad((options) => {
   console.log("Not Answered:", stats.notAnswered);
   console.log("Correct Rate:", stats.correctRate);
   console.log("Current Date:", stats.currentDate);
+
+  uni.removeStorageSync("param")
+  uni.removeStorageSync("questionList")
 })
 
 
@@ -349,6 +355,7 @@ function calculateStatistics(data) {
   .card-body {
     margin-top: 22rpx;
     margin-left: 22rpx;
+
     .question-category {
       margin-bottom: 20rpx;
 
