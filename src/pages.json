@@ -223,6 +223,20 @@
         "navigationBarTitleText": "收藏排行",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/person/my-kecheng",
+      "style": {
+        "navigationBarTitleText": "我的课程",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/topic/jump-items",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

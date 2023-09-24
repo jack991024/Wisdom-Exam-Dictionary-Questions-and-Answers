@@ -7,7 +7,7 @@
               title="头像"
               :isLink="true"
               @click="changeAvatar"
-              size="large"
+              customHeight="185rpx"
           >
             <template #value>
               <u-avatar
@@ -24,6 +24,7 @@
               :isLink="true"
               @click="navigateToProfile('username')"
               size="large"
+              customHeight="127rpx"
           >
             <template #value>
               <text>Shinn</text>
@@ -36,6 +37,7 @@
               :isLink="true"
               @click="navigateToProfile('gender')"
               size="large"
+              customHeight="127rpx"
           >
             <template #value>
               <text>保密</text>
@@ -48,6 +50,7 @@
               :isLink="true"
               @click="navigateToProfile('password')"
               size="large"
+              customHeight="127rpx"
           >
           </u-cell>
         </u-list-item>
@@ -59,6 +62,8 @@
 
 <script setup>
 import {ref} from 'vue';
+// import uCell from "@/uni_modules/u-cell-modify/u-cell.vue"
+
 
 const avatarUrl = ref('../../../../static/logo.png');
 const username = ref('ChatGPT');
@@ -177,6 +182,17 @@ const chooseFromAlbum = () => {
 </script>
 
 <style scoped>
+.background{
+  width: 692rpx;
+  height: 582rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0,0,0,0.08);
+  border-radius: 22rpx 22rpx 22rpx 22rpx;
+  opacity: 1;
+  margin-left: 29rpx;
+  margin-top: 22rpx;
+}
+
 .avatar {
   width: 50rpx;
   height: 50rpx;
@@ -185,7 +201,6 @@ const chooseFromAlbum = () => {
 
 /* 设置整个页面的背景色 */
 ::v-deep .uview-page {
-  height: 100%; /* 确保整个页面都有背景色 */
   margin-top: 10px !important;
   background-color: white !important;
 }

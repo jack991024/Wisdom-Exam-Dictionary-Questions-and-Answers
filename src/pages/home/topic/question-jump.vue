@@ -212,6 +212,7 @@ onLoad((options) => {
   let title = options.title
   let data = {}
   let current = options.currentIndex
+  let url = ""
   if (type === 1) {
     let items = uni.getStorageSync("wrongQuestionListsNew")
     data = {
@@ -222,12 +223,38 @@ onLoad((options) => {
     uni.setNavigationBarTitle({
       title: title
     })
-
+    url = 'https://dev.zhikaodian.com/apiV2/tk/getQuestions'
     selectMode('recite');
+  } else if (type === 2) {
+    let items = uni.getStorageSync("wrongQuestionLists")
+    console.log("type===2", items)
+    data = {
+      chid: items.chid,
+      encrypt: 0
+    }
+
+    uni.setNavigationBarTitle({
+      title: title
+    })
+    url = 'https://dev.zhikaodian.com/apiV2/tk/myErrorQuestion'
+    selectMode('recite');
+  } else if (type === 3) {
+    let items = uni.getStorageSync("wrongQuestionLists")
+    console.log("type===3", items)
+    data = {
+      chid: items.chid,
+      encrypt: 0
+    }
+
+    uni.setNavigationBarTitle({
+      title: title
+    })
+    url = 'https://dev.zhikaodian.com/apiV2/tk/myErrorQuestion'
+    selectMode('practice');
   }
 
   uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/tk/getQuestions',
+    url: url,
     header: {
       "Content-Type": "application/json",
       "Authorization": store.getters.getToken

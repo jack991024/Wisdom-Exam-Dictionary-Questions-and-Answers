@@ -13,7 +13,7 @@
       </view>
 
       <view class="bottom">
-        <view class="myCourse">
+        <view class="myCourse" @click="navigateTo('/pages/home/person/my-kecheng')">
           <image src="./static/person/kecheng.png"></image>
           <text style="display: block;font-size: 25rpx;">我的课程</text>
         </view>
