@@ -61,7 +61,7 @@
   </view>
 
   <view class="topic-body">
-    <view class="item exam-information">
+    <view class="item exam-information" @click="navigateToPath('exam-news')">
       <image src="../../../static/topic/01.png" class="item-icon"></image>
       <view class="text-container">
         <text class="item-text">考试资讯</text>

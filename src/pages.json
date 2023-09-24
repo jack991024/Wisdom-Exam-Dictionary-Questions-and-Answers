@@ -181,6 +181,13 @@
         "navigationBarTitleText": "考试资讯",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/exam-news-detail",
+      "style": {
+        "navigationBarTitleText": "资讯详情",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
