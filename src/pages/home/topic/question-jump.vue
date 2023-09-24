@@ -146,31 +146,10 @@
     </swiper-item>
   </swiper>
 
-  <view class="tarBar">
-    <u-tabbar
-        value=""
-        @change=""
-        :fixed="true"
-        :placeholder="true"
-        :safeAreaInsetBottom="true"
-    >
-      <u-tabbar-item text="目录" icon="list-dot" @click="open"></u-tabbar-item>
-      <u-tabbar-item text="题卡" icon="list-dot" @click="openQuestionCard"></u-tabbar-item>
-      <u-tabbar-item text="收藏" icon="star" @click=""></u-tabbar-item>
-      <u-tabbar-item text="模式" icon="list" @click="changeMode"></u-tabbar-item>
-    </u-tabbar>
-
-    <view v-if="isModeModalOpen" class="mode-modal">
-      <u-button :plain="true" icon="edit-pen" text="练习模式" @click="selectMode('practice')"></u-button>
-      <u-button :plain="true" icon="search" text="检测模式" @click="selectMode('exam')"></u-button>
-      <u-button :plain="true" icon="grid" text="背题模式" @click="selectMode('recite')"></u-button>
-    </view>
-
-  </view>
 </template>
 
 <script setup>
-import {} from '@dcloudio/uni-app';
+import {onLoad} from '@dcloudio/uni-app';
 import {ref, reactive, onMounted} from 'vue';
 import {useStore} from 'vuex'
 
@@ -227,14 +206,25 @@ const userAnswers = reactive({});
 
 onLoad((options) => {
   console.log(options)
-  let chid = options.param
-  let data = {
-    chid: chid,
-    encrypt: 0
+  let type = parseInt(options.type)
+  let title = options.title
+  let data = {}
+  if (type === 1) {
+    let items = uni.getStorageSync("wrongQuestionListsNew")
+    data = {
+      items: items,
+      encrypt: 0
+    }
+
+    uni.setNavigationBarTitle({
+      title: title
+    })
+
+    selectMode('recite');
   }
 
   uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/tk/getExercise',
+    url: 'https://dev.zhikaodian.com/apiV2/tk/getQuestions',
     header: {
       "Content-Type": "application/json",
       "Authorization": store.getters.getToken
@@ -245,7 +235,7 @@ onLoad((options) => {
       console.log(res.data.data)
       // 确保响应中有数据
       if (res.data && res.data.data) {
-        let result = res.data.data.result;
+        let result = res.data.data;
 
         // 对于每个问题，如果qType为4，则为其添加选项
         for (let item of result) {
@@ -264,8 +254,8 @@ onLoad((options) => {
         }
 
         questionLists.value = {
-          chapter_name: res.data.data.chapter_name,
-          count: res.data.data.count,
+          chapter_name: title,
+          count: result.length,
           result: result
         }
       }
