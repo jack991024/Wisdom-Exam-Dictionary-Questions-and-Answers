@@ -28,7 +28,8 @@
 
     <view v-if="curNow===1">
       <view class="header">
-        <zy-segmented :values="listMenus" :current="curNowMenus" @onClickItem="sectionChangeMenus" styleType='button'></zy-segmented>
+        <zy-segmented :values="listMenus" :current="curNowMenus" @onClickItem="sectionChangeMenus"
+                      styleType='button'></zy-segmented>
       </view>
     </view>
   </view>
@@ -72,10 +73,10 @@ const sectionChange = (index) => {
         "tkid": tkid
       },
       success: (response) => {
-        wrongQuestionAllList.value = response.data.data;
+        let data = response.data.data;
         listMenus.value = uni.getStorageSync("menus").map(item => item.menu)
-
-
+        console.log("listMenus:", listMenus.value)//["预测试卷","模拟预测","章节训练"]
+        wrongQuestionAllList.value = "";
       },
       fail: (error) => {
         console.log(error);
