@@ -27,13 +27,22 @@
     </view>
 
     <view v-if="curNow===1">
+      <!--      自定义模态框-->
+      <div v-if="visible" class="modal-overlay" @click="handleOverlayClick">
+        <div class="modal-container" @click.stop>
+          <button class="modal-button review-button" @click="reviewMistakes">错题回顾</button>
+          <button class="modal-button redo-button" @click="redoMistakes">错题重做</button>
+        </div>
+      </div>
+
       <view class="header">
         <zy-segmented :values="listMenus" :current="curNowMenus" @onClickItem="sectionChangeMenus"
                       styleType='button'></zy-segmented>
       </view>
       <view class="list">
         <view v-for="(item,index) in getCurrentChildren()" :key="index" class="itemTwo">
-          <u-cell :title="item.name" :value="item.count" :isLink="true" :center="true" :border="false"></u-cell>
+          <u-cell :title="item.name" :value="item.count" :isLink="true" :center="true" :border="false"
+                  @click="open"></u-cell>
         </view>
       </view>
     </view>
@@ -49,6 +58,32 @@ import zySegmented from "@/uni_modules/zy-segmented-control/components/zy-segmen
 
 
 const store = useStore()
+
+
+const visible = ref(false);
+
+const open = () => {
+  visible.value = true;
+};
+
+const close = () => {
+  visible.value = false;
+};
+
+const handleOverlayClick = () => {
+  close();
+};
+
+const reviewMistakes = () => {
+  console.log('进行错题回顾');
+  close();
+};
+
+const redoMistakes = () => {
+  console.log('进行错题重做');
+  close();
+};
+
 
 const list = ref(['最新错题', '全部错题']);
 const listMenus = ref([]);
@@ -216,4 +251,43 @@ onShow((options) => {
     margin-bottom: 29rpx;
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  width: 286rpx;
+  height: 168rpx;
+  background: #FFFFFF;
+  border-radius: 11rpx 11rpx 11rpx 11rpx;
+  opacity: 1;
+}
+
+.modal-button {
+
+}
+
+.review-button {
+  color: #3C7BFB;
+}
+
+.redo-button {
+  color: #3C7BFB;
+}
+
+.modal-button:active {
+  opacity: 0.8;
+}
+
+
 </style>

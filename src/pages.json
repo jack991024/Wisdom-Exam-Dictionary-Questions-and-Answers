@@ -195,6 +195,13 @@
         "navigationBarTitleText": "错题排行",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/question-jump",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
