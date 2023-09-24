@@ -1,5 +1,5 @@
 <template>
-  <swiper class="swiper-container" :indicator-dots="false">
+  <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex">
     <swiper-item style="overflow: auto" v-for="(item,index,itemIndex) in questionLists.result" :key="index">
       <scroll-view scroll-y style="height: 100%">
         <view class="main">
@@ -159,6 +159,8 @@ const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
 let jiandaAnswer = ""
+let currentIndex = ref(0);
+
 const open = () => {
   console.log('open');
   show.value = true
@@ -209,6 +211,7 @@ onLoad((options) => {
   let type = parseInt(options.type)
   let title = options.title
   let data = {}
+  let current = options.currentIndex
   if (type === 1) {
     let items = uni.getStorageSync("wrongQuestionListsNew")
     data = {
@@ -260,6 +263,8 @@ onLoad((options) => {
         }
       }
       console.log(questionLists)
+      currentIndex.value = current
+      console.log("currentIndex.value:", currentIndex.value)
     },
     fail: (err) => {
       console.log('error', err);

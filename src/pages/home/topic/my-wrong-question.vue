@@ -5,7 +5,8 @@
     </view>
     <view v-if="curNow!==1">
       <view class="list">
-        <view v-for="(item,index) in wrongQuestionList" :key="index" class="item" @click="navigateToQuestionNew(item)">
+        <view v-for="(item,index) in wrongQuestionList" :key="index" class="item"
+              @click="navigateToQuestionNew(item,index)">
           <view class="title">
             <text>{{ item.stem }}</text>
           </view>
@@ -93,7 +94,7 @@ const wrongQuestionList = ref([])
 const wrongQuestionAllList = ref([])
 
 
-const navigateToQuestionNew = (item) => {
+const navigateToQuestionNew = (item, index) => {
   const result = wrongQuestionList.value.map(item => ({
     chid: item.chid,
     qid: item.qid
@@ -101,7 +102,7 @@ const navigateToQuestionNew = (item) => {
 
   uni.setStorageSync("wrongQuestionListsNew", result);
 
-  uni.navigateTo({url: "/pages/home/topic/question-jump?title=最近错题&type=1"})
+  uni.navigateTo({url: "/pages/home/topic/question-jump?title=最近错题&type=1&currentIndex="+index})
 }
 
 
