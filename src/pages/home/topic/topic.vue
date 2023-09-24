@@ -213,6 +213,7 @@ const loadMenus = () => {
       // 确保响应中有数据
       if (res.data && res.data.data) {
         menus.value = processData(res.data.data);
+        uni.setStorageSync("menus", menus.value);
       }
       console.log(menus.value);
     },

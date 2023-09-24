@@ -25,6 +25,12 @@
         </view>
       </view>
     </view>
+
+    <view v-if="curNow===1">
+      <view class="header">
+        <zy-segmented :values="listMenus" :current="curNowMenus" @onClickItem="sectionChangeMenus" styleType='button'></zy-segmented>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -38,12 +44,44 @@ import zySegmented from "@/uni_modules/zy-segmented-control/components/zy-segmen
 const store = useStore()
 
 const list = ref(['最新错题', '全部错题']);
+const listMenus = ref([]);
 const curNow = ref(0);
+const curNowMenus = ref(0);
 const wrongQuestionList = ref([])
+const wrongQuestionAllList = ref([])
+
+const sectionChangeMenus = (index) => {
+  curNowMenus.value = index;
+  console.log("value", curNowMenus.value)
+}
 
 const sectionChange = (index) => {
   curNow.value = index;
   console.log("value", curNow.value)
+
+  // 检查curNow的值
+  if (curNow.value === 1) {
+    uni.request({
+      url: "https://dev.zhikaodian.com/apiV2/tk/myError",
+      method: 'POST',
+      header: {
+        'Authorization': store.getters.getToken,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        "tkid": tkid
+      },
+      success: (response) => {
+        wrongQuestionAllList.value = response.data.data;
+        listMenus.value = uni.getStorageSync("menus").map(item => item.menu)
+
+
+      },
+      fail: (error) => {
+        console.log(error);
+      }
+    });
+  }
 };
 
 const formatDate = (timestamp) => {
