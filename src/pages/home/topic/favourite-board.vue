@@ -1,6 +1,6 @@
 <template>
   <view class="list">
-    <view class="item" v-for="(item,index) in errorList" :key="index">
+    <view class="item" v-for="(item,index) in favList" :key="index" @click="navigateToQuestionFavNew(item,index)">
       <view class="tip" :class="getTipClass(index)">
         <text :class="getTextClass(index)">{{ index + 1 }}</text>
       </view>
@@ -10,7 +10,7 @@
           <text>来源：{{ item.name }}</text>
         </view>
         <view class="error-num">
-          <text>{{ item.count }}人做错</text>
+          <text>{{ item.count }}人收藏</text>
         </view>
       </view>
     </view>
@@ -24,7 +24,7 @@ import {useStore} from "vuex";
 
 const store = useStore()
 
-const errorList = ref([])
+const favList = ref([])
 
 let tkid = ""
 onShow(() => {
@@ -42,7 +42,7 @@ onShow(() => {
     },
 
     success: (response) => {
-      errorList.value = response.data.data
+      favList.value = response.data.data
     },
     fail: (error) => {
       console.log(error);
@@ -62,6 +62,16 @@ const getTextClass = (index) => {
   return 'text-blue';
 }
 
+const navigateToQuestionFavNew = (item, index) => {
+  const result = favList.value.map(item => ({
+    chid: item.chid,
+    qid: item.qid
+  }));
+
+  uni.setStorageSync("favQuestionListsNew", result);
+
+  uni.navigateTo({url: "/pages/home/topic/question-jump?title=收藏排行&type=8&currentIndex=" + index})
+}
 </script>
 
 <style lang="scss">

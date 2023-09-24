@@ -1,6 +1,6 @@
 <template>
   <view class="list">
-    <view class="item" v-for="(item,index) in errorList" :key="index">
+    <view class="item" v-for="(item,index) in errorList" :key="index" @click="navigateToQuestionNew(item,index)">
       <view class="tip" :class="getTipClass(index)">
         <text :class="getTextClass(index)">{{ index + 1 }}</text>
       </view>
@@ -60,6 +60,17 @@ const getTipClass = (index) => {
 const getTextClass = (index) => {
   if (index <= 2) return 'text-white';
   return 'text-blue';
+}
+
+const navigateToQuestionNew = (item, index) => {
+  const result = errorList.value.map(item => ({
+    chid: item.chid,
+    qid: item.qid
+  }));
+
+  uni.setStorageSync("wrongQuestionListsNew", result);
+
+  uni.navigateTo({url: "/pages/home/topic/question-jump?title=错题排行&type=7&currentIndex=" + index})
 }
 
 </script>

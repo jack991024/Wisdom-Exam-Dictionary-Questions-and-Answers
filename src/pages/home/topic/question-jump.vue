@@ -290,6 +290,30 @@ onLoad((options) => {
     })
     url = 'https://dev.zhikaodian.com/apiV2/tk/myFavQuestion'
     selectMode('practice');
+  }if (type === 7) {
+    let items = uni.getStorageSync("wrongQuestionListsNew")
+    data = {
+      items: items,
+      encrypt: 0
+    }
+
+    uni.setNavigationBarTitle({
+      title: title
+    })
+    url = 'https://dev.zhikaodian.com/apiV2/tk/getQuestions'
+    selectMode('recite');
+  }if (type === 8) {
+    let items = uni.getStorageSync("favQuestionListsNew")
+    data = {
+      items: items,
+      encrypt: 0
+    }
+
+    uni.setNavigationBarTitle({
+      title: title
+    })
+    url = 'https://dev.zhikaodian.com/apiV2/tk/getQuestions'
+    selectMode('recite');
   }
 
   uni.request({
