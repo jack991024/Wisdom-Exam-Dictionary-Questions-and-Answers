@@ -11,19 +11,48 @@
     </view>
 
     <view id="login">
-      <view class="wechatLogin">
+      <view class="wechatLogin" @click="wechatLogin">
+        <image src="./static/login/wechatLogin.png" mode="widthFix" style="width: 41.15rpx;height: 34.04rpx;"></image>
+        <text style="font-size: 33rpx;color: #FFFFFF;margin-left: 13rpx;"> 微信登陆</text>
+      </view>
 
+      <view style="display: flex;align-items: center;margin-top: 22rpx">
+        <u-radio-group v-model="isRadioSelected">
+          <u-radio shape="square"/>
+        </u-radio-group>
+        <view>
+          <text style="color: rgba(197, 200, 207, 1);font-size: 12px">
+            点击"按钮勾选"即同意
+            <text @click="navigateToPrivacyPolicy" class="link-text">
+              《智考典隐私政策》
+            </text>
+            及
+            <text @click="navigateToServiceAgreement" class="link-text">
+              《智考典用户服务协议》
+            </text>
+          </text>
+        </view>
       </view>
 
       <view class="footer">
         <u-divider text="其他登陆方式" :hairline="true"></u-divider>
         <view class="verifyCodeLogin">
+          <view style="margin-right: 100rpx">
+            <u-icon
+                name="phone"
+                size="30"
+                color="#909399"
+                @click="verifyLoginRouter"
+                label="验证码"
+                labelPos="bottom"
+            ></u-icon>
+          </view>
           <u-icon
               name="phone"
               size="30"
               color="#909399"
-              @click="verifyLoginRouter"
-              label="验证码"
+              @click="passwordLoginRouter"
+              label="密码"
               labelPos="bottom"
           ></u-icon>
         </view>
@@ -37,12 +66,21 @@ import {ref} from "vue";
 import {useStore} from 'vuex'
 
 const store = useStore()
-const login = ref({
-  userInfo: {
-    phoneMobile: "13600000000",
-    password: "ABC123"
-  }
-})
+
+const isRadioSelected = ref(false);
+
+const wechatLogin = () => {
+  let code = ""
+  uni.login({
+    provider: 'weixin', //使用微信登录
+    success: function (loginRes) {
+      code = loginRes.code
+    }
+  });
+
+
+}
+
 
 function registerRouter() {
   uni.navigateTo({
@@ -62,13 +100,13 @@ function verifyLoginRouter() {
   });
 }
 
+function passwordLoginRouter(){
+  uni.navigateTo({
+    url:'/pages/login/login'
+  })
+}
+
 function loginIndex() {
-  let data = JSON.stringify({
-    "phone": login.value.userInfo.phoneMobile,
-    "password": login.value.userInfo.password,
-    "loginType": "pwd",
-    "terminal": "wx"
-  });
 
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/user/login',
@@ -122,7 +160,11 @@ function loginIndex() {
       background: #45C45D;
       border-radius: 62rpx 62rpx 62rpx 62rpx;
       opacity: 1;
-      margin-left: 29rpx;
+      margin-top: 222rpx;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -132,5 +174,25 @@ function loginIndex() {
   }
 }
 
+.link-text {
+  color: rgba(60, 123, 251, 1);
+  // 如果需要加下划线效果，可以添加下面的样式
+  // text-decoration: underline;
+  // text-decoration-color: rgba(60, 123, 251, 1);
+  // text-decoration-style: solid;
+  // text-decoration-thickness: 1px;
+  // text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.footer {
+  margin-top: 200rpx;
+}
+
+.verifyCodeLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 </style>
