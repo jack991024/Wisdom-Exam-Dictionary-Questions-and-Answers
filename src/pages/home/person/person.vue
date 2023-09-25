@@ -103,7 +103,7 @@ const urls = [
     path: '/pages/home/person/personInfo/personInfo'
   },
   {title: '我的下载', url: '../../../../static/person/download.png'},
-  {title: '联系客服', url: '../../../../static/person/lianxikefu.png'},
+  {title: '联系客服', url: '../../../../static/person/lianxikefu.png',path: '/pages/home/person/kefu'},
   {title: '分享好友', url: '../../../../static/person/share.png'}
   // '../../../..//static/person/personInfo.png',
 ];

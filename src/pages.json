@@ -8,6 +8,13 @@
   },
   "pages": [
     {
+      "path": "pages/weChatLogin/weChatLogin",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
       "path": "pages/login/login",
       "style": {
         "navigationBarTitleText": "",
@@ -249,6 +256,13 @@
       "path": "pages/home/person/short-videos",
       "style": {
         "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/kefu",
+      "style": {
+        "navigationBarTitleText": "联系客服",
         "enablePullDownRefresh": true
       }
     }
