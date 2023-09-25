@@ -36,7 +36,12 @@
 </template>
 
 <script setup>
-const {groupedData} = defineProps();
+const { groupedData = [] } = defineProps({
+  groupedData: {
+    type: Array,
+    default: () => []
+  }
+});
 </script>
 
 <style lang="scss">
