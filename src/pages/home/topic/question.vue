@@ -179,7 +179,7 @@ import {useStore} from 'vuex'
 import ExamInfoCard from "../../../components/ExamInfoCard.vue";
 
 const store = useStore()
-const questionLists = reactive({})
+const questionLists = ref([])
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
@@ -226,7 +226,7 @@ function processAnalyseContent(analyse) {
   return analyse.replace(/\<img/gi, '<img style=max-width:100%;height:auto'); // 返回处理后的内容
 }
 
-const userAnswers = ref([]);
+const userAnswers = reactive({});
 
 
 onLoad((options) => {
@@ -431,7 +431,6 @@ const isTiKa = ref(false); // 初始化为未展开状态
 
 const toggleTiKa = () => {
   isTiKa.value = !isTiKa.value
-  console.log(isTiKa)
 }
 
 const isFavorited = ref(false); // 初始化为未收藏状态
