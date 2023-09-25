@@ -174,7 +174,9 @@
 
   <!-- 弹出层 -->
   <div v-show="isTiKa" class="custom-popup">
-    <ExamInfoCard :groupedData="groupedData"/>
+    <scroll-view scroll-y style="height: 100%; overflow-y: auto;">
+      <ExamInfoCard :groupedData="groupedData"/>
+    </scroll-view>
   </div>
 </template>
 
