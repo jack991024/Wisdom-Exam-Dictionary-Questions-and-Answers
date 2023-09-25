@@ -179,7 +179,7 @@ import {useStore} from 'vuex'
 import ExamInfoCard from "../../../components/ExamInfoCard.vue";
 
 const store = useStore()
-const questionLists = ref([])
+const questionLists = reactive({})
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
