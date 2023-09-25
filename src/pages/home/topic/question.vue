@@ -234,6 +234,8 @@ function processAnalyseContent(analyse) {
 
 const userAnswers = reactive({});
 
+//todo 构造data
+const groupedData = ref([])
 
 onLoad((options) => {
   console.log(options)
@@ -279,12 +281,20 @@ onLoad((options) => {
           result: result
         }
       }
-      console.log(questionLists)
+      console.log("onLoad:questionList:", questionLists)
+      let results = questionLists.value.result
+      for (let question of results) {
+        groupedData.value.push({
+          ...question,
+          status: "未做"
+        });
+      }
     },
     fail: (err) => {
       console.log('error', err);
     }
   })
+
 })
 
 function toggleOption(questionIndex, optionIndex, item) {
@@ -411,22 +421,15 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
 
 }
 
-//todo 构造data
-const groupedData = ref([])
-watch(userAnswers, () => {
-  // 初始化groupedData
-  for (let question of questionLists) {
-    groupedData.value.push({
-      ...question,
-      status: "未做"
-    });
-  }
 
+watch(userAnswers, () => {
+  console.log("groupedDataAll:", JSON.stringify(groupedData))
+  console.log("userAnswersAll:", JSON.stringify(userAnswers))
   for (let qid in userAnswers) {
     console.log("qid:", qid);
-    console.log("questionStatus[qid]", groupedData[qid])
-    if (groupedData[qid]) {
-      groupedData[qid].status = userAnswers[qid].isCorrect ? "正确" : "错误";
+    console.log("questionStatus[qid]", groupedData.value[qid])
+    if (groupedData.value[qid]) {
+      groupedData.value[qid].status = userAnswers[qid].isCorrect ? "正确" : "错误";
     }
   }
 
