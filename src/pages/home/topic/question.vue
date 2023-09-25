@@ -169,7 +169,13 @@
     </view>
   </view>
 
-  <ExamInfoCard :groupedData="groupedData" v-if="isTiKa"/>
+  <!-- 遮罩层 -->
+  <div v-show="isTiKa" class="overlay" @click="isTiKa = false"></div>
+
+  <!-- 弹出层 -->
+  <div v-show="isTiKa" class="custom-popup">
+    <ExamInfoCard :groupedData="groupedData"/>
+  </div>
 </template>
 
 <script setup>
@@ -802,5 +808,26 @@ rich-text {
   color: #fff; !* Text color *!
 }
 */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明的黑色背景 */
+  z-index: 1000; /* 确保在其他内容之上 */
+}
+
+.custom-popup {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 630rpx; /* 根据你的需求设置高度 */
+  background-color: #fff; /* 白色背景 */
+  z-index: 1001; /* 确保在遮罩层之上 */
+  /* 可以添加其他样式，如过渡效果等 */
+}
 
 </style>
