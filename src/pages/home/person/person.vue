@@ -28,7 +28,7 @@
           <text style="display: block;font-size: 25rpx;">激活码</text>
         </view>
 
-        <view class=shortVideo>
+        <view class=shortVideo @click="navigateTo('/pages/home/person/short-videos')">
           <image src="./static/person/shortVideo.png"></image>
           <text style="display: block;font-size: 25rpx;">短视频</text>
         </view>

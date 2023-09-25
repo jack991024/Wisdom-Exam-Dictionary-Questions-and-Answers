@@ -244,6 +244,13 @@
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/person/short-videos",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
