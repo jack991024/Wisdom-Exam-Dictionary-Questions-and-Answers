@@ -6,7 +6,7 @@
         <text class="question-name">{{ item.name }}</text>
         <view v-if="item.depth > 2" style="display: flex;align-items: center;">
           <view style="width: 318.84rpx;margin-right: 15rpx">
-            <u-line-progress :percentage="30" :showText="false" activeColor="#3C7BFB" height="4.5"/>
+            <u-line-progress :percentage="item.done/item.total" :showText="false" activeColor="#3C7BFB" height="4.5"/>
           </view>
           <view class="done-info" style="font-size: 24.74rpx;color: #262626;">
             {{ item.done }}/{{ item.total }}

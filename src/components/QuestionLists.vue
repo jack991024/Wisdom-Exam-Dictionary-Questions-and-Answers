@@ -12,7 +12,7 @@
         <text class="question-name">{{ item.name }}</text>
         <view style="display: flex;align-items: center;">
           <view style="width: 318.84rpx;margin-right: 15rpx">
-            <u-line-progress :percentage="30" :showText="false" activeColor="#3C7BFB" height="4.5"/>
+            <u-line-progress :percentage="item.done/item.total" :showText="false" activeColor="#3C7BFB" height="4.5"/>
           </view>
           <view class="done-info" style="font-size: 24.74rpx;color: #262626;">
             {{ item.done }}/{{ item.total }}
@@ -35,9 +35,15 @@ export default {
   },
   setup(props) {
     const currentQuestions = ref(props.initialQuestions);
+    // 设置初始的breadcrumbItems为"目录"
+    const breadcrumbItems = ref([{name: "目录", depth: 0}]);
+
     const jumpQuestion = (item) => {
       if (item.children && item.children.length > 0) {
         currentQuestions.value = item.children;
+        breadcrumbItems.value.push({
+          name: item.name, depth: item.depth
+        });
       } else {
         let param = item.chid;
         uni.navigateTo({
@@ -46,13 +52,24 @@ export default {
       }
     }
 
+    const getBreadcrumbStyle = (depth) => {
+      if (depth === 0) {
+        return {fontSize: '33rpx', color: '#262626', marginRight: '8px'};
+      } else {
+        return {fontSize: '22rpx', color: '#636363'};
+      }
+    };
+
     return {
       currentQuestions,
-      jumpQuestion
+      jumpQuestion,
+      breadcrumbItems,
+      getBreadcrumbStyle
     }
   }
 }
 </script>
+
 
 <style lang="scss">
 .container {
@@ -96,11 +113,11 @@ export default {
 .header .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 8rpx; // 为面包屑之间添加间隔
+  height: 70rpx;
+  margin-left: 25rpx;
 }
 
-.breadcrumb-item:not(:last-child)::after {
+.breadcrumb-item:not(:last-child):not(:first-child)::after {
   content: "/";
-  margin: 0 8rpx;
 }
 </style>
