@@ -86,31 +86,39 @@ function verifyLoginRouter() {
 }
 
 function loginIndex() {
-   let data = JSON.stringify({
-   "phone": login.value.userInfo.phoneMobile,
-   "password": login.value.userInfo.password,
-   "loginType": "pwd",
-   "terminal": "wx"
-   });
+  let data = JSON.stringify({
+    "phone": login.value.userInfo.phoneMobile,
+    "password": login.value.userInfo.password,
+    "loginType": "pwd",
+    "terminal": "wx"
+  });
 
-   uni.request({
-   url: 'https://dev.zhikaodian.com/apiV2/user/login',
-   method: 'POST',
-   header: {
-   'Content-Type': 'application/json'
-   },
-   data: data,
-   success: function (response) {
-   store.commit('updateToken', response.data.data.token)
-   uni.switchTab({
-   url: '/pages/home/classification/classificationMain'
-   });
-   // console.log(store.getters.getToken)
-   },
-   fail: function (error) {
-   console.log(error);
-   }
-   });
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/user/login',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json'
+    },
+    data: data,
+    success: function (response) {
+      store.commit('updateToken', response.data.data.token)
+      let flag = uni.getStorageSync("flag")
+      console.log("flag:", flag)
+      if (!flag) {
+        uni.navigateTo({
+          url: "/pages/start/xuanzekaoshi-one"
+        })
+      } else {
+        uni.switchTab({
+          url: '/pages/home/classification/classificationMain'
+        });
+      }
+      // console.log(store.getters.getToken)
+    },
+    fail: function (error) {
+      console.log(error);
+    }
+  });
 }
 </script>
 

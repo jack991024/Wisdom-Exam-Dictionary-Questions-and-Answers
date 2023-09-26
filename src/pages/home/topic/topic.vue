@@ -268,9 +268,9 @@ const jumpQuestionList = (child) => {
 
 const dropdown = ref(null)
 const dropdown1 = ref(null)
-const value2 = ref('');
+const value2 = ref('a');
 const option2 = ref([
-  // {text: '请选择学习科目', value: 'a'}
+  {text: '请选择学习科目', value: 'a'}
 ]);
 
 const toggleItem = (val) => {
@@ -290,7 +290,7 @@ const change1 = (val) => {
   console.log(tkid.value)
 }
 
-const loadQuestionBanks = (updateValue = false) => {
+const loadQuestionBanks = () => {
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/myCourse',
     method: 'GET',
@@ -305,9 +305,9 @@ const loadQuestionBanks = (updateValue = false) => {
           option2.value.push(
               {text: option.fullname, value: option.tkid}
           );
-          if (updateValue) {
-            value2.value = option.tkid;
-          }
+          // if (updateValue) {
+          //   value2.value = option.tkid;
+          // }
         });
       }
     },
@@ -388,7 +388,7 @@ onShow(() => {
   uni.setStorageSync("tkid", tkid.value)
   bannerLoads()
   loadMenus()
-  loadQuestionBanks(true)
+  loadQuestionBanks()
   loadState()
 })
 

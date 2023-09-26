@@ -67,7 +67,7 @@ onLoad((options) => {
 })
 
 const naviToTiKu = () => {
-  uni.navigateTo({
+  uni.switchTab({
     url: "/pages/home/topic/topic"
   })
 }

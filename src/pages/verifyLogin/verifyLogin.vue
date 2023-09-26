@@ -167,7 +167,7 @@ const submit = () => {
       console.log(response.data);
       store.commit('updateToken', response.data.data.token)
       uni.switchTab({
-        url: '/pages/home/classification/classificationRegions'
+        url: '/pages/home/classification/classificationMain'
       })
     },
     fail: (error) => {

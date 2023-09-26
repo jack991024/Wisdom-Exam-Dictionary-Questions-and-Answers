@@ -79,7 +79,7 @@ const wechatLogin = () => {
   });
 
   uni.navigateTo({
-    url:"/pages/start/xuanzekaoshi-one"
+    // url:"/pages/start/xuanzekaoshi-one"
   })
 
 }
