@@ -10,7 +10,7 @@
     <view class="body">
       <view class="item">
         <u-cell-group>
-          <view v-for="(item,index) in lists" :key="index">
+          <view v-for="(item,index) in lists" :key="index" @click="navigateToThree(item)">
             <u-cell :title="item.name" :is-link="true" size="large"></u-cell>
           </view>
         </u-cell-group>
@@ -51,6 +51,13 @@ const lists = ref()
 onLoad(() => {
   lists.value = uni.getStorageSync("xuanzekaoshi-item-children")
 })
+
+const navigateToThree = (item) => {
+  uni.setStorageSync("xuanzekaoshi-item-two-children", item.children)
+  uni.navigateTo({
+    url: "/pages/start/xuanzekaoshi-three"
+  })
+}
 </script>
 
 <style lang="scss">

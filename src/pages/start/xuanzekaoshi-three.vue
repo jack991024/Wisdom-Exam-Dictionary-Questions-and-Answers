@@ -10,6 +10,9 @@
 </template>
 
 <script setup>
+import {onLoad} from "@dcloudio/uni-app";
+import {ref} from "vue";
+
 let keyword = ""
 
 const searchByKeyWords = (keyword) => {
@@ -33,6 +36,11 @@ const searchByKeyWords = (keyword) => {
     }
   })
 }
+
+const lists=ref()
+onLoad(()=>{
+  lists.value=uni.getStorageSync("xuanzekaoshi-item-two-children")
+})
 </script>
 
 <style lang="scss">
