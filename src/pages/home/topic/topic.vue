@@ -268,9 +268,9 @@ const jumpQuestionList = (child) => {
 
 const dropdown = ref(null)
 const dropdown1 = ref(null)
-const value2 = ref('a');
+const value2 = ref('');
 const option2 = ref([
-  {text: '请选择学习科目', value: 'a'}
+  // {text: '请选择学习科目', value: 'a'}
 ]);
 
 const toggleItem = (val) => {
@@ -300,11 +300,12 @@ const loadQuestionBanks = () => {
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data)) {
+        console.log("!!!111!!!!")
         res.data.data.forEach(option => {
           option2.value.push(
               {text: option.fullname, value: option.tkid}
-          )
-          ;
+          );
+          value2.value = option.tkid
         });
       }
     },
@@ -372,7 +373,8 @@ watch(
 
 onShow(() => {
   let tikuFromLocal = store.getters.getTiKu
-  if (tikuFromLocal != null) {
+  console.log("!!!!!tikuFromLocal:::", tikuFromLocal)
+  if (tikuFromLocal != null && tikuFromLocal !== "") {
     let tiku = JSON.parse(tikuFromLocal)
     option2.value.push(
         {text: tiku.fullname, value: tiku.tkid}

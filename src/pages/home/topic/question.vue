@@ -49,7 +49,7 @@
               >
                 <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
                 <text
-                    v-if="item.qType === 4"
+                    v-if="item.qType === 4 && (currentMode.value !== 'exam' ||currentMode.value !== 'practice')"
                     :class="[
     'option-label',
     userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
