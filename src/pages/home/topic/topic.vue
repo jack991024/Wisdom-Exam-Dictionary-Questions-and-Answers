@@ -222,8 +222,8 @@ const loadMenus = () => {
       if (res.data && res.data.data) {
         menus.value = processData(res.data.data);
         uni.setStorageSync("menus", menus.value);
+        uni.setStorageSync("myQuestions", res.data.data);
       }
-      console.log(menus.value);
     },
     fail: (err) => {
       console.log('error', err);

@@ -133,12 +133,15 @@
           </view>
 
           <view class="catalog">
-            <u-popup :show="show" @close="close" @open="open" mode="left">
-              <view>
-                <text>目录</text>
-              </view>
+            <!-- 遮罩层 -->
+            <div v-show="isMenu" class="overlay" @click="isMenu = false"></div>
 
-            </u-popup>
+            <!-- 弹出层 -->
+            <div v-show="isMenu" class="custom-popup-left" :class="{ active: isMenu }">
+              <scroll-view scroll-y style="height: 100%; overflow-y: auto;">
+                <QuestionLists :initialQuestions="myQuestions"/>
+              </scroll-view>
+            </div>
           </view>
 
         </view>
@@ -154,7 +157,7 @@
         :placeholder="true"
         :safeAreaInsetBottom="true"
     >
-      <u-tabbar-item text="目录" icon="../../../../static/topic/menu.png" @click="open"></u-tabbar-item>
+      <u-tabbar-item text="目录" icon="../../../../static/topic/menu.png" @click="toggleMenu"></u-tabbar-item>
       <u-tabbar-item text="题卡" icon="../../../../static/topic/tika.png" @click="toggleTiKa"></u-tabbar-item>
       <u-tabbar-item text="收藏" v-if="!isFavorited.value"
                      icon="../../../../static/topic/fav.png"
@@ -185,6 +188,7 @@ import {onLoad} from '@dcloudio/uni-app';
 import {ref, reactive, onMounted, watch} from 'vue';
 import {useStore} from 'vuex'
 import ExamInfoCard from "../../../components/ExamInfoCard.vue";
+import QuestionLists from "../../../components/QuestionLists.vue";
 
 const store = useStore()
 const questionLists = ref([])
@@ -236,10 +240,12 @@ function processAnalyseContent(analyse) {
 
 const userAnswers = reactive({});
 
-//todo 构造data
-const groupedData = ref([])
 
+const groupedData = ref([])
+const myQuestions = ref([])
 onLoad((options) => {
+
+  myQuestions.value = uni.getStorageSync("myQuestions")
   console.log(options)
   let chid = options.param
   let data = {
@@ -439,9 +445,16 @@ watch(userAnswers, () => {
 
 
 const isTiKa = ref(false); // 初始化为未展开状态
+const isMenu = ref(false); // 初始化为未展开状态
 
 const toggleTiKa = () => {
   isTiKa.value = !isTiKa.value
+  isMenu.value = false
+}
+
+const toggleMenu = () => {
+  isMenu.value = !isMenu.value
+  isTiKa.value = false
 }
 
 const isFavorited = ref(false); // 初始化为未收藏状态
@@ -833,6 +846,24 @@ rich-text {
   background-color: #fff; /* 白色背景 */
   z-index: 1001; /* 确保在遮罩层之上 */
   /* 可以添加其他样式，如过渡效果等 */
+}
+
+.custom-popup-left {
+  position: fixed; // 使用固定定位
+  top: 0; // 从顶部开始
+  left: 0; // 从左边开始
+  width: 80%; // 设置弹出层的宽度为屏幕宽度的80%
+  height: 100%; // 设置弹出层的高度为屏幕的100%
+  background-color: #fff; // 设置背景颜色为白色
+  overflow-y: auto; // 允许垂直滚动
+  transform: translateX(-100%); // 初始状态，将弹出层移动到屏幕的左侧
+  transition: transform 0.3s ease-out; // 添加平滑的过渡效果
+  z-index: 1000; // 设置一个较高的z-index值，确保弹出层在其他元素之上
+}
+
+// 当弹出层被触发显示时，我们可以使用一个类（例如.active）来改变其位置
+.custom-popup-left.active {
+  transform: translateX(0); // 将弹出层移动到屏幕的可见区域
 }
 
 </style>
