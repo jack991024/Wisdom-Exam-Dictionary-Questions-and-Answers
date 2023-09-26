@@ -53,9 +53,8 @@ onLoad(() => {
 })
 
 const navigateToThree = (item) => {
-  uni.setStorageSync("xuanzekaoshi-item-two-children", item.children)
   uni.navigateTo({
-    url: "/pages/start/xuanzekaoshi-three"
+    url: "/pages/start/xuanzekaoshi-three?coid="+item.coid
   })
 }
 </script>
