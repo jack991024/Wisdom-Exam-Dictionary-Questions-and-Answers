@@ -5,8 +5,9 @@
     </view>
   </view>
   <view id="body">
-    <view>
+    <view style="display: flex;flex-direction: column;align-items: center;">
       <image id="logo" src="./static/login/logo.png"/>
+      <text style="font-size: 29rpx;color: #666666;margin-top: 29rpx;">AI智能题库让学习更高效</text>
     </view>
 
     <view id="login">
@@ -41,7 +42,7 @@
         <u-divider text="其他登陆方式" :hairline="true"></u-divider>
         <view class="verifyCodeLogin">
           <u-icon
-              name="phone"
+              name="../../../../static/login/yanzhengma.png"
               size="30"
               color="#909399"
               @click="verifyLoginRouter"

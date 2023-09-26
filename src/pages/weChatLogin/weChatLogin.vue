@@ -39,7 +39,7 @@
         <view class="verifyCodeLogin">
           <view style="margin-right: 100rpx">
             <u-icon
-                name="phone"
+                name="../../../../static/login/yanzhengma.png"
                 size="30"
                 color="#909399"
                 @click="verifyLoginRouter"
@@ -48,7 +48,7 @@
             ></u-icon>
           </view>
           <u-icon
-              name="phone"
+              name="../../../../static/login/mima.png"
               size="30"
               color="#909399"
               @click="passwordLoginRouter"
@@ -83,6 +83,20 @@ const wechatLogin = () => {
   })
 
 }
+
+const navigateToPrivacyPolicy = () => {
+  // 使用uni.navigateTo或其他导航方法跳转到隐私政策页面
+  uni.navigateTo({
+    url: '/pages/register/policy'
+  })
+};
+
+const navigateToServiceAgreement = () => {
+  // 使用uni.navigateTo或其他导航方法跳转到用户服务协议页面
+  uni.navigateTo({
+    url: '/pages/register/FAQ'
+  })
+};
 
 
 function registerRouter() {
