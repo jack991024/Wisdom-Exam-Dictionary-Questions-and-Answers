@@ -166,9 +166,17 @@ const submit = () => {
     success: (response) => {
       console.log(response.data);
       store.commit('updateToken', response.data.data.token)
-      uni.switchTab({
-        url: '/pages/home/classification/classificationMain'
-      })
+      let flag = uni.getStorageSync("flag")
+      console.log("flag:", flag)
+      if (!flag) {
+        uni.navigateTo({
+          url: "/pages/start/xuanzekaoshi-one"
+        })
+      } else {
+        uni.switchTab({
+          url: '/pages/home/classification/classificationMain'
+        });
+      }
     },
     fail: (error) => {
       console.log('error', error);
