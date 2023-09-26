@@ -321,6 +321,27 @@
         "navigationBarTitleText": "员工招聘",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/start/xuanzekaoshi-one",
+      "style": {
+        "navigationBarTitleText": "选择考试",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/start/xuanzekaoshi-two",
+      "style": {
+        "navigationBarTitleText": "选择考试",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/start/xuanzekaoshi-three",
+      "style": {
+        "navigationBarTitleText": "选择考试",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
