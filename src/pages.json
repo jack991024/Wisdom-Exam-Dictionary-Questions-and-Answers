@@ -293,6 +293,34 @@
         "navigationBarTitleText": "关于智考典题库",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/person/guanyuwomen",
+      "style": {
+        "navigationBarTitleText": "关于我们",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/yinsixieyi",
+      "style": {
+        "navigationBarTitleText": "隐私协议",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/zhucexieyi",
+      "style": {
+        "navigationBarTitleText": "注册协议",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/yuangongzhaopin",
+      "style": {
+        "navigationBarTitleText": "员工招聘",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {
