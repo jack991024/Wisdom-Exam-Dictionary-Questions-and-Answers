@@ -114,7 +114,7 @@ const urls2 = [
     url: '../../../../static/person/zhaoshangjiameng.png',
     path: '/pages/home/person/zhaoshangjiameng'
   },
-  {title: '员工招聘', url: '../../../../static/person/gerenxinxi.png', path: '/pages/home/person/wentijieda'},
+  {title: '员工招聘', url: '../../../../static/person/gerenxinxi.png', path: '/pages/home/person/zhaoshangjiameng'},
   {title: '问题解答', url: '../../../../static/person/wentijieda.png', path: '/pages/home/person/wentijieda'},
   {title: '意见反馈', url: '../../../../static/person/yijianfankui.png'},
   {title: '关于智考典题库', url: '../../../../static/person/guanyuwomen.png',path: '/pages/home/person/guanyuzhikaodian'}
