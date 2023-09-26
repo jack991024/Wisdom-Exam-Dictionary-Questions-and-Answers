@@ -2,11 +2,11 @@
   <view class="u-wrap">
     <view class="u-search-box">
       <view class="u-search-inner">
-        <u-search placeholder="搜索考试地区" action-style="color: #3C7BFB;"></u-search>
+        <u-search placeholder="搜索考试地区" action-style="color: #3C7BFB;" v-model="searchQuery" @custom="filterRegions"></u-search>
       </view>
     </view>
     <view class="u-menu-wrap">
-      <block v-for="(item, index) in tabbar" :key="index">
+      <block v-for="(item, index) in filteredTabbar" :key="index">
         <scroll-view scroll-y class="right-box" v-if="current == index">
           <view class="page-view">
             <view class="class-item">
@@ -26,14 +26,39 @@
   </view>
 </template>
 
+
 <script setup>
-import {ref, onMounted} from "vue";
+import { ref, onMounted } from "vue";
 import classifyData from "../../../common/regions.js";
 
 const tabbar = ref(classifyData);
+const filteredTabbar = ref([...classifyData]);
 const current = ref(0);
 const menuHeight = ref(0);
 const menuItemHeight = ref(0);
+const searchQuery = ref("");
+
+const filterRegions = () => {
+  if (searchQuery.value.trim() === "") {
+    filteredTabbar.value = [...classifyData];
+    return;
+  }
+  const query = searchQuery.value.toLowerCase();
+
+  // 过滤出包含搜索查询的地区
+  const filteredRegions = classifyData[0].regions.filter(region => region.name.toLowerCase().includes(query));
+
+  // 如果有匹配的地区，将它们放入filteredTabbar中
+  if (filteredRegions.length > 0) {
+    filteredTabbar.value = [{
+      name: "选择省份，筛选对应地区课程",
+      regions: filteredRegions
+    }];
+  } else {
+    filteredTabbar.value = []; // 如果没有匹配的地区，清空filteredTabbar
+  }
+};
+
 
 const swichMenu = async (index) => {
   if (index === current.value) return;
@@ -81,6 +106,7 @@ const mainRouter = (item) => {
   });
 };
 </script>
+
 
 <style lang="scss" scoped>
 .u-wrap {

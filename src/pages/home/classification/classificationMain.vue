@@ -5,7 +5,8 @@
       <image src="./static/fenlei/jiantou.png" style="width: 21.74rpx;height: 13.57rpx;"></image>
     </view>
     <view class="search">
-      <u-search placeholder="搜索考试科目" v-model="keyword" action-style="color: #3C7BFB;"></u-search>
+      <u-search placeholder="搜索考试科目" v-model="keyword" action-style="color: #3C7BFB;"
+                @custom="searchByKeyWords(keyword)"></u-search>
     </view>
 
   </view>
@@ -121,6 +122,28 @@ const navigatorToItem = (item) => {
 const navigatorToRegion = () => {
   uni.navigateTo({
     url: "/pages/home/classification/classificationRegions"
+  })
+}
+
+const searchByKeyWords = (keyword) => {
+  let subjects = []
+  uni.request({
+    url: "https://dev.zhikaodian.com/apiV2/tk/search",
+    data: {
+      keyword: keyword
+    },
+    method: "POST",
+    success: (response) => {
+      console.log("response.data", response.data)
+      subjects = response.data.data;
+      uni.setStorageSync("subjects", subjects);
+      uni.navigateTo({
+        url:"/pages/home/classification/searchByKeyWordTiKuItem"
+      })
+    },
+    fail: (error) => {
+      console.log('error', error);
+    }
   })
 }
 </script>

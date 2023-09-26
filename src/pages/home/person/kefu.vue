@@ -24,7 +24,7 @@
     </view>
 
     <view class="body">
-      <mp-html content="123"></mp-html>
+      <text>智考典题库小程序用户问题解答</text>
     </view>
   </view>
 </template>

@@ -17,8 +17,12 @@
         </view>
       </view>
       <view class="footer">
-        <view><text>共{{ item.detail.count }}科</text></view>
-        <view><text>{{ item.detail.people }}人已学习</text></view>
+        <view>
+          <text>共{{ item.detail.count }}科</text>
+        </view>
+        <view>
+          <text>{{ item.detail.people }}人已学习</text>
+        </view>
       </view>
     </view>
   </view>
@@ -80,7 +84,7 @@ const naviToPackage = (item) => {
 
 .tikuItem {
   width: 692rpx;
-  height: 230rpx;
+  padding-bottom: 22rpx;
   background: #FFFFFF;
   box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
   border-radius: 22rpx 22rpx 22rpx 22rpx;
@@ -114,6 +118,7 @@ const naviToPackage = (item) => {
       margin-left: 22rpx;
       margin-top: 18rpx;
       display: flex;
+      flex-wrap: wrap;
 
       .label {
         width: 123rpx;
@@ -123,6 +128,9 @@ const naviToPackage = (item) => {
         display: flex; // 添加这一行
         justify-content: center; // 添加这一行
         align-items: center; // 添加这一行
+        padding-left: 18rpx;
+        padding-right: 18rpx;
+        margin-bottom: 10rpx;
 
         text {
           font-size: 21.74rpx;
@@ -169,6 +177,7 @@ const naviToPackage = (item) => {
       text {
         color: #898989;
       }
+
       view:not(:last-child) {
         margin-right: 29rpx; // 添加这一行
       }

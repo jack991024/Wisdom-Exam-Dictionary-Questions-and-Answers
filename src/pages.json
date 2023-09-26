@@ -265,6 +265,13 @@
         "navigationBarTitleText": "联系客服",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/classification/searchByKeyWordTiKuItem",
+      "style": {
+        "navigationBarTitleText": "搜索结果",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

@@ -199,15 +199,18 @@ const shiyong = () => {
   .labels {
     margin-top: 18rpx;
     display: flex;
+    flex-wrap: wrap;
 
     .label {
-      width: 123rpx;
       height: 33rpx;
       background: #E1EAFD;
       border-radius: 16rpx 16rpx 16rpx 16rpx;
       display: flex; // 添加这一行
       justify-content: center; // 添加这一行
       align-items: center; // 添加这一行
+      padding-left: 18rpx;
+      padding-right: 18rpx;
+      margin-bottom: 10rpx;
 
       text {
         font-size: 21.74rpx;
@@ -330,7 +333,7 @@ const shiyong = () => {
 
 .bottom-nav {
   position: fixed;
-  bottom: 15rpx;
+  bottom: 0rpx;
   left: 0;
   width: 100%;
   height: 161.23rpx;
