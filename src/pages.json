@@ -272,6 +272,27 @@
         "navigationBarTitleText": "搜索结果",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/person/wentijieda",
+      "style": {
+        "navigationBarTitleText": "问题解答",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/zhaoshangjiameng",
+      "style": {
+        "navigationBarTitleText": "招商加盟",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/home/person/guanyuzhikaodian",
+      "style": {
+        "navigationBarTitleText": "关于智考典题库",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

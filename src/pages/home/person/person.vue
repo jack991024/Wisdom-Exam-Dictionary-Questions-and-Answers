@@ -103,7 +103,7 @@ const urls = [
     path: '/pages/home/person/personInfo/personInfo'
   },
   {title: '我的下载', url: '../../../../static/person/download.png'},
-  {title: '联系客服', url: '../../../../static/person/lianxikefu.png',path: '/pages/home/person/kefu'},
+  {title: '联系客服', url: '../../../../static/person/lianxikefu.png', path: '/pages/home/person/kefu'},
   {title: '分享好友', url: '../../../../static/person/share.png'}
   // '../../../..//static/person/personInfo.png',
 ];
@@ -111,12 +111,14 @@ const urls = [
 const urls2 = [
   {
     title: '招商加盟',
-    url: '../../../../static/person/zhaoshangjiameng.png'
+    url: '../../../../static/person/zhaoshangjiameng.png',
+    path: '/pages/home/person/zhaoshangjiameng'
   },
-  {title: '问题解答', url: '../../../../static/person/wentijieda.png'},
+  {title: '问题解答', url: '../../../../static/person/wentijieda.png', path: '/pages/home/person/wentijieda'},
   {title: '注册协议', url: '../../../../static/person/zhucexieyi.png'},
   {title: '关于我们', url: '../../../../static/person/guanyuwomen.png'},
-  {title: '意见反馈', url: '../../../../static/person/yijianfankui.png'}
+  {title: '意见反馈', url: '../../../../static/person/yijianfankui.png'},
+  {title: '关于智考典题库', url: '../../../../static/person/guanyuwomen.png'}
 ];
 
 const navigateTo = (path) => {
