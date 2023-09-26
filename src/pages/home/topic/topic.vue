@@ -290,7 +290,7 @@ const change1 = (val) => {
   console.log(tkid.value)
 }
 
-const loadQuestionBanks = () => {
+const loadQuestionBanks = (updateValue = false) => {
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/myCourse',
     method: 'GET',
@@ -305,7 +305,9 @@ const loadQuestionBanks = () => {
           option2.value.push(
               {text: option.fullname, value: option.tkid}
           );
-          value2.value = option.tkid
+          if (updateValue) {
+            value2.value = option.tkid;
+          }
         });
       }
     },
@@ -386,7 +388,7 @@ onShow(() => {
   uni.setStorageSync("tkid", tkid.value)
   bannerLoads()
   loadMenus()
-  loadQuestionBanks()
+  loadQuestionBanks(true)
   loadState()
 })
 

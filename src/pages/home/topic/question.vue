@@ -47,18 +47,26 @@
                   :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
                   @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
               >
-                <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
+                <!-- 当qType不等于4或者模式不是exam时，显示option-label -->
                 <text
-                    v-if="item.qType === 4 && (currentMode.value !== 'exam')"
+                    v-if="item.qType !== 4 || currentMode.value !== 'exam'"
+                    class="option-label"
+                >
+                  {{ op.label }}
+                </text>
+                <!-- 当qType等于4且模式不是exam时，显示特定的option-label -->
+                <text
+                    v-else-if="item.qType === 4 && currentMode.value !== 'exam'"
                     :class="[
-    'option-label',
-    userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
-    userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
-  ]"
+            'option-label',
+            userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
+            userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
+        ]"
                 >
                 </text>
                 <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
               </view>
+
               <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
                 确认答案
               </text>
