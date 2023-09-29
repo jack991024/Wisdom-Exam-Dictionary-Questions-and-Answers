@@ -62,7 +62,7 @@
     </view>
     <!-- 底部导航栏 -->
     <view class="bottom-nav">
-      <view class="zixun">
+      <view class="zixun" @click="kefu0">
         <view>
           <image src="./static/fenlei/zixun.png" style="width: 45.29rpx;height: 45.29rpx;"></image>
         </view>
@@ -183,6 +183,23 @@ const shiyong = () => {
   });
 
 }
+
+const kefu0 = () => {
+  wx.openCustomerServiceChat({
+    //企业微信的企业id
+    corpId: 'wwd3c8149b29b98603',
+    extInfo: {
+      //客服链接
+      url: 'https://work.weixin.qq.com/kfid/kfc4f5b715bf166f166'
+    },
+    success: (e) => {
+      console.log('e', e)
+    },
+    fail: (err) => {
+      console.log('err', err)
+    }
+  })
+}
 </script>
 
 <style lang="scss">
@@ -255,6 +272,8 @@ const shiyong = () => {
 
     .price {
       display: flex;
+      align-items: center;
+      margin-bottom: 41rpx;
 
       .priceNow {
         margin-right: 24rpx;

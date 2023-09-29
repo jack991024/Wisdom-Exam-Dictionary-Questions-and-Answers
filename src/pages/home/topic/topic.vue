@@ -105,6 +105,10 @@
     </view>
   </view>
 
+  <view class="wechatZiXun" @click="kefu0">
+    <image src="./static/topic/wechat.png" style="width: 108.7rpx;height: 108.7rpx;"></image>
+  </view>
+
   <view class="share">
     <u-divider
         text="分享好友"
@@ -257,6 +261,23 @@ const bannerLoads = () => {
     }
   });
 };
+
+const kefu0 = () => {
+  wx.openCustomerServiceChat({
+    //企业微信的企业id
+    corpId: 'wwd3c8149b29b98603',
+    extInfo: {
+      //客服链接
+      url: 'https://work.weixin.qq.com/kfid/kfc4f5b715bf166f166'
+    },
+    success: (e) => {
+      console.log('e', e)
+    },
+    fail: (err) => {
+      console.log('err', err)
+    }
+  })
+}
 
 const jumpQuestionList = (child) => {
   let arrayParam = JSON.stringify(child)
@@ -565,6 +586,16 @@ const navigateToPath = (param) => {
   margin-top: 50rpx;
   margin-bottom: 100rpx;
   height: 70rpx;
+}
+
+.wechatZiXun {
+  width: 54.0px;
+  height: 54.0px;
+  margin-left: 640rpx;
+  margin-bottom: 572rpx;
+  position: fixed;
+  bottom: 10px;
+  z-index: 1000;
 }
 
 </style>

@@ -3,15 +3,15 @@
     <view class="header">
       <view style="margin-top: 30rpx">
         <view class="kefu-body">
-          <view class="kefu1" @click="">
+          <view class="kefu1" @click="kefu1">
             <image src="../../../static/person/kefu1.png" class="kefu-icon"></image>
             <text class="item-text">售前客服</text>
           </view>
-          <view class="kefu2" @click="">
+          <view class="kefu2" @click="kefu2">
             <image src="../../../static/person/kefu2.png" class="kefu-icon"></image>
             <text class="item-text">售后客服</text>
           </view>
-          <view class="kefu3" @click="">
+          <view class="kefu3" @click="kefu3">
             <image src="../../../static/person/kefu3.png" class="kefu-icon"></image>
             <text class="item-text">技术支持</text>
           </view>
@@ -47,7 +47,56 @@ onLoad(() => {
   })
 })
 
+const kefu1 = () => {
+  wx.openCustomerServiceChat({
+    //企业微信的企业id
+    corpId: 'wwd3c8149b29b98603',
+    extInfo: {
+      //客服链接
+      url: 'https://work.weixin.qq.com/kfid/kfc4f5b715bf166f166'
+    },
+    success: (e) => {
+      console.log('e', e)
+    },
+    fail: (err) => {
+      console.log('err', err)
+    }
+  })
+}
 
+const kefu2 = () => {
+  wx.openCustomerServiceChat({
+    //企业微信的企业id
+    corpId: 'wwd3c8149b29b98603',
+    extInfo: {
+      //客服链接
+      url: 'https://work.weixin.qq.com/kfid/kfca603142d6f909e1f'
+    },
+    success: (e) => {
+      console.log('e', e)
+    },
+    fail: (err) => {
+      console.log('err', err)
+    }
+  })
+}
+
+const kefu3 = () => {
+  wx.openCustomerServiceChat({
+    //企业微信的企业id
+    corpId: 'wwd3c8149b29b98603',
+    extInfo: {
+      //客服链接
+      url: 'https://work.weixin.qq.com/kfid/kfca603142d6f909e1f'
+    },
+    success: (e) => {
+      console.log('e', e)
+    },
+    fail: (err) => {
+      console.log('err', err)
+    }
+  })
+}
 </script>
 
 <style lang="scss">
