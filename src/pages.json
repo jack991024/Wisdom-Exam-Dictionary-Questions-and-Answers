@@ -342,6 +342,13 @@
         "navigationBarTitleText": "选择考试",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/home/topic/xuanzekaoshi",
+      "style": {
+        "navigationBarTitleText": "选择考试",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "tabBar": {

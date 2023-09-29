@@ -38,51 +38,51 @@
     </view>
 
     <view class="u-page">
-      <u-list height="172">
-        <u-list-item
-            v-for="(item, index) in indexList"
-            :key="index"
+      <view
+          v-for="(item, index) in indexList"
+          :key="index"
+      >
+        <u-cell
+            :title="item.title"
+            :isLink="true"
+            @click="navigateTo(item.path)"
+            size="large"
+            :border="index !== indexList.length - 1"
         >
-          <u-cell
-              :title="item.title"
-              :isLink="true"
-              @click="navigateTo(item.path)"
-          >
-            <template #icon>
-              <up-avatar
-                  shape="square"
-                  size="20"
-                  :src="item.url"
-                  customStyle="margin: -3px 5px -3px 0"
-              ></up-avatar>
-            </template>
-          </u-cell>
-        </u-list-item>
-      </u-list>
+          <template #icon>
+            <up-avatar
+                shape="square"
+                size="20"
+                :src="item.url"
+                customStyle="margin: -3px 5px -3px 0"
+            ></up-avatar>
+          </template>
+        </u-cell>
+      </view>
     </view>
 
     <view class="u-page-two">
-      <u-list height="0">
-        <u-list-item
-            v-for="(item, index) in indexList2"
-            :key="index"
+      <view
+          v-for="(item, index) in indexList2"
+          :key="index"
+      >
+        <u-cell
+            :title="item.title"
+            :isLink="true"
+            @click="navigateTo(item.path)"
+            size="large"
+            :border="index !== indexList2.length - 1"
         >
-          <u-cell
-              :title="item.title"
-              :isLink="true"
-              @click="navigateTo(item.path)"
-          >
-            <template #icon>
-              <up-avatar
-                  shape="square"
-                  size="20"
-                  :src="item.url"
-                  customStyle="margin: -3px 5px -3px 0"
-              ></up-avatar>
-            </template>
-          </u-cell>
-        </u-list-item>
-      </u-list>
+          <template #icon>
+            <up-avatar
+                shape="square"
+                size="20"
+                :src="item.url"
+                customStyle="margin: -3px 5px -3px 0"
+            ></up-avatar>
+          </template>
+        </u-cell>
+      </view>
     </view>
   </view>
 </template>
@@ -117,7 +117,11 @@ const urls2 = [
   {title: '员工招聘', url: '../../../../static/person/gerenxinxi.png', path: '/pages/home/person/zhaoshangjiameng'},
   {title: '问题解答', url: '../../../../static/person/wentijieda.png', path: '/pages/home/person/wentijieda'},
   {title: '意见反馈', url: '../../../../static/person/yijianfankui.png'},
-  {title: '关于智考典题库', url: '../../../../static/person/guanyuwomen.png',path: '/pages/home/person/guanyuzhikaodian'}
+  {
+    title: '关于智考典题库',
+    url: '../../../../static/person/guanyuwomen.png',
+    path: '/pages/home/person/guanyuzhikaodian'
+  }
 ];
 
 const navigateTo = (path) => {
@@ -147,42 +151,25 @@ onMounted(() => {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1; /* 使背景位于其他内容下方 */
-}
-
-#app::after {
-  //content: '';
-  //width: 130%;
-  //height: 230rpx;
-  //position: absolute;
-  //left: -15%;
-  //top: 0;
-  //z-index: -1;
-  //border-radius: 0 0 50% 50%;
-  //background: rgb(23, 125, 244);
-  //width: 750rpx;
-  //height: 312rpx;
-  //background: linear-gradient(180deg, #3D7BFB 0%, #F5F6F8 100%);
-  //border-radius: 0rpx 0rpx 0rpx 0rpx;
-  //opacity: 0.43;
+  z-index: 1; // 使背景位于其他内容下方
 }
 
 #app {
-  .u-alert {
-    z-index: 999;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 100rpx;
+  background: #F5F6F8;
+  height: 100vh;
 
   .swiper {
     width: 90%;
     height: 304.35rpx;
     box-shadow: 0 16rpx 16rpx rgba(10, 16, 20, 0.24), 0 0 16rpx rgba(10, 16, 20, 0.12);
-    position: absolute;
-    top: 100rpx;
-    left: 50%;
-    transform: translateX(-50%);
     background: #FFFFFF;
     border-radius: 22rpx 22rpx 22rpx 22rpx;
     opacity: 1;
+    z-index: 2;
 
     .header {
       display: flex;
@@ -222,12 +209,12 @@ onMounted(() => {
 
   .name,
   .classNum {
-    margin: 2px 0; /* Adjust margin */
+    margin: 2px 0; // Adjust margin
     font-family: "PingFang SC", serif;
   }
 
   .name {
-    font-size: 20px; /* Larger font size for name */
+    font-size: 20px; // Larger font size for name
     font-family: "PingFang SC", serif;
     font-size: 33rpx;
   }
@@ -238,11 +225,19 @@ onMounted(() => {
 
   .u-page {
     padding: 0;
-    margin-top: 220px;
+    margin-top: 37rpx;
+    width: 692rpx;
+    background: #FFFFFF;
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
   }
 
   .u-page-two {
     margin-top: 36rpx;
+    width: 692rpx;
+    background: #FFFFFF;
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
   }
 }
 
@@ -250,4 +245,5 @@ image {
   width: 68.84rpx;
   height: 68.84rpx;
 }
+
 </style>

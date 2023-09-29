@@ -8,7 +8,7 @@
     </view>
 
     <view class="body">
-      <view class="item">
+      <view class="item" @click="navigateToMySubjects">
         <view class="icon">
           <image src="./static/start/1.png" mode="widthFix" style="margin-left:29rpx;width: 57.97rpx;
     height: 57.97rpx;"></image>
@@ -24,7 +24,7 @@
         </view>
       </view>
 
-      <view class="item">
+      <view class="item" @click="navigateToMyTiKu">
         <view class="icon">
           <image src="/static/start/2.png" mode="widthFix" style=" margin-left:29rpx;  width: 57.97rpx;
     height: 57.97rpx;"></image>
@@ -109,6 +109,18 @@ const navigateToTwo = (item) => {
   uni.setStorageSync("xuanzekaoshi-item-children", item.children)
   uni.navigateTo({
     url: "/pages/start/xuanzekaoshi-two"
+  })
+}
+
+const navigateToMySubjects = () => {
+  uni.navigateTo({
+    url: "/pages/home/person/my-kecheng"
+  })
+}
+
+const navigateToMyTiKu = () => {
+  uni.navigateTo({
+    url: "/pages/home/person/personInfo/tiku"
   })
 }
 </script>
