@@ -4,11 +4,11 @@
     <view class="swiper" indicator-active-color="#fff">
       <view class="header">
         <view class="avatar-wrapper">
-          <up-avatar :icon="account-fill" :size="60"></up-avatar>
+          <up-avatar :src="userInfo.avatar" :size="60"></up-avatar>
         </view>
         <view class="desc">
-          <text class="name">{{ name }}</text>
-          <text class="classNum">{{ classNum }}</text>
+          <text class="name">{{ userInfo.username }}</text>
+          <text class="classNum">学号：{{ userInfo.number }}</text>
         </view>
       </view>
 
@@ -88,6 +88,11 @@
 </template>
 
 <script setup>
+import {onLoad} from "@dcloudio/uni-app";
+import {useStore} from "vuex";
+
+const store = useStore()
+
 let text = 'test'
 let name = '小明'
 let classNum = '学号 123456789'
@@ -139,6 +144,23 @@ onMounted(() => {
     indexList2.push(item);
   }
 });
+
+const userInfo = ref()
+onLoad(() => {
+  uni.request({
+    url: "https://dev.zhikaodian.com/apiV2/user/current",
+    header: {
+      "Content-Type": "application/json",
+      "Authorization": store.getters.getToken
+    },
+    success: function (res) {
+      userInfo.value = res.data.data
+    },
+    error: function (err) {
+      console.log(err)
+    }
+  })
+})
 </script>
 
 <style lang="scss" scoped>
