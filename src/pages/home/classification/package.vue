@@ -7,13 +7,13 @@
       <zy-segmented :values="list" :current="curNow" @onClickItem="sectionChange"></zy-segmented>
     </view>
     <u-gap height="1" bgColor="#f6f6f6"></u-gap>
-    <view v-if="curNow===0">
+    <view v-if="curNow === 0">
       <view class="info">
         <view class="name">
           <text>{{ item.name }}</text>
         </view>
         <view class="labels">
-          <view class="label" v-for="(item,index) in item.detail?.labels" :key="index">
+          <view class="label" v-for="(item, index) in item.detail?.labels" :key="index">
             <text>{{ item }}</text>
           </view>
         </view>
@@ -38,27 +38,24 @@
           <text>科目</text>
         </view>
         <view class="subjects-item">
-          <view class="subject-item"
-                v-for="(item, index) in courses"
-                :key="index"
-                :class="{ 'selected': isSelected(item) }"
-                @click="toggleSelect(item)">
+          <view class="subject-item" v-for="(item, index) in courses" :key="index"
+            :class="{ 'selected': isSelected(item) }" @click="toggleSelect(item)">
             <text>{{ item.name }}</text>
           </view>
         </view>
       </view>
     </view>
-    <view v-if="curNow===1">
+    <view v-if="curNow === 1">
       <image src="https://cdn.zhikaodian.com/tk/details/6c/ab/6cab94c1d979a420fa823629f416db33.png" mode="widthFix"
-             style="width: 100%"></image>
+        style="width: 100%"></image>
       <image src="https://cdn.zhikaodian.com/tk/details/10/74/107434ca744e30849198f63c7bd504c8.png" mode="widthFix"
-             style="width: 100%"></image>
+        style="width: 100%"></image>
       <image src="https://cdn.zhikaodian.com/tk/details/6e/73/6e732c7cdd52c8e82803b86484fac2ba.png" mode="widthFix"
-             style="width: 100%"></image>
+        style="width: 100%"></image>
       <image src="https://cdn.zhikaodian.com/tk/details/b7/61/b761f94c723c3dad38675c1320c99863.png" mode="widthFix"
-             style="width: 100%"></image>
+        style="width: 100%"></image>
       <image src="https://cdn.zhikaodian.com/tk/details/51/f5/51f5ba41a518dc133ef09d19b7c58a2b.png" mode="widthFix"
-             style="width: 100%"></image>
+        style="width: 100%"></image>
     </view>
     <!-- 底部导航栏 -->
     <view class="bottom-nav">
@@ -74,10 +71,7 @@
       <view class="buy">立即购买</view>
     </view>
 
-    <u-modal
-        :show="showModal"
-        :showConfirmButton="false"
-        :showCancelButton="false" width="507.25rpx" height="362.32rpx">
+    <u-modal :show="showModal" :showConfirmButton="false" :showCancelButton="false" width="507.25rpx" height="362.32rpx">
       <template v-slot:default>
         <text>{{ modalContent }}</text>
       </template>
@@ -92,9 +86,9 @@
 </template>
 
 <script setup>
-import {onLoad} from "@dcloudio/uni-app";
-import {reactive, ref} from "vue";
-import {useStore} from "vuex";
+import { onLoad } from "@dcloudio/uni-app";
+import { reactive, ref } from "vue";
+import { useStore } from "vuex";
 import zySegmented from "@/uni_modules/zy-segmented-control/components/zy-segmented-control/zy-segmented-control.vue"
 
 const store = useStore()
@@ -108,7 +102,7 @@ const goToHome = () => {
   // 在这里添加跳转到首页的代码
   console.log('返回首页');
   showModal.value = false;  // 关闭模态框
-  uni.switchTab({url: "/pages/home/classification/classificationRegions"})
+  uni.switchTab({ url: "/pages/home/classification/classificationRegions" })
 };
 
 // 立即试用的函数
@@ -116,7 +110,7 @@ const tryNow = () => {
   // 在这里添加立即试用的代码
   console.log('立即试用');
   showModal.value = false;  // 关闭模态框
-  uni.navigateTo({url: "/pages/home/person/personInfo/tiku"})
+  uni.navigateTo({ url: "/pages/home/person/personInfo/tiku" })
 };
 
 const sectionChange = (index) => {
@@ -133,7 +127,7 @@ onLoad((option) => {
   let tksuid = item.tksuid
   uni.request({
     url: "https://dev.zhikaodian.com/apiV2/tk/course",
-    data: {tksuid: tksuid},
+    data: { tksuid: tksuid },
     method: "POST",
     success: (response) => {
       courses.value = response.data.data.courses
@@ -274,6 +268,8 @@ const kefu0 = () => {
       display: flex;
       align-items: center;
       margin-bottom: 41rpx;
+      align-items: center;
+      margin-bottom: 30rpx;
 
       .priceNow {
         margin-right: 24rpx;

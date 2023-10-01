@@ -311,6 +311,8 @@ const change1 = (val) => {
   console.log(tkid.value)
 }
 
+const isValue2Set = ref(false);
+
 const loadQuestionBanks = () => {
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/myCourse',
@@ -320,15 +322,17 @@ const loadQuestionBanks = () => {
       "Authorization": store.getters.getToken
     },
     success: (res) => {
-      if (res.data && Array.isArray(res.data.data)) {
-        console.log("!!!111!!!!")
+      if (res.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+         // 只有当isValue2Set为false时，才设置value2
+         if (!isValue2Set.value) {
+          value2.value = res.data.data[0].tkid;
+          isValue2Set.value = true;  // 标记value2已经被设置
+        }
+        
         res.data.data.forEach(option => {
           option2.value.push(
               {text: option.fullname, value: option.tkid}
           );
-          // if (updateValue) {
-          //   value2.value = option.tkid;
-          // }
         });
       }
     },
