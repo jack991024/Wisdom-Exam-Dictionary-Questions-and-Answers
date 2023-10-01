@@ -96,7 +96,7 @@
                 <view class="correct-answer">
                   正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
                 </view>
-                <view
+                <view v-if="item.qType !== 5"
                   :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
                   您的答案是：{{
                     indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
@@ -262,11 +262,11 @@ onLoad((options) => {
           if (item.qType === 4) {
             item.option = [
               {
-                "label": "0",
+                "label": "A",
                 "content": "错误"
               },
               {
-                "label": "1",
+                "label": "B",
                 "content": "正确"
               }
             ];
@@ -442,6 +442,7 @@ const isFavorited = ref(false); // 初始化为未收藏状态
 
 const toggleFavorite = () => {
   isFavorited.value = !isFavorited.value;
+
 }
 
 const indexToLetter = (indexArray, qType) => {
