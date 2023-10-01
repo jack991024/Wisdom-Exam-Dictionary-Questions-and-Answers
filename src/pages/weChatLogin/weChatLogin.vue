@@ -5,23 +5,31 @@
     </view>
   </view>
   <view id="body">
-    <view style="display: flex;flex-direction: column;align-items: center;">
-      <image id="logo" src="./static/login/logo.png"/>
-      <text style="font-size: 29rpx;color: #666666;margin-top: 29rpx;">AI智能题库让学习更高效</text>
+    <view style="display: flex; flex-direction: column; align-items: center">
+      <image id="logo" src="./static/login/logo.png" />
+      <text style="font-size: 29rpx; color: #666666; margin-top: 29rpx"
+        >AI智能题库让学习更高效</text
+      >
     </view>
 
     <view id="login">
       <view class="wechatLogin" @click="wechatLogin">
-        <image src="./static/login/wechatLogin.png" mode="widthFix" style="width: 41.15rpx;height: 34.04rpx;"></image>
-        <text style="font-size: 33rpx;color: #FFFFFF;margin-left: 13rpx;"> 微信登陆</text>
+        <image
+          src="./static/login/wechatLogin.png"
+          mode="widthFix"
+          style="width: 41.15rpx; height: 34.04rpx"
+        ></image>
+        <text style="font-size: 33rpx; color: #ffffff; margin-left: 13rpx">
+          微信登陆</text
+        >
       </view>
 
-      <view style="display: flex;align-items: center;margin-top: 22rpx">
+      <view style="display: flex; align-items: center; margin-top: 22rpx">
         <u-radio-group v-model="isRadioSelected">
-          <u-radio shape="square"/>
+          <u-radio shape="square" />
         </u-radio-group>
         <view>
-          <text style="color: rgba(197, 200, 207, 1);font-size: 12px">
+          <text style="color: rgba(197, 200, 207, 1); font-size: 12px">
             点击"按钮勾选"即同意
             <text @click="navigateToPrivacyPolicy" class="link-text">
               《智考典隐私政策》
@@ -39,21 +47,21 @@
         <view class="verifyCodeLogin">
           <view style="margin-right: 100rpx">
             <u-icon
-                name="../../../../static/login/yanzhengma.png"
-                size="30"
-                color="#909399"
-                @click="verifyLoginRouter"
-                label="验证码"
-                labelPos="bottom"
+              name="../../../../static/login/yanzhengma.png"
+              size="30"
+              color="#909399"
+              @click="verifyLoginRouter"
+              label="验证码"
+              labelPos="bottom"
             ></u-icon>
           </view>
           <u-icon
-              name="../../../../static/login/mima.png"
-              size="30"
-              color="#909399"
-              @click="passwordLoginRouter"
-              label="密码"
-              labelPos="bottom"
+            name="../../../../static/login/mima.png"
+            size="30"
+            color="#909399"
+            @click="passwordLoginRouter"
+            label="密码"
+            labelPos="bottom"
           ></u-icon>
         </view>
       </view>
@@ -62,86 +70,90 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {useStore} from 'vuex'
+import { ref } from "vue";
+import { useStore } from "vuex";
 
-const store = useStore()
+const store = useStore();
 
 const isRadioSelected = ref(false);
 
 const wechatLogin = () => {
-  let code = ""
+  let code = "";
   uni.login({
-    provider: 'weixin', //使用微信登录
+    provider: "weixin", //使用微信登录
     success: function (loginRes) {
-      code = loginRes.code
-    }
+      code = loginRes.code;
+      console.log(loginRes);
+      loginIndex(code);
+    },
   });
-
   uni.navigateTo({
     // url:"/pages/start/xuanzekaoshi-one"
-  })
-
-}
+  });
+};
 
 const navigateToPrivacyPolicy = () => {
   // 使用uni.navigateTo或其他导航方法跳转到隐私政策页面
   uni.navigateTo({
-    url: '/pages/register/policy'
-  })
+    url: "/pages/register/policy",
+  });
 };
 
 const navigateToServiceAgreement = () => {
   // 使用uni.navigateTo或其他导航方法跳转到用户服务协议页面
   uni.navigateTo({
-    url: '/pages/register/FAQ'
-  })
+    url: "/pages/register/FAQ",
+  });
 };
-
 
 function registerRouter() {
   uni.navigateTo({
-    url: '/pages/register/register'
+    url: "/pages/register/register",
   });
 }
 
 function lostPasswordRouter() {
   uni.navigateTo({
-    url: '/pages/lostPassword/lostPassword'
+    url: "/pages/lostPassword/lostPassword",
   });
 }
 
 function verifyLoginRouter() {
   uni.navigateTo({
-    url: '/pages/verifyLogin/verifyLogin'
+    url: "/pages/verifyLogin/verifyLogin",
   });
 }
 
-function passwordLoginRouter(){
+function passwordLoginRouter() {
   uni.navigateTo({
-    url:'/pages/login/login'
-  })
+    url: "/pages/login/login",
+  });
 }
 
-function loginIndex() {
+function loginIndex(code) {
+  let data = {
+    loginType: "wx_app",
+    terminal: "app",
+    wx_code: code,
+  };
 
   uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/user/login',
-    method: 'POST',
+    url: "https://dev.zhikaodian.com/apiV2/user/login",
+    method: "POST",
     header: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     data: data,
     success: function (response) {
-      store.commit('updateToken', response.data.data.token)
+      store.commit("updateToken", response.data.data.token);
       uni.switchTab({
-        url: '/pages/home/classification/classificationMain'
+        url: "/pages/home/classification/classificationMain",
       });
-      // console.log(store.getters.getToken)
+      console.log(store.getters.getToken);
     },
     fail: function (error) {
       console.log(error);
-    }
+    },
   });
 }
 </script>
@@ -174,7 +186,7 @@ function loginIndex() {
     .wechatLogin {
       width: 692rpx;
       height: 105rpx;
-      background: #45C45D;
+      background: #45c45d;
       border-radius: 62rpx 62rpx 62rpx 62rpx;
       opacity: 1;
       margin-top: 222rpx;
@@ -184,7 +196,6 @@ function loginIndex() {
       justify-content: center;
     }
   }
-
 
   input::placeholder {
     font-size: 3px;
@@ -211,5 +222,4 @@ function loginIndex() {
   justify-content: center;
   align-items: center;
 }
-
 </style>
