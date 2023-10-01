@@ -6,7 +6,7 @@
           <text>练习报告</text>
         </view>
         <view class="percent-body">
-          <LCircularProgress :value="stats.correctRate"/>
+          <LCircularProgress :value="stats.correctRate" />
           <view class="score">
             <text>准确率</text>
             <text class="score-value">{{ stats.correctRate }}%</text>
@@ -98,25 +98,27 @@
             <text v-if="qType === '5'">{{ '简答题' }}</text>
           </view>
           <view class="category-body">
-            <view
-                v-for="(item, index) in questions"
-                :key="index"
-                :class="['question-block', item.status === '正确' ? 'correct' : item.status === '错误' ? 'incorrect' : 'not-done']"
-            >
+            <view v-for="(item, index) in questions" :key="index"
+              :class="['question-block', item.status === '正确' ? 'correct' : item.status === '错误' ? 'incorrect' : 'not-done']">
               <text>{{ parseInt(index) + 1 }}</text>
             </view>
           </view>
         </view>
       </view>
+    </view>
 
+    <!-- 底部导航栏 -->
+    <view class="bottom-nav">
+      <view class="quanbujiexi" @click="quanbujiexi">全部解析</view>
+      <view class="cuotijiexi" @click="cuotijiexi">错题解析</view>
     </view>
   </view>
 </template>
 
 <script setup>
 import LCircularProgress from './CustomProgress.vue'
-import {onLoad} from '@dcloudio/uni-app';
-import {reactive, ref} from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
+import { reactive, ref } from 'vue';
 
 let stats = reactive({
   chapterName: '',
@@ -129,10 +131,13 @@ let stats = reactive({
 });
 let groupedData = reactive({});
 
+const chid = ref(null)
+
 onLoad(() => {
   const param = JSON.parse(uni.getStorageSync("param"));
   const questionList = JSON.parse(uni.getStorageSync("questionList")).result;
-
+  chid.value = questionList[0].chid;
+  console.log("chid.value", chid.value)
   // 初始化一个新的对象，其中每个题目的默认状态都是"未做"。
   let questionStatus = [];
   for (let question of questionList) {
@@ -191,6 +196,14 @@ function calculateStatistics(param, questionList) {
     notAnswered,
     correctRate: correctRate.toFixed(2)
   };
+}
+
+const quanbujiexi = () => {
+  uni.setStorageSync("quanbujiexi", chid.value)
+  console.log("uni:",uni.getStorageSync("quanbujiexi"))
+  uni.navigateTo({
+    url: '/pages/home/topic/question-jump?type=9&title="全部解析"'
+  })
 }
 </script>
 
@@ -409,5 +422,32 @@ function calculateStatistics(param, questionList) {
   }
 }
 
+.bottom-nav {
+  position: fixed;
+  bottom: 0rpx;
+  left: 0;
+  width: 100%;
+  height: 161.23rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1rpx solid #ccc;
 
+  .quanbujiexi {
+    width: 313rpx;
+    height: 67rpx;
+    background: #FF9957;
+    border-radius: 34rpx 34rpx 34rpx 34rpx;
+    opacity: 1;
+  }
+
+  .cuotijiexi {
+    width: 313rpx;
+    height: 67rpx;
+    background: #1C65FE;
+    border-radius: 34rpx 34rpx 34rpx 34rpx;
+    opacity: 1;
+  }
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex">
-    <swiper-item style="overflow: auto" v-for="(item,index,itemIndex) in questionLists.result" :key="index">
+    <swiper-item style="overflow: auto" v-for="(item, index, itemIndex) in questionLists.result" :key="index">
       <scroll-view scroll-y style="height: 100%">
         <view class="main">
           <view class="title-and-count">
@@ -12,10 +12,10 @@
             <view class="question-description">
               <view class="type-and-stem">
                 <view class="stam">
-                  <mp-html :content="processAnalyseContentTitle(item.stem, item.qType)"/>
+                  <mp-html :content="processAnalyseContentTitle(item.stem, item.qType)" />
                 </view>
               </view>
-              <view v-if="item.materials.length>0">
+              <view v-if="item.materials.length > 0">
                 <l-floating-panel>
                   <scroll-view scroll-y style="height: 100%">
                     <rich-text :nodes="processAnalyseContent(item.materials[0].content)"></rich-text>
@@ -25,52 +25,44 @@
             </view>
 
             <view class="options">
-              <view v-if="item.qType===5" class="jianda">
+              <view v-if="item.qType === 5" class="jianda">
                 <text class="label">请作答</text>
 
                 <view class="textArea">
                   <u-textarea v-model="jiandaAnswer" placeholder="请输入您的解答"
-                              placeholderClass="font-size: 25rpx;color: #AEAEB2;"></u-textarea>
+                    placeholderClass="font-size: 25rpx;color: #AEAEB2;"></u-textarea>
                 </view>
                 <view style="display: flex;flex-direction: column;align-items: center;">
                   <view class="subButton">
-                    <text style="font-size: 25rpx;" @click="validateAnswer(itemIndex,itemIndex,item,'true')">确认答案
+                    <text style="font-size: 25rpx;" @click="validateAnswer(itemIndex, itemIndex, item, 'true')">确认答案
                     </text>
                   </view>
                 </view>
               </view>
               <!-- 使用v-for来循环渲染所有选项 -->
-              <view
-                  v-if="item.qType!==5"
-                  v-for="(op, index) in item.option"
-                  :key="index"
-                  :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
-                  @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
-              >
+              <view v-if="item.qType !== 5" v-for="(op, index) in item.option" :key="index"
+                :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
+                @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)">
                 <text class="option-label" v-if="item.qType !== 4">{{ op.label }}</text>
-                <text
-                    v-if="item.qType === 4 && (currentMode.value !== 'exam' ||currentMode.value !== 'practice')"
-                    :class="[
-    'option-label',
-    userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
-    userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
-  ]"
-                >
+                <text v-if="item.qType === 4 && (currentMode.value !== 'exam' || currentMode.value !== 'practice')"
+                  :class="[
+                    'option-label',
+                    userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
+                    userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
+                  ]">
                 </text>
                 <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
               </view>
-              <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
+              <text v-if="item.qType === 2" class="check-answer"
+                @click="validateAnswer(itemIndex, itemIndex, item, 'true')">
                 确认答案
               </text>
               <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
-                    class="submit-button-container">
+                class="submit-button-container">
                 <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
               </view>
             </view>
-            <view
-                v-if="currentMode === 'recite'"
-                class="answer"
-            >
+            <view v-if="currentMode === 'recite'" class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">正确答案是：{{ item.answer }}</view>
@@ -94,17 +86,14 @@
               </view>
             </view>
 
-            <view
-                v-else-if="currentMode === 'practice' && userAnswers[itemIndex]"
-                class="answer"
-            >
+            <view v-else-if="currentMode === 'practice' && userAnswers[itemIndex]" class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">
                   正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
                 </view>
                 <view
-                    :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
+                  :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
                   您的答案是：{{
                     indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
                   }}
@@ -145,13 +134,12 @@
       </scroll-view>
     </swiper-item>
   </swiper>
-
 </template>
 
 <script setup>
-import {onLoad} from '@dcloudio/uni-app';
-import {ref, reactive, onMounted} from 'vue';
-import {useStore} from 'vuex'
+import { onLoad } from '@dcloudio/uni-app';
+import { ref, reactive, onMounted } from 'vue';
+import { useStore } from 'vuex'
 
 const store = useStore()
 const questionLists = ref([])
@@ -260,7 +248,7 @@ onLoad((options) => {
     })
     url = 'https://dev.zhikaodian.com/apiV2/tk/getQuestions'
     selectMode('recite');
-  }else if (type === 5) {
+  } else if (type === 5) {
     let items = uni.getStorageSync("favQuestionLists")
     data = {
       chid: items.chid,
@@ -284,7 +272,7 @@ onLoad((options) => {
     })
     url = 'https://dev.zhikaodian.com/apiV2/tk/myFavQuestion'
     selectMode('practice');
-  }if (type === 7) {
+  } if (type === 7) {
     let items = uni.getStorageSync("wrongQuestionListsNew")
     data = {
       items: items,
@@ -296,7 +284,7 @@ onLoad((options) => {
     })
     url = 'https://dev.zhikaodian.com/apiV2/tk/getQuestions'
     selectMode('recite');
-  }if (type === 8) {
+  } if (type === 8) {
     let items = uni.getStorageSync("favQuestionListsNew")
     data = {
       items: items,
@@ -307,6 +295,19 @@ onLoad((options) => {
       title: title
     })
     url = 'https://dev.zhikaodian.com/apiV2/tk/getQuestions'
+    selectMode('recite');
+  } if (type === 9) {
+    let chid = uni.getStorageSync("quanbujiexi");
+    data = {
+      chid: chid,
+      encrypt: 0
+    }
+
+
+    uni.setNavigationBarTitle({
+      title: title
+    })
+    url = 'https://dev.zhikaodian.com/apiV2/tk/getExercise'
     selectMode('recite');
   }
 
@@ -320,19 +321,22 @@ onLoad((options) => {
     data: data,
     success: (res) => {
       // 确保响应中有数据
-      if (res.data && res.data.data) {
+      if (res.data && (res.data.data || res.data.data.result)) {
         let result = res.data.data;
+        if (!Array.isArray(result)) {
+          result = res.data.data.result
+        }
 
         // 对于每个问题，如果qType为4，则为其添加选项
         for (let item of result) {
           if (item.qType === 4) {
             item.option = [
               {
-                "label": "0",
+                "label": "A",
                 "content": "错误"
               },
               {
-                "label": "1",
+                "label": "B",
                 "content": "正确"
               }
             ];
@@ -567,13 +571,15 @@ function handleSubmitPaper() {
         }
 
         .stem {
-          flex: 1; /* This allows the stem to take up the remaining width */
+          flex: 1;
+          /* This allows the stem to take up the remaining width */
           position: relative;
         }
 
         .stem::before {
           content: '';
-          width: calc(11px + 2px + 8px + 10px); /* Font size + padding + margin of question-type */
+          width: calc(11px + 2px + 8px + 10px);
+          /* Font size + padding + margin of question-type */
           display: block;
           visibility: hidden;
         }
@@ -727,11 +733,13 @@ function handleSubmitPaper() {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%; /* 设置宽度为100% */
+  width: 100%;
+  /* 设置宽度为100% */
 }
 
 rich-text {
-  width: 100%; /* 设置宽度为100% */
+  width: 100%;
+  /* 设置宽度为100% */
 }
 
 .my-note {
@@ -749,13 +757,19 @@ rich-text {
 }
 
 .material-swiper-container {
-  position: fixed; /* Fixed position */
-  bottom: 0; /* Align to the bottom */
-  width: 100%; /* Full width */
+  position: fixed;
+  /* Fixed position */
+  bottom: 0;
+  /* Align to the bottom */
+  width: 100%;
+  /* Full width */
   right: 1px;
-  background-color: white; /* Background color */
-  border-top-left-radius: 15px; /* Rounded corners at the top */
-  border-top-right-radius: 15px; /* Rounded corners at the top */
+  background-color: white;
+  /* Background color */
+  border-top-left-radius: 15px;
+  /* Rounded corners at the top */
+  border-top-right-radius: 15px;
+  /* Rounded corners at the top */
 }
 
 .check-answer {
@@ -767,13 +781,15 @@ rich-text {
   font-size: 14px;
   font-weight: bold;
   text-align: center;
-  margin: 0 auto; /* This will center the button */
+  margin: 0 auto;
+  /* This will center the button */
 }
 
 .option-correct {
   position: relative;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     background-color: green;
@@ -799,7 +815,8 @@ rich-text {
 .option-incorrect {
   position: relative;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     background-color: red;
@@ -829,5 +846,4 @@ rich-text {
   color: #fff; !* Text color *!
 }
 */
-
 </style>
