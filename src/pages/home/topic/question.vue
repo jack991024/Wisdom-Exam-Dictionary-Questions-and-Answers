@@ -1,5 +1,5 @@
 <template>
-  <swiper class="swiper-container" :indicator-dots="false">
+  <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex">
     <swiper-item style="overflow: auto" v-for="(item,index,itemIndex) in questionLists.result" :key="index">
       <scroll-view scroll-y style="height: 100%">
         <view class="main">
@@ -186,7 +186,7 @@
   <!-- 弹出层 -->
   <div v-show="isTiKa" class="custom-popup">
     <scroll-view scroll-y style="height: 100%; overflow-y: auto;">
-      <ExamInfoCard :groupedData="groupedData"/>
+      <ExamInfoCard :groupedData="groupedData" @changeQuestion="updateCurrentQuestion"/>
     </scroll-view>
   </div>
 </template>
@@ -212,6 +212,12 @@ const open = () => {
 const close = () => {
   console.log('close')
   show.value = false
+}
+
+let currentIndex = ref(0); // 初始化为第一个题目
+
+function updateCurrentQuestion(index) {
+    currentIndex.value = index;
 }
 
 function processAnalyseContentTitle(analyse, qType) {

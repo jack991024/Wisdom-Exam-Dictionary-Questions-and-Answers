@@ -25,6 +25,7 @@
           <view
               v-for="(item, index) in groupedData"
               :key="index"
+              @click="goToQuestion(index)"
               :class="['question-block', item.status === '正确' ? 'correct' : item.status === '错误' ? 'incorrect' : 'not-done']"
           >
             <text>{{ parseInt(index) + 1 }}</text>
@@ -42,6 +43,12 @@ const { groupedData = [] } = defineProps({
     default: () => []
   }
 });
+
+const emit = defineEmits();
+
+function goToQuestion(index) {
+    emit('changeQuestion', index);
+}
 </script>
 
 <style lang="scss">
