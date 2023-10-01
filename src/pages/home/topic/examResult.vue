@@ -141,12 +141,8 @@ onLoad(() => {
       status: "未做"
     });
   }
-  console.log("questionStatus:", questionStatus)
-  console.log("param:", param)
   // 遍历param，并更新每个题目的状态为"已做"或"做错"。
   for (let qid in param) {
-    console.log("qid:", qid);
-    console.log("questionStatus[qid]", questionStatus[qid])
     if (questionStatus[qid]) {
       questionStatus[qid].status = param[qid].isCorrect ? "正确" : "错误";
     }
@@ -161,8 +157,6 @@ onLoad(() => {
     acc[qType].push(question);
     return acc;
   }, {});
-
-  console.log("groupedData:", groupedData)
 
   const calculatedStats = calculateStatistics(param, questionList);
   Object.assign(stats, calculatedStats);

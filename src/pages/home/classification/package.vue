@@ -100,7 +100,6 @@ const modalContent = '添加成功！';  // 模态框的内容
 // 返回首页的函数
 const goToHome = () => {
   // 在这里添加跳转到首页的代码
-  console.log('返回首页');
   showModal.value = false;  // 关闭模态框
   uni.switchTab({ url: "/pages/home/classification/classificationRegions" })
 };
@@ -108,21 +107,18 @@ const goToHome = () => {
 // 立即试用的函数
 const tryNow = () => {
   // 在这里添加立即试用的代码
-  console.log('立即试用');
   showModal.value = false;  // 关闭模态框
   uni.navigateTo({ url: "/pages/home/person/personInfo/tiku" })
 };
 
 const sectionChange = (index) => {
   curNow.value = index;
-  console.log("value", curNow.value)
 };
 
 let item = reactive({})
 const courses = ref([])
 onLoad((option) => {
   Object.assign(item, JSON.parse(option.item));
-  console.log(item)
 
   let tksuid = item.tksuid
   uni.request({
@@ -131,7 +127,6 @@ onLoad((option) => {
     method: "POST",
     success: (response) => {
       courses.value = response.data.data.courses
-      console.log("courses", courses.value)
     },
     error: (err) => {
       console.log(err)
@@ -148,7 +143,6 @@ const toggleSelect = (item) => {
   } else {
     selectedItems.value.push(item);
   }
-  console.log("selectedItems", selectedItems)
 };
 
 const isSelected = (item) => {
@@ -157,7 +151,6 @@ const isSelected = (item) => {
 
 const shiyong = () => {
   const tksuids = selectedItems.value.map(item => item.tksuid);
-  console.log(store.getters.getToken)
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/evaluateTksuid',
     method: 'POST',

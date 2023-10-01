@@ -308,7 +308,6 @@ const close = () => {
 
 const change1 = (val) => {
   tkid.value = val.value
-  console.log(tkid.value)
 }
 
 const isValue2Set = ref(false);
@@ -366,7 +365,7 @@ const loadState = () => {
       if (res.data && res.data.data) {
         nextTick(() => {
           questionNums.value = res.data.data;
-          console.log(questionNums)
+  
           doneRate.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2) + '%';
           done.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2);
 
@@ -400,7 +399,6 @@ watch(
 
 onShow(() => {
   let tikuFromLocal = store.getters.getTiKu
-  console.log("!!!!!tikuFromLocal:::", tikuFromLocal)
   if (tikuFromLocal != null && tikuFromLocal !== "") {
     let tiku = JSON.parse(tikuFromLocal)
     option2.value.push(
@@ -409,7 +407,6 @@ onShow(() => {
     value2.value = tiku.tkid
     tkid.value = tiku.tkid
   }
-  console.log("tkid:", tkid.value)
   uni.setStorageSync("tkid", tkid.value)
   bannerLoads()
   loadMenus()

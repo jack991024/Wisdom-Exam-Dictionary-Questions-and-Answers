@@ -207,7 +207,6 @@ const userAnswers = reactive({});
 
 
 onLoad((options) => {
-  console.log(options)
   let type = parseInt(options.type)
   let title = options.title
   let data = {}
@@ -227,7 +226,6 @@ onLoad((options) => {
     selectMode('recite');
   } else if (type === 2) {
     let items = uni.getStorageSync("wrongQuestionLists")
-    console.log("type===2", items)
     data = {
       chid: items.chid,
       encrypt: 0
@@ -240,7 +238,6 @@ onLoad((options) => {
     selectMode('recite');
   } else if (type === 3) {
     let items = uni.getStorageSync("wrongQuestionLists")
-    console.log("type===3", items)
     data = {
       chid: items.chid,
       encrypt: 0
@@ -253,7 +250,6 @@ onLoad((options) => {
     selectMode('practice');
   } else if (type === 4) {
     let items = uni.getStorageSync("favQuestionListsNew")
-    console.log("type===4", items)
     data = {
       items: items,
       encrypt: 0
@@ -266,7 +262,6 @@ onLoad((options) => {
     selectMode('recite');
   }else if (type === 5) {
     let items = uni.getStorageSync("favQuestionLists")
-    console.log("type===5", items)
     data = {
       chid: items.chid,
       encrypt: 0
@@ -279,7 +274,6 @@ onLoad((options) => {
     selectMode('recite');
   } else if (type === 6) {
     let items = uni.getStorageSync("favQuestionLists")
-    console.log("type===3", items)
     data = {
       chid: items.chid,
       encrypt: 0
@@ -325,7 +319,6 @@ onLoad((options) => {
     method: 'POST',
     data: data,
     success: (res) => {
-      console.log(res.data.data)
       // 确保响应中有数据
       if (res.data && res.data.data) {
         let result = res.data.data;
@@ -352,9 +345,7 @@ onLoad((options) => {
           result: result
         }
       }
-      console.log(questionLists)
       currentIndex.value = current
-      console.log("currentIndex.value:", currentIndex.value)
     },
     fail: (err) => {
       console.log('error', err);
@@ -426,10 +417,6 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
     };
   }
 
-  console.log("correct:", correctAnswer);
-  console.log("select:", selectedAnswer);
-  console.log("userAnswers:", userAnswers[questionIndex])
-  console.log("item:", item)
   if ((item.qType !== 2 && item.qType !== 5 && !clickButton) || (item.qType === 2 && clickButton === 'true')) {
     let selectAnswer = indexToLetter(selectedAnswer, item.qType)
     uni.request({
@@ -445,7 +432,6 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
         "answer": selectAnswer
       },
       success: (response) => {
-        console.log(JSON.stringify(response.data));
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
           handleSubmitPaper(userAnswers);
@@ -471,10 +457,8 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
         "answer": jiandaAnswer
       },
       success: (response) => {
-        console.log(JSON.stringify(response.data));
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
-          console.log("questionLists:", JSON.stringify(questionLists.value))
           handleSubmitPaper(userAnswers);
         }
       },
@@ -503,7 +487,6 @@ function changeMode() {
 const currentMode = ref('exam');  // 新增，用于存储当前选择的模式，默认exam
 
 function selectMode(mode) {
-  console.log('Selected mode:', mode);
   currentMode.value = mode;  // 更新当前模式
   isModeModalOpen.value = false;
   // 在这里添加你的模式切换逻辑...
@@ -512,8 +495,6 @@ function selectMode(mode) {
 function handleSubmitPaper() {
   uni.setStorageSync("questionList", JSON.stringify(questionLists.value));
   uni.setStorageSync("param", JSON.stringify(userAnswers));
-  console.log("JSON.stringify(userAnswers):::", JSON.stringify(userAnswers))
-  console.log("JSON.stringify(questionList):::", JSON.stringify(questionLists.value))
   uni.navigateTo({
     url: '/pages/home/topic/examResult'
   });

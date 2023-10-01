@@ -24,19 +24,16 @@ const items = ref([]);
 // 定义一个新的响应式引用来存储当前的 item
 const currentItem = ref(null);
 onLoad((option) => {
-  console.log(option)
   let name = option.name
   uni.setNavigationBarTitle({
     title: name
   });
 
   items.value = uni.getStorageSync("item").children
-  console.log("items:", JSON.stringify(items))
   uni.removeStorageSync("item")
 })
 
 const jumpToItems = (item) => {
-  console.log("item:", item)
   if (item.children.length !== 0) {
     uni.setStorageSync("item", item)
     uni.navigateTo({

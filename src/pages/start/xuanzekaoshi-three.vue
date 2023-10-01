@@ -34,7 +34,6 @@ const searchByKeyWords = (keyword) => {
     },
     method: "POST",
     success: (response) => {
-      console.log("response.data", response.data)
       subjects = response.data.data;
       uni.setStorageSync("subjects", subjects);
       uni.navigateTo({

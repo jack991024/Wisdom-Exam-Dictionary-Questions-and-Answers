@@ -48,16 +48,16 @@ const submitActivCode = () => {
       code: activCode.value
     },
     success: (response) => {
-      console.log(JSON.stringify(response.data));
+
       resp.value = response.data
-      console.log(resp.value)
+  
       if (resp.value.code === 0) {
         show.value = true
         content.value = '激活成功'
       } else {
         show.value = true
         content.value = resp.value.msg
-        console.log(content.value)
+    
       }
     },
     fail: (error) => {

@@ -40,7 +40,6 @@ onLoad((options) => {
   itemName = options.itemName
   itemCoid = options.itemCoid
   regionId = options.regionId
-  console.log(options)
   uni.setNavigationBarTitle({
     title: itemName
   });
@@ -54,9 +53,9 @@ onLoad((options) => {
     },
     method: "POST",
     success: (response) => {
-      console.log("response.data", response.data)
+
       subjects.values = response.data.data.subjects;
-      console.log("subjects.values", subjects.values)
+     
     },
     fail: (error) => {
       console.log('error', error);

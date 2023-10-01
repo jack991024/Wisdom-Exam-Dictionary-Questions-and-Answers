@@ -99,7 +99,6 @@ onMounted(() => {
 });
 
 const mainRouter = (item) => {
-  console.log("item", item)
   uni.setStorageSync('item', JSON.stringify(item));
   uni.switchTab({
     url: "/pages/home/classification/classificationMain",

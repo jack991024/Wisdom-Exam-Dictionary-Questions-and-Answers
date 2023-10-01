@@ -42,7 +42,6 @@ const list = ref(['赞过', '收藏']);
 const curNow = ref(0);
 const sectionChange = (index) => {
   curNow.value = index;
-  console.log("value", curNow.value)
   let url = ""
   if (curNow.value === 1) {
     url = "https://dev.zhikaodian.com/apiV2/svideo/myFav"

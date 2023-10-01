@@ -129,7 +129,6 @@ const wrongQuestionAllList = ref([])
 
 const sectionChangeMenus = (index) => {
   curNowMenus.value = index;
-  console.log("value", curNowMenus.value)
 }
 
 // 创建一个响应式变量用于存储分类后的数据
@@ -151,10 +150,8 @@ const getCurrentChildren = () => {
 
 const currentItem = ref(null)
 const jumpToItems = (item) => {
-  console.log("item:", item)
   if (item.children.length !== 0) {
     uni.setStorageSync("item", item)
-    console.log("item.name", item.name)
     uni.navigateTo({
       url: "/pages/home/topic/jump-items-fav?name=" + item.name
     })
@@ -166,7 +163,6 @@ const jumpToItems = (item) => {
 
 const sectionChange = (index) => {
   curNow.value = index;
-  console.log("value", curNow.value)
 
   // 检查curNow的值
   if (curNow.value === 1) {
@@ -183,7 +179,6 @@ const sectionChange = (index) => {
       success: (response) => {
         let data = response.data.data;
         listMenus.value = uni.getStorageSync("menus").map(item => item.menu)
-        console.log("listMenus:", listMenus.value)//["预测试卷","模拟预测","章节训练"]
         updateMenuData(data);
       },
       fail: (error) => {
@@ -210,7 +205,6 @@ const formatDate = (timestamp) => {
 let tkid = ''
 onShow((options) => {
   tkid = uni.getStorageSync("tkid")
-  console.log("tkid:", tkid)
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/myFavRecent',
     method: 'POST',

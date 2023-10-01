@@ -585,7 +585,6 @@
 						_id: this.videoID
 					},
 					success: (res) => {
-						// console.log(res);
 						this.pinlunList = [];
 						this.pinlunListX = [];
 						var pin = res.data.data[0].pinlun;
@@ -634,7 +633,6 @@
 								_id: this.videoID
 							},
 							success: (resa) => {
-								// console.log(res);
 								var pins = resa.data.data[0].pinlun;
 								this.pinlunNum = pins.length;
 								for(let i=0;i<pins.length;i++){
@@ -672,7 +670,6 @@
 										this.pinlun_list.unshift(pins[i]);
 									}
 								}
-								// console.log(this.pinlun_list);
 								this.pinlunListX = resa.data.data[0].pinlun;
 							}
 						})
@@ -687,7 +684,6 @@
 					var nodes = ""
 					if(this.value !== ''){
 						let replacedStr = str.replace(/\[([^(\]|\[)]*)\]/g,(item, index)=>{
-							console.log("item: " + item);
 							for(let i=0;i<this.emojilist.length;i++){
 								let row = this.emojilist[i];
 								if(row.alt==item){
@@ -695,7 +691,6 @@
 									//比如你上传服务器后，你的100.gif路径为https://www.xxx.com/emoji/100.gif 则替换onlinePath填写为https://www.xxx.com/emoji/
 									let onlinePath = 'https://static-2908110e-6da2-4899-8b44-d45c153457ad.bspapp.com/emojis/qq/'
 									let imgstr = '<img id="img" src="' + onlinePath + row.url + '" style="">';
-									// console.log("imgstr: " + imgstr);
 									return imgstr;
 								}
 							}
@@ -737,7 +732,6 @@
 								pinlun: pin
 							},
 							success: (resx) => {
-								// console.log(resx);
 								/*
 								4.评论发送成功
 								（1）把输入框清空
@@ -766,7 +760,6 @@
 							like: [],
 							imageURL: this.imageURL
 						}
-						// console.log(msg);
 						this.isSend = false;
 						uni.showLoading({
 							title: '正在发送...'
@@ -779,7 +772,6 @@
 								_id: this.videoID
 							},
 							success: (res) => {
-								// console.log(res);
 								var pin = res.data.data[0].pinlun;
 								pin.push(msg);
 								uni.request({
@@ -791,7 +783,7 @@
 										pinlun: pin
 									},
 									success: (resx) => {
-										// console.log(resx);
+									
 										/*
 										5.评论发送成功
 										（1）把输入框清空
@@ -846,7 +838,6 @@
 			},
 			tosonlike(index,inde){
 				// 处理子评论
-				console.log(this.pinlun_list[index].sonPinlun[inde].mylike);
 				if(this.pinlun_list[index].sonPinlun[inde].mylike == false){
 					this.pinlunListX[(this.pinlunListX.length-1)-index].sonPinlun[(this.pinlunListX[(this.pinlunListX.length-1)-index].sonPinlun.length-1)-inde].like.push(uni.getStorageSync("user")._id);
 				} else {
@@ -938,7 +929,6 @@
 									sms.push(this.pinlunListX[i]);
 								}
 							}
-							// console.log(this.pinlunListX)
 							uni.request({
 								url: 'https://bdb24c6d-8c19-4f80-8e7e-c9c9f037f131.bspapp.com/video',
 								method: 'POST',
@@ -1340,7 +1330,6 @@
 				this.value += str;
 			},
 			clickEmoji(index){
-				// console.log(this.emojilist[index])
 				var str = this.emojilist[index].alt;
 				this.value += str;
 				if(uni.getStorageSync("nowTimeEmojiList").length == 0){
@@ -1362,7 +1351,6 @@
 				}
 			},
 			clicksinaEmoji(index){
-				console.log(this.sinaEmojilist[index])
 			},
 			currentChange(e){
 				var num = e.detail.current + 1

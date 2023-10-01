@@ -27,7 +27,6 @@ const getProgress = (correct, total) => {
 let data = reactive([]);
 
 const goToLearn = (item) => {
-  console.log('前往学习', item);
   store.commit('updateTiKu', JSON.stringify(item))
   uni.switchTab({url: '/pages/home/topic/topic'})
 };
@@ -45,7 +44,7 @@ const loadQuestionBanks = () => {
         data.length = 0; // 首先清空数组
         res.data.data.forEach(item => data.push(item)); // 然后将新数据推送到数组中
       }
-      console.log("data:", data);
+
     },
     fail: (err) => {
       console.log('error', err);

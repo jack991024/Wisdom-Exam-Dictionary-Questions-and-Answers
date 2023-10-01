@@ -60,7 +60,6 @@ const computedCorrect = computed(() => {
 const jumpQuestion = (item) => {
   if (item.children && item.children.length > 0) {
     // 如果有子节点，继续跳转到当前页面
-    console.log(item.children)
     uni.navigateTo({
       url: '/pages/home/topic/questionList?arrayParam=' + JSON.stringify(item.children)
     })

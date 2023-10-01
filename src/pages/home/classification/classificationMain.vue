@@ -60,12 +60,10 @@ const size = (size) => {
 };
 
 const change = (index) => {
-  console.log('选项改变：', index);
   value.value = index;
 };
 
 const scrolltolower = (index) => {
-  console.log('内容滚动到底部触发：', index);
 };
 
 let regionId = ""
@@ -73,7 +71,6 @@ let regionName = ""
 onShow(async () => {
   let region = {};
   const item = uni.getStorageSync('item');
-  console.log("itemmmmm:", item)
   if (item != null && item !== "") {
     region = JSON.parse(item)
     uni.removeStorageSync("item")
@@ -134,7 +131,6 @@ const searchByKeyWords = (keyword) => {
     },
     method: "POST",
     success: (response) => {
-      console.log("response.data", response.data)
       subjects = response.data.data;
       uni.setStorageSync("subjects", subjects);
       uni.navigateTo({

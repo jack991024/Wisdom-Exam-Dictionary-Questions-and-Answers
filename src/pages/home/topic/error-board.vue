@@ -29,7 +29,6 @@ const errorList = ref([])
 let tkid = ""
 onShow(() => {
   tkid = uni.getStorageSync("tkid")
-  console.log("tkid:", tkid)
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/errorBoard',
     method: 'POST',

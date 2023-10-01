@@ -1,6 +1,6 @@
 <template>
   <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex">
-    <swiper-item style="overflow: auto" v-for="(item,index,itemIndex) in questionLists.result" :key="index">
+    <swiper-item style="overflow: auto" v-for="(item, index, itemIndex) in questionLists.result" :key="index">
       <scroll-view scroll-y style="height: 100%">
         <view class="main">
           <view class="title-and-count">
@@ -12,10 +12,10 @@
             <view class="question-description">
               <view class="type-and-stem">
                 <view class="stam">
-                  <mp-html :content="processAnalyseContentTitle(item.stem, item.qType)"/>
+                  <mp-html :content="processAnalyseContentTitle(item.stem, item.qType)" />
                 </view>
               </view>
-              <view v-if="item.materials.length>0">
+              <view v-if="item.materials.length > 0">
                 <l-floating-panel>
                   <scroll-view scroll-y style="height: 100%">
                     <rich-text :nodes="processAnalyseContent(item.materials[0].content)"></rich-text>
@@ -25,60 +25,48 @@
             </view>
 
             <view class="options">
-              <view v-if="item.qType===5" class="jianda">
+              <view v-if="item.qType === 5" class="jianda">
                 <text class="label">请作答</text>
 
                 <view class="textArea">
                   <u-textarea v-model="jiandaAnswer" placeholder="请输入您的解答"
-                              placeholderClass="font-size: 25rpx;color: #AEAEB2;"></u-textarea>
+                    placeholderClass="font-size: 25rpx;color: #AEAEB2;"></u-textarea>
                 </view>
                 <view style="display: flex;flex-direction: column;align-items: center;">
                   <view class="subButton">
-                    <text style="font-size: 25rpx;" @click="validateAnswer(itemIndex,itemIndex,item,'true')">确认答案
+                    <text style="font-size: 25rpx;" @click="validateAnswer(itemIndex, itemIndex, item, 'true')">确认答案
                     </text>
                   </view>
                 </view>
               </view>
               <!-- 使用v-for来循环渲染所有选项 -->
-              <view
-                  v-if="item.qType!==5"
-                  v-for="(op, index) in item.option"
-                  :key="index"
-                  :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
-                  @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)"
-              >
+              <view v-if="item.qType !== 5" v-for="(op, index) in item.option" :key="index"
+                :class="['option-item', selectedOptions[itemIndex] && selectedOptions[itemIndex].includes(index) ? 'selected' : '']"
+                @tap="() => currentMode.value !== 'recite' && toggleOption(itemIndex, index, item)">
                 <!-- 当qType不等于4或者模式不是exam时，显示option-label -->
-                <text
-                    v-if="item.qType !== 4 || currentMode.value !== 'exam'"
-                    class="option-label"
-                >
+                <text v-if="item.qType !== 4 || currentMode.value !== 'exam'" class="option-label">
                   {{ op.label }}
                 </text>
                 <!-- 当qType等于4且模式不是exam时，显示特定的option-label -->
-                <text
-                    v-else-if="item.qType === 4 && currentMode.value !== 'exam'"
-                    :class="[
-            'option-label',
-            userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
-            userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
-        ]"
-                >
+                <text v-else-if="item.qType === 4 && currentMode.value !== 'exam'" :class="[
+                  'option-label',
+                  userAnswers[itemIndex] && userAnswers[itemIndex].correctOption.includes(index) ? 'option-correct' : '',
+                  userAnswers[itemIndex] && userAnswers[itemIndex].incorrectOption.includes(index) ? 'option-incorrect' : ''
+                ]">
                 </text>
                 <rich-text class="option-description" :nodes="processAnalyseContent(op.content)"></rich-text>
               </view>
 
-              <text v-if="item.qType===2" class="check-answer" @click="validateAnswer(itemIndex,itemIndex,item,'true')">
+              <text v-if="item.qType === 2" class="check-answer"
+                @click="validateAnswer(itemIndex, itemIndex, item, 'true')">
                 确认答案
               </text>
               <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
-                    class="submit-button-container">
+                class="submit-button-container">
                 <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
               </view>
             </view>
-            <view
-                v-if="currentMode === 'recite'"
-                class="answer"
-            >
+            <view v-if="currentMode === 'recite'" class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">正确答案是：{{ item.answer }}</view>
@@ -102,17 +90,14 @@
               </view>
             </view>
 
-            <view
-                v-else-if="currentMode === 'practice' && userAnswers[itemIndex]"
-                class="answer"
-            >
+            <view v-else-if="currentMode === 'practice' && userAnswers[itemIndex]" class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">
                   正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
                 </view>
                 <view
-                    :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
+                  :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
                   您的答案是：{{
                     indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
                   }}
@@ -147,7 +132,7 @@
             <!-- 弹出层 -->
             <div v-show="isMenu" class="custom-popup-left" :class="{ active: isMenu }">
               <scroll-view scroll-y style="height: 100%; overflow-y: auto;">
-                <QuestionLists :initialQuestions="myQuestions"/>
+                <QuestionLists :initialQuestions="myQuestions" />
               </scroll-view>
             </div>
           </view>
@@ -158,18 +143,11 @@
   </swiper>
 
   <view class="tarBar">
-    <u-tabbar
-        value=""
-        @change=""
-        :fixed="true"
-        :placeholder="true"
-        :safeAreaInsetBottom="true"
-    >
+    <u-tabbar value="" @change="" :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
       <u-tabbar-item text="目录" icon="../../../../static/topic/menu.png" @click="toggleMenu"></u-tabbar-item>
       <u-tabbar-item text="题卡" icon="../../../../static/topic/tika.png" @click="toggleTiKa"></u-tabbar-item>
-      <u-tabbar-item text="收藏" v-if="!isFavorited.value"
-                     icon="../../../../static/topic/fav.png"
-                     @click="toggleFavorite"></u-tabbar-item>
+      <u-tabbar-item text="收藏" v-if="!isFavorited.value" icon="../../../../static/topic/fav.png"
+        @click="toggleFavorite"></u-tabbar-item>
       <u-tabbar-item text="模式" icon="../../../../static/topic/mode.png" @click="changeMode"></u-tabbar-item>
     </u-tabbar>
 
@@ -186,15 +164,15 @@
   <!-- 弹出层 -->
   <div v-show="isTiKa" class="custom-popup">
     <scroll-view scroll-y style="height: 100%; overflow-y: auto;">
-      <ExamInfoCard :groupedData="groupedData" @changeQuestion="updateCurrentQuestion"/>
+      <ExamInfoCard :groupedData="groupedData" @changeQuestion="updateCurrentQuestion" />
     </scroll-view>
   </div>
 </template>
 
 <script setup>
-import {onLoad} from '@dcloudio/uni-app';
-import {ref, reactive, onMounted, watch} from 'vue';
-import {useStore} from 'vuex'
+import { onLoad } from '@dcloudio/uni-app';
+import { ref, reactive, onMounted, watch } from 'vue';
+import { useStore } from 'vuex'
 import ExamInfoCard from "../../../components/ExamInfoCard.vue";
 import QuestionLists from "../../../components/QuestionLists.vue";
 
@@ -205,19 +183,19 @@ const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
 let jiandaAnswer = ""
 const open = () => {
-  console.log('open');
+
   show.value = true
 }
 
 const close = () => {
-  console.log('close')
   show.value = false
 }
 
 let currentIndex = ref(0); // 初始化为第一个题目
 
 function updateCurrentQuestion(index) {
-    currentIndex.value = index;
+  currentIndex.value = index;
+  isTiKa.value = false
 }
 
 function processAnalyseContentTitle(analyse, qType) {
@@ -260,7 +238,6 @@ const myQuestions = ref([])
 onLoad((options) => {
 
   myQuestions.value = uni.getStorageSync("myQuestions")
-  console.log(options)
   let chid = options.param
   let data = {
     chid: chid,
@@ -276,7 +253,6 @@ onLoad((options) => {
     method: 'POST',
     data: data,
     success: (res) => {
-      console.log(res.data.data)
       // 确保响应中有数据
       if (res.data && res.data.data) {
         let result = res.data.data.result;
@@ -303,7 +279,7 @@ onLoad((options) => {
           result: result
         }
       }
-      console.log("onLoad:questionList:", questionLists)
+
       let results = questionLists.value.result
       for (let question of results) {
         groupedData.value.push({
@@ -313,7 +289,7 @@ onLoad((options) => {
       }
     },
     fail: (err) => {
-      console.log('error', err);
+
     }
   })
 
@@ -383,10 +359,6 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
     };
   }
 
-  console.log("correct:", correctAnswer);
-  console.log("select:", selectedAnswer);
-  console.log("userAnswers:", userAnswers[questionIndex])
-  console.log("item:", item)
   if ((item.qType !== 2 && item.qType !== 5 && !clickButton) || (item.qType === 2 && clickButton === 'true')) {
     let selectAnswer = indexToLetter(selectedAnswer, item.qType)
     uni.request({
@@ -402,14 +374,14 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
         "answer": selectAnswer
       },
       success: (response) => {
-        console.log(JSON.stringify(response.data));
+
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
           handleSubmitPaper(userAnswers);
         }
       },
       fail: (error) => {
-        console.log(error);
+
       }
     });
   }
@@ -428,15 +400,14 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
         "answer": jiandaAnswer
       },
       success: (response) => {
-        console.log(JSON.stringify(response.data));
+
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
-          console.log("questionLists:", JSON.stringify(questionLists.value))
           handleSubmitPaper(userAnswers);
         }
       },
       fail: (error) => {
-        console.log(error);
+
       }
     });
   }
@@ -445,17 +416,13 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
 
 
 watch(userAnswers, () => {
-  console.log("groupedDataAll:", JSON.stringify(groupedData))
-  console.log("userAnswersAll:", JSON.stringify(userAnswers))
   for (let qid in userAnswers) {
-    console.log("qid:", qid);
-    console.log("questionStatus[qid]", groupedData.value[qid])
     if (groupedData.value[qid]) {
       groupedData.value[qid].status = userAnswers[qid].isCorrect ? "正确" : "错误";
     }
   }
 
-}, {deep: true});
+}, { deep: true });
 
 
 const isTiKa = ref(false); // 初始化为未展开状态
@@ -475,7 +442,6 @@ const isFavorited = ref(false); // 初始化为未收藏状态
 
 const toggleFavorite = () => {
   isFavorited.value = !isFavorited.value;
-  console.log(isFavorited)
 }
 
 const indexToLetter = (indexArray, qType) => {
@@ -495,7 +461,7 @@ function changeMode() {
 const currentMode = ref('exam');  // 新增，用于存储当前选择的模式，默认exam
 
 function selectMode(mode) {
-  console.log('Selected mode:', mode);
+
   currentMode.value = mode;  // 更新当前模式
   isModeModalOpen.value = false;
   // 在这里添加你的模式切换逻辑...
@@ -504,8 +470,6 @@ function selectMode(mode) {
 function handleSubmitPaper() {
   uni.setStorageSync("questionList", JSON.stringify(questionLists.value));
   uni.setStorageSync("param", JSON.stringify(userAnswers));
-  console.log("JSON.stringify(userAnswers):::", JSON.stringify(userAnswers))
-  console.log("JSON.stringify(questionList):::", JSON.stringify(questionLists.value))
   uni.navigateTo({
     url: '/pages/home/topic/examResult'
   });
@@ -578,13 +542,15 @@ function handleSubmitPaper() {
         }
 
         .stem {
-          flex: 1; /* This allows the stem to take up the remaining width */
+          flex: 1;
+          /* This allows the stem to take up the remaining width */
           position: relative;
         }
 
         .stem::before {
           content: '';
-          width: calc(11px + 2px + 8px + 10px); /* Font size + padding + margin of question-type */
+          width: calc(11px + 2px + 8px + 10px);
+          /* Font size + padding + margin of question-type */
           display: block;
           visibility: hidden;
         }
@@ -738,11 +704,13 @@ function handleSubmitPaper() {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%; /* 设置宽度为100% */
+  width: 100%;
+  /* 设置宽度为100% */
 }
 
 rich-text {
-  width: 100%; /* 设置宽度为100% */
+  width: 100%;
+  /* 设置宽度为100% */
 }
 
 .my-note {
@@ -760,13 +728,19 @@ rich-text {
 }
 
 .material-swiper-container {
-  position: fixed; /* Fixed position */
-  bottom: 0; /* Align to the bottom */
-  width: 100%; /* Full width */
+  position: fixed;
+  /* Fixed position */
+  bottom: 0;
+  /* Align to the bottom */
+  width: 100%;
+  /* Full width */
   right: 1px;
-  background-color: white; /* Background color */
-  border-top-left-radius: 15px; /* Rounded corners at the top */
-  border-top-right-radius: 15px; /* Rounded corners at the top */
+  background-color: white;
+  /* Background color */
+  border-top-left-radius: 15px;
+  /* Rounded corners at the top */
+  border-top-right-radius: 15px;
+  /* Rounded corners at the top */
 }
 
 .check-answer {
@@ -778,13 +752,15 @@ rich-text {
   font-size: 14px;
   font-weight: bold;
   text-align: center;
-  margin: 0 auto; /* This will center the button */
+  margin: 0 auto;
+  /* This will center the button */
 }
 
 .option-correct {
   position: relative;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     background-color: green;
@@ -810,7 +786,8 @@ rich-text {
 .option-incorrect {
   position: relative;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     background-color: red;
@@ -847,8 +824,10 @@ rich-text {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明的黑色背景 */
-  z-index: 1000; /* 确保在其他内容之上 */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* 半透明的黑色背景 */
+  z-index: 1000;
+  /* 确保在其他内容之上 */
 }
 
 .custom-popup {
@@ -856,9 +835,12 @@ rich-text {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 630rpx; /* 根据你的需求设置高度 */
-  background-color: #fff; /* 白色背景 */
-  z-index: 1001; /* 确保在遮罩层之上 */
+  height: 630rpx;
+  /* 根据你的需求设置高度 */
+  background-color: #fff;
+  /* 白色背景 */
+  z-index: 1001;
+  /* 确保在遮罩层之上 */
   /* 可以添加其他样式，如过渡效果等 */
 }
 
@@ -879,5 +861,4 @@ rich-text {
 .custom-popup-left.active {
   transform: translateX(0); // 将弹出层移动到屏幕的可见区域
 }
-
 </style>

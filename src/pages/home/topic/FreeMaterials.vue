@@ -51,7 +51,6 @@ const value = ref(0);
 
 const list2 = computed(() => {
   const _list = list.value[value.value]?.childrens;
-  console.log("_list", _list)
   return _list ? _list : [];
 });
 
@@ -60,7 +59,6 @@ const size = (size) => {
 };
 
 const change = (index) => {
-  console.log('选项改变：', index);
   value.value = index;
 };
 
