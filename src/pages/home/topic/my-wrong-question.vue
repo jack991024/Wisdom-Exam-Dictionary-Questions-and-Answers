@@ -3,10 +3,10 @@
     <view class="header">
       <zy-segmented :values="list" :current="curNow" @onClickItem="sectionChange"></zy-segmented>
     </view>
-    <view v-if="curNow!==1">
+    <view v-if="curNow !== 1">
       <view class="list">
-        <view v-for="(item,index) in wrongQuestionList" :key="index" class="item"
-              @click="navigateToQuestionNew(item,index)">
+        <view v-for="(item, index) in wrongQuestionList" :key="index" class="item"
+          @click="navigateToQuestionNew(item, index)">
           <view class="title">
             <text>{{ item.stem }}</text>
           </view>
@@ -27,7 +27,7 @@
       </view>
     </view>
 
-    <view v-if="curNow===1">
+    <view v-if="curNow === 1">
       <!--      自定义模态框-->
       <div v-if="visible" class="modal-overlay" @click="handleOverlayClick">
         <div class="modal-container" @click.stop>
@@ -38,12 +38,12 @@
 
       <view class="header">
         <zy-segmented :values="listMenus" :current="curNowMenus" @onClickItem="sectionChangeMenus"
-                      styleType='button'></zy-segmented>
+          styleType='button'></zy-segmented>
       </view>
       <view class="list">
-        <view v-for="(item,index) in getCurrentChildren()" :key="index" class="itemTwo">
+        <view v-for="(item, index) in getCurrentChildren()" :key="index" class="itemTwo">
           <u-cell :title="item.name" :value="item.count" :isLink="true" :center="true" :border="false"
-                  @click="jumpToItems(item)"></u-cell>
+            @click="jumpToItems(item)"></u-cell>
         </view>
       </view>
     </view>
@@ -52,9 +52,9 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {onShow} from "@dcloudio/uni-app";
-import {useStore} from 'vuex'
+import { ref } from "vue";
+import { onShow } from "@dcloudio/uni-app";
+import { useStore } from 'vuex'
 import zySegmented from "@/uni_modules/zy-segmented-control/components/zy-segmented-control/zy-segmented-control.vue"
 
 
@@ -117,7 +117,7 @@ const navigateToQuestionNew = (item, index) => {
 
   uni.setStorageSync("wrongQuestionListsNew", result);
 
-  uni.navigateTo({url: "/pages/home/topic/question-jump?title=最近错题&type=1&currentIndex=" + index})
+  uni.navigateTo({ url: "/pages/home/topic/question-jump?title=最近错题&type=1&currentIndex=" + index })
 }
 
 const navigateToQuestion = (item, index) => {
@@ -128,7 +128,7 @@ const navigateToQuestion = (item, index) => {
 
   uni.setStorageSync("wrongQuestionLists", result);
 
-  uni.navigateTo({url: "/pages/home/topic/question-jump?title=" + item.name + "&type=2&currentIndex=" + index})
+  uni.navigateTo({ url: "/pages/home/topic/question-jump?title=" + item.name + "&type=2&currentIndex=" + index })
 }
 
 const navigateToQuestion2 = (item, index) => {
@@ -139,7 +139,7 @@ const navigateToQuestion2 = (item, index) => {
 
   uni.setStorageSync("wrongQuestionLists", result);
 
-  uni.navigateTo({url: "/pages/home/topic/question-jump?title=" + item.name + "&type=3&currentIndex=" + index})
+  uni.navigateTo({ url: "/pages/home/topic/question-jump?title=" + item.name + "&type=3&currentIndex=" + index })
 }
 
 
@@ -320,9 +320,7 @@ onShow((options) => {
   opacity: 1;
 }
 
-.modal-button {
-
-}
+.modal-button {}
 
 .review-button {
   color: #3C7BFB;
@@ -335,6 +333,4 @@ onShow((options) => {
 .modal-button:active {
   opacity: 0.8;
 }
-
-
 </style>

@@ -100,7 +100,7 @@
           <view class="category-body">
             <view v-for="(item, index) in questions" :key="index"
               :class="['question-block', item.status === '正确' ? 'correct' : item.status === '错误' ? 'incorrect' : 'not-done']">
-              <text>{{ parseInt(index) + 1 }}</text>
+              <text>{{ item.realQid }}</text>
             </view>
           </view>
         </view>
@@ -137,19 +137,20 @@ onLoad(() => {
   const param = JSON.parse(uni.getStorageSync("param"));
   const questionList = JSON.parse(uni.getStorageSync("questionList")).result;
   chid.value = questionList[0].chid;
-  console.log("chid.value", chid.value)
   // 初始化一个新的对象，其中每个题目的默认状态都是"未做"。
   let questionStatus = [];
-  for (let question of questionList) {
+  for (let [index, question] of questionList.entries()) {
     questionStatus.push({
       ...question,
-      status: "未做"
+      status: "未做",
+      realQid: parseInt(index, 10) + 1
     });
   }
   // 遍历param，并更新每个题目的状态为"已做"或"做错"。
   for (let qid in param) {
     if (questionStatus[qid]) {
       questionStatus[qid].status = param[qid].isCorrect ? "正确" : "错误";
+      questionStatus[qid].realQid = parseInt(qid, 10) + 1;  // 保留真实的题目编号
     }
   }
 
@@ -159,9 +160,24 @@ onLoad(() => {
     if (!acc[qType]) {
       acc[qType] = [];
     }
-    acc[qType].push(question);
+    acc[qType].push({
+      qid: question.qid,  // 保留真实的题目编号
+      status: question.status,
+      realQid: question.realQid
+    });
     return acc;
   }, {});
+
+  // 提取所有status为“错误”的项
+  const errorLists = questionStatus.filter(item => item.status === "错误").map(item => {
+    return {
+      chid: item.chid,
+      qid: item.qid
+    };
+  });
+
+
+  uni.setStorageSync("cuotijiexi", errorLists)
 
   const calculatedStats = calculateStatistics(param, questionList);
   Object.assign(stats, calculatedStats);
@@ -200,9 +216,14 @@ function calculateStatistics(param, questionList) {
 
 const quanbujiexi = () => {
   uni.setStorageSync("quanbujiexi", chid.value)
-  console.log("uni:",uni.getStorageSync("quanbujiexi"))
   uni.navigateTo({
-    url: '/pages/home/topic/question-jump?type=9&title="全部解析"'
+    url: '/pages/home/topic/question-jump?type=9&title=全部解析'
+  })
+}
+
+const cuotijiexi = () => {
+  uni.navigateTo({
+    url: '/pages/home/topic/question-jump?type=10&title=错题解析'
   })
 }
 </script>
@@ -365,6 +386,7 @@ const quanbujiexi = () => {
   .card-body {
     margin-top: 22rpx;
     margin-left: 22rpx;
+    padding-bottom: 150rpx;
 
     .question-category {
       margin-bottom: 20rpx;
@@ -440,6 +462,11 @@ const quanbujiexi = () => {
     background: #FF9957;
     border-radius: 34rpx 34rpx 34rpx 34rpx;
     opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 29rpx;
   }
 
   .cuotijiexi {
@@ -448,6 +475,11 @@ const quanbujiexi = () => {
     background: #1C65FE;
     border-radius: 34rpx 34rpx 34rpx 34rpx;
     opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 29rpx;
   }
 }
 </style>

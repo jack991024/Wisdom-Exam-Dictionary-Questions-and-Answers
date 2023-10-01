@@ -69,7 +69,9 @@
             <view v-if="currentMode === 'recite'" class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
-                <view class="correct-answer">正确答案是：{{ item.answer }}</view>
+                <view class="correct-answer">
+                  正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? 'B' : 'A') : item.answer }}
+                </view>
                 <view class="answer-key">
                   <view class="analysis">[解析]</view>
                   <view class="analysis-parse">
@@ -94,7 +96,7 @@
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">
-                  正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? '正确' : '错误') : item.answer }}
+                  正确答案是：{{ item.qType === 4 ? (item.answer === '1' ? 'B' : 'A') : item.answer }}
                 </view>
                 <view v-if="item.qType !== 5"
                   :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
