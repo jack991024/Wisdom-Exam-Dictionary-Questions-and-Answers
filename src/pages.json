@@ -122,8 +122,9 @@
 		{
 			"path": "pages/home/person/editUsername/editUsername",
 			"style": {
-				"navigationBarTitleText": "设置昵称",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#3C7BFB"
 			}
 		},
 		{
@@ -352,6 +353,12 @@
 		},
 		{
 			"path": "pages/home/topic/menu-list",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/home/person/personInfo/modify-password",
 			"style": {
 				"navigationBarTitleText": ""
 			}

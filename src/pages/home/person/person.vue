@@ -38,48 +38,22 @@
     </view>
 
     <view class="u-page">
-      <view
-          v-for="(item, index) in indexList"
-          :key="index"
-      >
-        <u-cell
-            :title="item.title"
-            :isLink="true"
-            @click="navigateTo(item.path)"
-            size="large"
-            :border="index !== indexList.length - 1"
-        >
+      <view v-for="(item, index) in indexList" :key="index">
+        <u-cell :title="item.title" :isLink="true" @click="navigateTo(item.path)" size="large"
+          :border="index !== indexList.length - 1">
           <template #icon>
-            <up-avatar
-                shape="square"
-                size="20"
-                :src="item.url"
-                customStyle="margin: -3px 5px -3px 0"
-            ></up-avatar>
+            <up-avatar shape="square" size="20" :src="item.url" customStyle="margin: -3px 5px -3px 0"></up-avatar>
           </template>
         </u-cell>
       </view>
     </view>
 
     <view class="u-page-two">
-      <view
-          v-for="(item, index) in indexList2"
-          :key="index"
-      >
-        <u-cell
-            :title="item.title"
-            :isLink="true"
-            @click="navigateTo(item.path)"
-            size="large"
-            :border="index !== indexList2.length - 1"
-        >
+      <view v-for="(item, index) in indexList2" :key="index">
+        <u-cell :title="item.title" :isLink="true" @click="navigateTo(item.path)" size="large"
+          :border="index !== indexList2.length - 1">
           <template #icon>
-            <up-avatar
-                shape="square"
-                size="20"
-                :src="item.url"
-                customStyle="margin: -3px 5px -3px 0"
-            ></up-avatar>
+            <up-avatar shape="square" size="20" :src="item.url" customStyle="margin: -3px 5px -3px 0"></up-avatar>
           </template>
         </u-cell>
       </view>
@@ -88,8 +62,8 @@
 </template>
 
 <script setup>
-import {onLoad} from "@dcloudio/uni-app";
-import {useStore} from "vuex";
+import { onLoad } from "@dcloudio/uni-app";
+import { useStore } from "vuex";
 
 const store = useStore()
 
@@ -97,7 +71,7 @@ let text = 'test'
 let name = '小明'
 let classNum = '学号 123456789'
 
-import {ref, reactive, onMounted} from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 
 const indexList = reactive([]);
 const indexList2 = reactive([]);
@@ -107,9 +81,9 @@ const urls = [
     url: '../../../../static/person/gerenxinxi.png',
     path: '/pages/home/person/personInfo/personInfo'
   },
-  {title: '我的下载', url: '../../../../static/person/download.png'},
-  {title: '联系客服', url: '../../../../static/person/lianxikefu.png', path: '/pages/home/person/kefu'},
-  {title: '分享好友', url: '../../../../static/person/share.png'}
+  { title: '我的下载', url: '../../../../static/person/download.png' },
+  { title: '联系客服', url: '../../../../static/person/lianxikefu.png', path: '/pages/home/person/kefu' },
+  { title: '分享好友', url: '../../../../static/person/share.png' }
   // '../../../..//static/person/personInfo.png',
 ];
 
@@ -119,9 +93,9 @@ const urls2 = [
     url: '../../../../static/person/zhaoshangjiameng.png',
     path: '/pages/home/person/zhaoshangjiameng'
   },
-  {title: '员工招聘', url: '../../../../static/person/gerenxinxi.png', path: '/pages/home/person/zhaoshangjiameng'},
-  {title: '问题解答', url: '../../../../static/person/wentijieda.png', path: '/pages/home/person/wentijieda'},
-  {title: '意见反馈', url: '../../../../static/person/yijianfankui.png'},
+  { title: '员工招聘', url: '../../../../static/person/gerenxinxi.png', path: '/pages/home/person/zhaoshangjiameng' },
+  { title: '问题解答', url: '../../../../static/person/wentijieda.png', path: '/pages/home/person/wentijieda' },
+  { title: '意见反馈', url: '../../../../static/person/yijianfankui.png' },
   {
     title: '关于智考典题库',
     url: '../../../../static/person/guanyuwomen.png',
@@ -131,7 +105,7 @@ const urls2 = [
 
 const navigateTo = (path) => {
   if (path) {
-    uni.navigateTo({url: path});
+    uni.navigateTo({ url: path });
   }
 };
 
@@ -155,6 +129,7 @@ onLoad(() => {
     },
     success: function (res) {
       userInfo.value = res.data.data
+      uni.setStorageSync("userInfo", userInfo.value)
     },
     error: function (err) {
       console.log(err)
@@ -210,7 +185,10 @@ onLoad(() => {
       justify-content: space-between;
       margin-right: 45rpx;
 
-      .myCourse, .myTiKu, .jihuoma, .shortVideo {
+      .myCourse,
+      .myTiKu,
+      .jihuoma,
+      .shortVideo {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -219,9 +197,7 @@ onLoad(() => {
     }
   }
 
-  .avatar-wrapper {
-
-  }
+  .avatar-wrapper {}
 
   .desc {
     margin-left: 12px;
@@ -267,5 +243,4 @@ image {
   width: 68.84rpx;
   height: 68.84rpx;
 }
-
 </style>

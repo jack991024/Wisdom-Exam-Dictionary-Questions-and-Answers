@@ -3,55 +3,29 @@
     <view>
       <u-list class="uview-page">
         <u-list-item>
-          <u-cell
-              title="头像"
-              :isLink="true"
-              @click="changeAvatar"
-              customHeight="185rpx"
-          >
+          <u-cell title="头像" :isLink="true" @click="changeAvatar" customHeight="185rpx" size="large">
             <template #value>
-              <u-avatar
-                  shape="square"
-                  size="35"
-                  text="sfg"
-              ></u-avatar>
+              <up-avatar size="50" :src="userInfo.avatar"></up-avatar>
             </template>
           </u-cell>
         </u-list-item>
         <u-list-item>
-          <u-cell
-              title="用户名"
-              :isLink="true"
-              @click="navigateToProfile('username')"
-              size="large"
-              customHeight="127rpx"
-          >
+          <u-cell title="用户名" :isLink="true" @click="navigateToProfile('username')" size="large" customHeight="127rpx">
             <template #value>
-              <text>Shinn</text>
+              <text>{{ userInfo.username }}</text>
             </template>
           </u-cell>
         </u-list-item>
         <u-list-item>
-          <u-cell
-              title="性别"
-              :isLink="true"
-              @click="navigateToProfile('gender')"
-              size="large"
-              customHeight="127rpx"
-          >
+          <u-cell title="性别" :isLink="true" @click="navigateToProfile('gender')" size="large" customHeight="127rpx">
             <template #value>
-              <text>保密</text>
+              <text>{{ userInfo.gender }}</text>
             </template>
           </u-cell>
         </u-list-item>
         <u-list-item>
-          <u-cell
-              title="修改密码"
-              :isLink="true"
-              @click="navigateToProfile('password')"
-              size="large"
-              customHeight="127rpx"
-          >
+          <u-cell title="修改密码" :isLink="true" @click="navigateToProfile('password')" size="large" customHeight="127rpx"
+            :border="false">
           </u-cell>
         </u-list-item>
       </u-list>
@@ -61,13 +35,19 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
-// import uCell from "@/uni_modules/u-cell-modify/u-cell.vue"
+import { ref, reactive } from 'vue';
+import { useStore } from 'vuex';
 
-
+const store = useStore()
+let data = {}
 const avatarUrl = ref('../../../../static/logo.png');
 const username = ref('ChatGPT');
 const gender = ref('男');
+const userInfo = reactive(uni.getStorageSync("userInfo"));
+// 监听全局事件
+uni.$on('usernameUpdated', (updatedUsername) => {
+  userInfo.username = updatedUsername;
+});
 
 const changeGender = () => {
   uni.showActionSheet({
@@ -75,17 +55,17 @@ const changeGender = () => {
     success: (res) => {
       switch (res.tapIndex) {
         case 0:
-          gender.value = '男';
+          userInfo.gender = '男';
           break;
         case 1:
-          gender.value = '女';
+          userInfo.gender = '女';
           break;
         case 2:
-          gender.value = '保密';
+          userInfo.gender = '保密';
           break;
       }
-      // 如果你需要将修改的性别保存到后端，你可以在这里发起请求。
-      // 例如：updateGenderOnServer(gender.value);
+      data = { gender: userInfo.gender }
+      updateUserInfoOnServer()
     },
     fail: (res) => {
       console.log('选择失败', res.errMsg);
@@ -115,36 +95,35 @@ const changeAvatar = () => {
 const navigateToProfile = (section) => {
   switch (section) {
     case 'username':
-      uni.navigateTo({url: '/pages/home/person/editUsername/editUsername'});
+      uni.redirectTo({ url: '/pages/home/person/editUsername/editUsername' });
       break;
     case 'gender':
       changeGender();  // 调用性别修改方法
       break;
     case 'password':
-      uni.navigateTo({url: '/pages/changePassword/changePassword'});
+      uni.navigateTo({ url: '/pages/home/person/personInfo/modify-password' });
   }
 };
 
-// 如果你需要与后端交互，可以添加类似以下的函数：
-// const updateGenderOnServer = (newGender) => {
-//   uni.request({
-//     url: 'YOUR_API_ENDPOINT',
-//     method: 'POST',
-//     data: {
-//       gender: newGender
-//     },
-//     success: (res) => {
-//       if (res.data.success) {
-//         uni.showToast({ title: '性别更新成功', icon: 'success' });
-//       } else {
-//         uni.showToast({ title: '性别更新失败', icon: 'none' });
-//       }
-//     },
-//     fail: (err) => {
-//       console.error('Error updating gender:', err);
-//     }
-//   });
-// };
+const updateUserInfoOnServer = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/user/edit',
+    method: 'POST',
+    data: data,
+    header: { "Authorization": store.getters.getToken },
+    success: (res) => {
+      console.log(res.data)
+      if (res.data.code === 0) {
+        uni.showToast({ title: '更新成功', icon: 'success' });
+      } else {
+        uni.showToast({ title: '更新失败', icon: 'none' });
+      }
+    },
+    fail: (err) => {
+      console.error('Error updating gender:', err);
+    }
+  });
+};
 
 const showPopup = ref(false);
 
@@ -161,32 +140,89 @@ const takePhoto = () => {
     count: 1,
     sourceType: ['camera'],
     success: (res) => {
-      console.log(res);
-      // 此处可以处理图片，例如上传等操作
-      closePopup();
+      const filePath = res.tempFilePaths[0];
+      // 读取文件内容
+      uni.getFileSystemManager().readFile({
+        filePath: filePath,
+        encoding: 'base64',
+        success: (base64Data) => {
+          const prefix = getBase64Prefix(filePath);
+          userInfo.avatar = (prefix + base64Data.data);
+          data = {
+            avatar_base64: base64Data.data
+          }
+          updateUserInfoOnServer()
+          // 此处可以处理图片，例如上传等操作
+          closePopup();
+        },
+        fail: (err) => {
+          console.error('Error reading file:', err);
+        }
+      });
+    },
+    fail: (err) => {
+      console.error('Error taking photo:', err);
     }
   });
 };
+
 
 const chooseFromAlbum = () => {
   uni.chooseImage({
     count: 1,
     sourceType: ['album'],
     success: (res) => {
-      console.log(res);
-      // 此处可以处理图片，例如上传等操作
-      closePopup();
+      const filePath = res.tempFilePaths[0];
+      // 读取文件内容
+      uni.getFileSystemManager().readFile({
+        filePath: filePath,
+        encoding: 'base64',
+        success: (base64Data) => {
+          const prefix = getBase64Prefix(filePath);
+          userInfo.avatar = (prefix + base64Data.data);
+          data = {
+            avatar_base64: base64Data.data
+          }
+          updateUserInfoOnServer()
+          // 此处可以处理图片，例如上传等操作
+          closePopup();
+        },
+        fail: (err) => {
+          console.error('Error reading file:', err);
+        }
+      });
+    },
+    fail: (err) => {
+      console.error('Error choosing image:', err);
     }
   });
 };
+
+function getBase64Prefix(filePath) {
+  const ext = filePath.split('.').pop().toLowerCase();
+  switch (ext) {
+    case 'jpg':
+    case 'jpeg':
+      return 'data:image/jpeg;base64,';
+    case 'png':
+      return 'data:image/png;base64,';
+    case 'gif':
+      return 'data:image/gif;base64,';
+    // ... 其他文件格式
+    default:
+      return 'data:image/png;base64,'; // 默认为PNG
+  }
+}
+
+
 </script>
 
 <style scoped>
-.background{
+.background {
   width: 692rpx;
-  height: 582rpx;
+  height: 448rpx;
   background: #FFFFFF;
-  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0,0,0,0.08);
+  box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
   border-radius: 22rpx 22rpx 22rpx 22rpx;
   opacity: 1;
   margin-left: 29rpx;
@@ -219,6 +255,4 @@ const chooseFromAlbum = () => {
 .popup-content view:last-child {
   border-bottom: none;
 }
-
-
 </style>
