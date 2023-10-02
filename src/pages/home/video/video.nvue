@@ -32,7 +32,6 @@
 
 
      -->
-        <!-- #ifdef MP -->
         <swiper :style="'width: '+ windowWidth +'px; height: '+ windowHeight +'px; background-color: #000000;'"
                 :vertical="true" @animationfinish="animationfinish" @change="change" :current="current"
                 :indicator-dots="false" @touchstart="mpTouchstart" @touchend="mpTouchend">
@@ -110,7 +109,7 @@
                         </view>
                         <!-- 4.评论 -->
                         <view class="comment" @click="toComment(index)" style="opacity: 0.9; margin-top: 17px;">
-                            <image src="@/static/img/index/liaotian-2.png"
+                            <image src="@/static/img/index/pinglun.png"
                                    style="width: 35px; height: 35px; position: absolute; right: 7px;"></image>
                             <text
                                     style="color: #FFFFFF; margin-top: 5px; font-size: 14px; font-weight: bold; text-align: center; margin-top: 40px;">
@@ -123,7 +122,7 @@
                                    style="width: 40px; height: 40px; position: absolute; right: 5px;"></image>
                             <text
                                     style="color: #FFFFFF; margin-top: 5px; font-size: 14px; text-align: center; font-weight: bold; margin-top: 40px;">
-                                分享
+                                {{ list.count.share_count }}
                             </text>
                         </view>
                     </view>
@@ -140,6 +139,9 @@
                     <!-- 进度条 -->
                     <view v-if="k === index" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend"
                           :style="'width: '+ (windowWidth - (windowWidth*0.10)) +'px; margin-left: '+ (windowWidth * 0.05) +'px; height: 40px; position: absolute; bottom: 10px;'">
+                       <!-- 显示当前播放时间 -->
+    <text :style="'position: absolute; left: 0; top: 0; color: #FFF;'">{{ currentPlayTime }}</text>
+
                         <!-- 不拖动情况下 -->
                         <view>
                             <!-- 1.底部背景进度条 -->
@@ -152,11 +154,15 @@
                             <view v-if="isTouch"
                                   :style="'width: '+ (videoStartPositon + addPositon) +'px; position: absolute; margin-top: 18px; height: 5px; border-radius: 10px; background-color: #e6e4e7; '"></view>
                         </view>
+
+                           <!-- 显示视频总时长 -->
+    <text :style="'position: absolute; right: 0; top: 0; color: #FFF;'">{{ totalDuration }}</text>
+
                     </view>
                 </view>
             </swiper-item>
         </swiper>
-        <!-- #endif -->
+
     </view>
 </template>
 
@@ -202,6 +208,8 @@
                 changeTimeout: "",
                 mptime: 0,
                 mpstartTime: 0,
+                currentPlayTime: '00:00',
+                totalDuration: '00:00',
 
                 duration: 500,
                 // -- 进度条相关 -- start
@@ -373,6 +381,17 @@
                 // 触发进度条更新
                 // console.log(event,index);
                 if (index === this.k) {
+
+                    this.timeduration = event.detail.duration;
+                    this.progressBarPercent = parseFloat(Number(event.detail.currentTime / event.detail.duration));
+
+                    // 更新当前播放时间
+                    this.currentPlayTime = this.formatTime(event.detail.currentTime);
+
+                    // 更新视频总时长
+                    this.totalDuration = this.formatTime(event.detail.duration);
+
+                    
                     this.timeduration = event.detail.duration;
                     this.progressBarPercent = parseFloat(Number(event.detail.currentTime / event.detail.duration));
 
@@ -403,6 +422,11 @@
                         // 处理错误响应
                     }
                 })
+            },
+            formatTime(seconds) {
+                const min = Math.floor(seconds / 60);
+                const sec = Math.floor(seconds % 60);
+                return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
             },
             // ---- 进度条相关 --- ending
             //点击播放&&暂停
@@ -498,6 +522,10 @@
                     title: '分享',
                     icon: 'none'
                 })
+                return {
+                    title: '智考典题库',
+                    path: '/pages/login/login'//分享的页面路径
+                    }
             },
             toComment(index) {
                 // 注意点击评论之后会执行这里

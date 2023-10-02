@@ -10,7 +10,7 @@
     <view class="body">
       <view class="item">
         <u-cell-group>
-          <view v-for="(item,index) in lists" :key="index" @click="naviToTiKu">
+          <view v-for="(item,index) in lists" :key="index" @click="naviToTiKu(item)">
             <u-cell :title="item.name" :is-link="true" size="large"></u-cell>
           </view>
         </u-cell-group>
@@ -65,10 +65,11 @@ onLoad((options) => {
   })
 })
 
-const naviToTiKu = () => {
-  uni.switchTab({
-    url: "/pages/home/topic/topic"
-  })
+const naviToTiKu = (item) => {
+  console.log(item)
+  // uni.switchTab({
+  //   url: "/pages/home/topic/topic"
+  // })
 }
 </script>
 
