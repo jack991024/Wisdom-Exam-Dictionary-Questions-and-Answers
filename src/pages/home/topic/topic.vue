@@ -162,6 +162,14 @@ const onShareAppMessage = (res) => {
   }
 }
 
+function deduplicateOption2() {
+  const seen = new Set();
+  option2.value = option2.value.filter(option => {
+    const isDuplicate = seen.has(option.value);
+    seen.add(option.value);
+    return !isDuplicate;
+  });
+}
 
 function processData(data) {
   return data.map((item, index) => {
@@ -318,6 +326,7 @@ const loadQuestionBanks = () => {
           option2.value.push(
             { text: res.data.data[0].fullname, value: res.data.data[0].tkid }
           );
+          deduplicateOption2();
         }
       }
     },
@@ -407,6 +416,7 @@ onShow(() => {
     option2.value.push(
       { text: tiku.fullname, value: tiku.tkid }
     )
+    deduplicateOption2();
     value2.value = tiku.tkid
     tkid.value = tiku.tkid
   }
@@ -427,6 +437,7 @@ const loadMenuListFromStorage = () => {
   const storedMenuList = uni.getStorageSync("menuList");
   if (storedMenuList && Array.isArray(storedMenuList) && storedMenuList.length > 0) {
     option2.value = [{ text: '请选择学习科目', value: 'a' }, ...storedMenuList];
+    deduplicateOption2();
     value2.value = storedMenuList[0].value;  // 设置value2为storedMenuList中的第一个元素的value
     tkid.value = value2.value
   }
