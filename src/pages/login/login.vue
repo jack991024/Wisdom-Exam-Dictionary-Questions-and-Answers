@@ -103,7 +103,6 @@ function loginIndex() {
     success: function (response) {
       store.commit('updateToken', response.data.data.token)
       let flag = uni.getStorageSync("flag")
-      console.log("flag:", flag)
       if (!flag) {
         uni.navigateTo({
           url: "/pages/start/xuanzekaoshi-one"
@@ -113,7 +112,6 @@ function loginIndex() {
           url: '/pages/home/classification/classificationMain'
         });
       }
-      // console.log(store.getters.getToken)
     },
     fail: function (error) {
       console.log(error);
@@ -124,7 +122,7 @@ function loginIndex() {
 
 <style lang="scss">
 #register {
-  padding: 12px 14px 9px 280px;
+  padding: 12rpx 14rpx 9rpx 620rpx;
   display: block;
   overflow-wrap: break-word;
   color: rgba(38, 38, 38, 1);

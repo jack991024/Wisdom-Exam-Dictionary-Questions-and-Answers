@@ -3,7 +3,7 @@
     <!-- Header Section -->
     <view class="header">
       <view>
-        <zb-dropdown-menu :zIndex="100" ref="dropdown">
+        <zb-dropdown-menu :zIndex="100" ref="dropdown" active-color="#3C7BFB">
           <zb-dropdown-item name="two" :options="option2" v-model="value2" @change="change1"></zb-dropdown-item>
         </zb-dropdown-menu>
       </view>

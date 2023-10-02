@@ -16,10 +16,11 @@
       <view class="news-pinglun-title">
         <text>精彩评论</text>
       </view>
-      <view class="">
+      <view class="no-comments"> <!-- 修改这里，添加新的类名 -->
         <text>暂无题友评论</text>
       </view>
     </view>
+
 
     <view class="news-xiangguan">
       <view v-for="(item, index) in newsLists" :key="index" class="list-item">
@@ -134,6 +135,7 @@ let newsLists = [1, 2, 3]
   opacity: 1;
   margin-left: 29rpx;
   margin-top: 22rpx;
+  position: relative; // 添加这一行
 
   .news-pinglun-title {
     margin-left: 29rpx;
@@ -147,7 +149,18 @@ let newsLists = [1, 2, 3]
       height: 15rpx;
     }
   }
+
+  .no-comments { // 添加这个新的类
+    text-align: center;
+    position: absolute; // 添加这一行
+    top: 50%; // 添加这一行
+    left: 0; // 添加这一行
+    right: 0; // 添加这一行
+    transform: translateY(-50%); // 添加这一行
+  }
 }
+
+
 
 
 .news-xiangguan {

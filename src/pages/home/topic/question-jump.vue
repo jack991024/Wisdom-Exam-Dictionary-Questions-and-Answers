@@ -101,7 +101,9 @@
                 <view v-if="item.qType !== 5"
                   :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
                   您的答案是：{{
-                    indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
+                    item.qType === 4
+                    ? (userAnswers[itemIndex] && userAnswers[itemIndex].answer[0] === 1 ? 'B' : 'A')
+                    : indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
                   }}
                 </view>
                 <view class="answer-key">

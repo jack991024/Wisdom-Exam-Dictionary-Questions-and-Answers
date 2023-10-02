@@ -160,7 +160,7 @@ function loginIndex(code) {
 
 <style lang="scss">
 #register {
-  padding: 12px 14px 9px 280px;
+  padding: 12rpx 14rpx 9rpx 620rpx;
   display: block;
   overflow-wrap: break-word;
   color: rgba(38, 38, 38, 1);
