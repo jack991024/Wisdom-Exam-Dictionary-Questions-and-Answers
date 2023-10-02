@@ -299,8 +299,8 @@ const change1 = (val) => {
 const isValue2Set = ref(false);
 
 const loadQuestionBanks = () => {
-   // 如果option2中已经有除默认选项外的其他元素，则直接返回，不再执行后续操作
-   if (option2.value.length > 1) {
+  // 如果option2中已经有除默认选项外的其他元素，则直接返回，不再执行后续操作
+  if (option2.value.length > 1) {
     return;
   }
   uni.request({
@@ -328,9 +328,9 @@ const loadQuestionBanks = () => {
 }
 
 const questionNums = ref({
-  total: 0,
-  done: 0,
-  error: 0
+  total: "0",
+  done: "0",
+  error: "0"
 })
 let doneRate = ref('0');
 let correctRate = ref('0');
@@ -351,6 +351,22 @@ const loadState = () => {
       if (res.data && res.data.data) {
         nextTick(() => {
           questionNums.value = res.data.data;
+          if(questionNums.value.total===0){
+            questionNums.value.total="0"
+          }
+          if(questionNums.value.done===0){
+            questionNums.value.done="0"
+          }
+          if(questionNums.value.correct===0){
+            questionNums.value.correct="0"
+          }
+          if(questionNums.value.error===0){
+            questionNums.value.error="0"
+          }
+          if(questionNums.value.progress===0){
+            questionNums.value.progress="0"
+          }
+          console.log("首页values,", questionNums.value)
 
           doneRate.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2) + '%';
           done.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2);
