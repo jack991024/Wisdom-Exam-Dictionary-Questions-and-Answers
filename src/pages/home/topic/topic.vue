@@ -3,29 +3,14 @@
     <!-- Header Section -->
     <view class="header">
       <view>
-        <zb-dropdown-menu
-            :zIndex="100"
-
-            ref="dropdown"
-        >
-          <zb-dropdown-item
-              name="two"
-              :options="option2"
-              v-model="value2"
-              @change="change1"
-          ></zb-dropdown-item>
+        <zb-dropdown-menu :zIndex="100" ref="dropdown">
+          <zb-dropdown-item name="two" :options="option2" v-model="value2" @change="change1"></zb-dropdown-item>
         </zb-dropdown-menu>
       </view>
     </view>
 
     <view class="header-swiper">
-      <u-swiper
-          v-if="swiperLists.length > 0"
-          :list="swiperLists"
-          indicator
-          indicatorMode="dot"
-          circular
-      ></u-swiper>
+      <u-swiper v-if="swiperLists.length > 0" :list="swiperLists" indicator indicatorMode="dot" circular></u-swiper>
     </view>
 
     <view class="question-menu" v-if="menus.length">
@@ -44,18 +29,18 @@
 
   <view class="question">
     <view class="question-num">
-      <u-cell title="总题数" :value="questionNums.total" center/>
-      <u-cell title="已做" :value="questionNums.done" center/>
-      <u-cell title="错题" :value="questionNums.error" center :border="false"/>
+      <u-cell title="总题数" :value="questionNums.total" center />
+      <u-cell title="已做" :value="questionNums.done" center />
+      <u-cell title="错题" :value="questionNums.error" center :border="false" />
     </view>
     <view class="question-rate">
       <view class="rate-item-done">
-        <u-cell title="完成率" :value="doneRate" center :border="false" :size="small"/>
-        <u-line-progress :percentage="done" :showText="false" activeColor="#3C7BFB"/>
+        <u-cell title="完成率" :value="doneRate" center :border="false" :size="small" />
+        <u-line-progress :percentage="done" :showText="false" activeColor="#3C7BFB" />
       </view>
       <view class="rate-item-correct">
-        <u-cell title="正确率" :value="correctRate" center :border="false"/>
-        <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB"/>
+        <u-cell title="正确率" :value="correctRate" center :border="false" />
+        <u-line-progress :percentage="correct" :showText="false" activeColor="#3C7BFB" />
       </view>
     </view>
   </view>
@@ -110,11 +95,7 @@
   </view>
 
   <view class="share">
-    <u-divider
-        text="分享好友"
-        textColor="#AEAEB2"
-        lineColor="white"
-    ></u-divider>
+    <u-divider text="分享好友" textColor="#AEAEB2" lineColor="white"></u-divider>
     <view class="share-body">
       <view class="weixin" @click="onShareAppMessage">
         <image src="../../..//static/topic/share_1.png" class="share-icon"></image>
@@ -138,13 +119,12 @@
   <view class="end">
     <u-divider text="爱学出勤奋 勤奋出天才"></u-divider>
   </view>
-
 </template>
 
 <script setup>
-import {ref, computed, nextTick, watch} from 'vue';
-import {useStore} from 'vuex'
-import {onShow, onLoad} from '@dcloudio/uni-app';
+import { ref, computed, nextTick, watch } from 'vue';
+import { useStore } from 'vuex'
+import { onShow, onLoad } from '@dcloudio/uni-app';
 
 const store = useStore()
 const activePanels = ref([]); // 默认只有面板1展开
@@ -251,7 +231,7 @@ const bannerLoads = () => {
         swiperLists.value = []
         res.data.data.forEach(img => {
           swiperLists.value.push(
-              img.image_src2
+            img.image_src2
           );
         });
       }
@@ -291,7 +271,7 @@ const dropdown = ref(null)
 const dropdown1 = ref(null)
 const value2 = ref('a');
 const option2 = ref([
-  {text: '请选择学习科目', value: 'a'}
+  { text: '请选择学习科目', value: 'a' }
 ]);
 
 const toggleItem = (val) => {
@@ -307,7 +287,13 @@ const close = () => {
 }
 
 const change1 = (val) => {
-  tkid.value = val.value
+  if (val.value === 'a') {
+    uni.redirectTo({
+      url: '/pages/home/topic/menu-list'
+    })
+  } else {
+    tkid.value = val.value
+  }
 }
 
 const isValue2Set = ref(false);
@@ -322,15 +308,15 @@ const loadQuestionBanks = () => {
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
-         // 只有当isValue2Set为false时，才设置value2
-         if (!isValue2Set.value) {
+        // 只有当isValue2Set为false时，才设置value2
+        if (!isValue2Set.value) {
           value2.value = res.data.data[0].tkid;
           isValue2Set.value = true;  // 标记value2已经被设置
         }
-        
+
         res.data.data.forEach(option => {
           option2.value.push(
-              {text: option.fullname, value: option.tkid}
+            { text: option.fullname, value: option.tkid }
           );
         });
       }
@@ -365,7 +351,7 @@ const loadState = () => {
       if (res.data && res.data.data) {
         nextTick(() => {
           questionNums.value = res.data.data;
-  
+
           doneRate.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2) + '%';
           done.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2);
 
@@ -386,15 +372,15 @@ const loadState = () => {
 }
 
 watch(
-    () => tkid.value, // 使用函数返回tkid的值，以确保深度监听
-    (newTkid, oldTkid) => {
-      uni.setStorageSync("tkid", newTkid)
-      bannerLoads();
-      loadMenus();
-      loadQuestionBanks();
-      loadState();
-    },
-    {deep: true, immediate: true} // 使用deep和immediate选项
+  () => tkid.value, // 使用函数返回tkid的值，以确保深度监听
+  (newTkid, oldTkid) => {
+    uni.setStorageSync("tkid", newTkid)
+    bannerLoads();
+    loadMenus();
+    loadQuestionBanks();
+    loadState();
+  },
+  { deep: true, immediate: true } // 使用deep和immediate选项
 );
 
 onShow(() => {
@@ -402,7 +388,7 @@ onShow(() => {
   if (tikuFromLocal != null && tikuFromLocal !== "") {
     let tiku = JSON.parse(tikuFromLocal)
     option2.value.push(
-        {text: tiku.fullname, value: tiku.tkid}
+      { text: tiku.fullname, value: tiku.tkid }
     )
     value2.value = tiku.tkid
     tkid.value = tiku.tkid
@@ -452,7 +438,8 @@ const navigateToPath = (param) => {
   background: #f4f7fe;
   border-radius: 12px;
 
-  .question-num, .question-rate {
+  .question-num,
+  .question-rate {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -471,7 +458,8 @@ const navigateToPath = (param) => {
   .question-rate {
     width: 53%;
 
-    .rate-item-done, .rate-item-correct {
+    .rate-item-done,
+    .rate-item-correct {
       display: flex;
       flex-direction: column;
       height: 100%;
@@ -559,7 +547,10 @@ const navigateToPath = (param) => {
     justify-content: space-around;
     align-items: center;
 
-    .weixin, .weixinpengyouquan, .qq, .qqzone {
+    .weixin,
+    .weixinpengyouquan,
+    .qq,
+    .qqzone {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -598,5 +589,4 @@ const navigateToPath = (param) => {
   bottom: 10px;
   z-index: 1000;
 }
-
 </style>

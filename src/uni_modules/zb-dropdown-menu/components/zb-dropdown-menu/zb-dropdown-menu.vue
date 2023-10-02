@@ -265,9 +265,9 @@ export default {
 }
 
 .zb-dropdown-menu__title--down::after {
-  margin-top: -1px;
-  -webkit-transform: rotate(135deg);
-  transform: rotate(135deg);
+  // margin-top: -1px;
+  // -webkit-transform: rotate(135deg);
+  // transform: rotate(135deg);
 }
 
 .zb-dropdown-menu__title--active::after {
