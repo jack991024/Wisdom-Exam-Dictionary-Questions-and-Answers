@@ -92,7 +92,7 @@
               </view>
             </view>
 
-            <view v-else-if="currentMode === 'practice' && userAnswers[itemIndex]" class="answer">
+            <view v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])" class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">
@@ -234,7 +234,8 @@ function processAnalyseContent(analyse) {
 
 const userAnswers = reactive({});
 
-
+//确认答案
+const confirmedAnswers = reactive({});
 const groupedData = ref([])
 const myQuestions = ref([])
 onLoad((options) => {
@@ -331,6 +332,9 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
   const question = questionLists.value.result[questionIndex];
   let correctAnswer;
 
+  if (item.qType === 2 && clickButton === 'true') {
+    confirmedAnswers[questionIndex] = true;
+  }
   if (question.qType === 4) {
     // For qType 4, the correct answer is directly the value of the "answer" field
     correctAnswer = [parseInt(question.answer)];
@@ -444,6 +448,52 @@ const isFavorited = ref(false); // 初始化为未收藏状态
 
 const toggleFavorite = () => {
   isFavorited.value = !isFavorited.value;
+  const currentItem = questionLists.value.result[currentIndex.value];
+  const chid = currentItem.chid;
+  const qid = currentItem.qid;
+  if (isFavorited.value === true) {
+
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/tk/fav',
+      header: {
+        "Authorization": store.getters.getToken,
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      data: {
+        "chid": chid,
+        "qid": qid
+      },
+      success: (res) => {
+        console.log(res)
+        if (res.data.code === 0) {
+          uni.showToast({ title: '已收藏', icon: 'success' });
+        }
+      },
+      error: (errr) => { console.log(err) }
+    })
+  } else if (isFavorited.value === false) {
+
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/tk/favCancel',
+      header: {
+        "Authorization": store.getters.getToken,
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      data: {
+        "chid": chid,
+        "qid": qid
+      },
+      success: (res) => {
+        console.log(res)
+        if (res.data.code === 0) {
+          uni.showToast({ title: '已取消收藏', icon: 'success' });
+        }
+      },
+      error: (errr) => { console.log(err) }
+    })
+  }
 
 }
 
