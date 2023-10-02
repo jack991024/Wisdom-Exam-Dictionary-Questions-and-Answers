@@ -368,6 +368,12 @@
 			"style": {
 				"navigationBarTitleText": "意见反馈"
 			}
+		},
+		{
+			"path": "pages/home/topic/FreeMaterialsItem",
+			"style": {
+				"navigationBarTitleText": "FreeMaterialsItem"
+			}
 		}
 	],
 	"tabBar": {
