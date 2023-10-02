@@ -1,5 +1,5 @@
 <template>
-  <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex">
+  <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex" @change="onSwiperChange">
     <swiper-item style="overflow: auto" v-for="(item, index, itemIndex) in questionLists.result" :key="index">
       <scroll-view scroll-y style="height: 100%">
         <view class="main">
@@ -79,20 +79,11 @@
                   </view>
                 </view>
               </view>
-
-              <view class="my-note" v-if="false">
-                <view>我的笔记</view>
-                <view>
-                  <up-button type="primary" icon="map" text="添加笔记"></up-button>
-                </view>
-              </view>
-
-              <view class="question-friend-interaction" v-if="false">
-                <view>题友互动</view>
-              </view>
             </view>
 
-            <view v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])" class="answer">
+            <view
+              v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])"
+              class="answer">
               <view class="answer">
                 <u-divider text="试卷详解"></u-divider>
                 <view class="correct-answer">
@@ -101,7 +92,9 @@
                 <view v-if="item.qType !== 5"
                   :class="['your-answer', userAnswers[itemIndex] && userAnswers[itemIndex].isCorrect ? 'correct-answer' : 'incorrect-answer']">
                   您的答案是：{{
-                    indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
+                    item.qType === 4
+                    ? (userAnswers[itemIndex] && userAnswers[itemIndex].answer[0] === 1 ? 'B' : 'A')
+                    : indexToLetter(userAnswers[itemIndex] ? userAnswers[itemIndex].answer : [], item.qType)
                   }}
                 </view>
                 <view class="answer-key">
@@ -111,18 +104,33 @@
                   </view>
                 </view>
               </view>
+            </view>
 
-              <view class="my-note" v-if="false">
-                <view class="note">
-                  <u-text text="我的笔记" size="18" align="center"></u-text>
-                  <view class="button">
-                    <up-button type="primary" icon="edit-pen" text="添加笔记"></up-button>
+            <view v-if="false">
+              <view class="my-note"
+                v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])">
+                <view><text>我的笔记</text></view>
+                <view v-if="myNoteData">
+                  <view class="info">
+                    <image :src="myNoteData.user.avatar" mode="widthFix" style="width: 72.46rpx;height: 72.46rpx;" />
+                    <view>
+                      <view class="name"><text>{{ myNoteData.user.username }}</text></view>
+                      <view class="date"><text>{{ timestampToDate(myNoteData.update_at) }}</text></view>
+                    </view>
+                  </view>
+                  <view class="body">
+                    <text>{{ myNoteData.comment }}</text>
                   </view>
                 </view>
-              </view>
+                <view class="button">
+                  <text>添加笔记</text>
+                </view>
 
-              <view class="question-friend-interaction" v-if="false">
-                <view>题友互动</view>
+
+                <view class="question-friend-interaction"
+                  v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])">
+                  <view>题友互动</view>
+                </view>
               </view>
             </view>
           </view>
@@ -238,6 +246,7 @@ const userAnswers = reactive({});
 const confirmedAnswers = reactive({});
 const groupedData = ref([])
 const myQuestions = ref([])
+const myNoteData = ref(null);
 onLoad((options) => {
 
   myQuestions.value = uni.getStorageSync("myQuestions")
@@ -290,13 +299,51 @@ onLoad((options) => {
           status: "未做"
         });
       }
+
+      const qid = questionLists.value.result[currentIndex.value].qid;
+      fetchMyNoteData(chid, qid);
     },
     fail: (err) => {
 
     }
   })
-
 })
+
+function onSwiperChange(event) {
+  // 更新当前索引
+  currentIndex.value = event.detail.current;
+
+  // 获取新的chid和qid
+  const chid = questionLists.value.result[currentIndex.value].chid;
+  const qid = questionLists.value.result[currentIndex.value].qid;
+
+  // 重新请求笔记数据
+  fetchMyNoteData(chid, qid);
+}
+
+function fetchMyNoteData(chid, qid) {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/tk/getComment',
+    method: 'POST',
+    header: {
+      "Authorization": store.getters.getToken,
+      'Content-Type': 'application/json'
+    },
+    data: {
+      chid: chid,
+      qid: qid
+    },
+    success: (response) => {
+      if (response.data && response.data.data && response.data.data.my) {
+        myNoteData.value = response.data.data.my;
+      }
+    },
+    fail: (error) => {
+      console.error("Failed to fetch note data:", error);
+    }
+  });
+}
+
 
 function toggleOption(questionIndex, optionIndex, item) {
   if (currentMode.value === 'recite') {
@@ -527,6 +574,18 @@ function handleSubmitPaper() {
     url: '/pages/home/topic/examResult'
   });
 }
+
+function timestampToDate(timestamp) {
+  const date = new Date(timestamp * 1000); // 转换为毫秒
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 </script>
 
 <style lang="scss">
