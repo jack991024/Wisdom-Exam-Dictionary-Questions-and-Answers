@@ -1,5 +1,6 @@
 <template>
-  <u-navbar leftText="" title="选择题库" :border="true" :safeAreaInsetTop="false" @leftClick="naviToTopic">
+  <u-navbar leftText="" title="选择题库" :border="true" :safeAreaInsetTop="false" @leftClick="naviToTopic"
+    @rightClick="naviToTopicByParam">
     <template #right>
       <text>提交</text>
     </template>
@@ -7,11 +8,11 @@
 
   <view class="body">
     <u-cell-group>
-      <checkbox-group>
+      <checkbox-group @change="handleCheckboxChange">
         <u-cell v-for="(item, index) in items" :title="item.fullname" :size="large" :key="index" :clickable="true">
           <template #value>
             <label>
-              <checkbox :value="item.tkid" color="blue" @change="handleCheckboxChange($event, item.tkid)" />
+              <checkbox :value="item.tkid" color="blue" />
             </label>
           </template>
         </u-cell>
@@ -60,15 +61,30 @@ const naviToTopic = () => {
 }
 
 // 添加 handleCheckboxChange 函数
-const handleCheckboxChange = (event, tkid) => {
-  if (event.detail.value) { // 如果 checkbox 被选中
-    checkedItems.value.push(tkid);
-  } else { // 如果 checkbox 被取消选中
-    const index = checkedItems.value.indexOf(tkid);
-    if (index !== -1) {
-      checkedItems.value.splice(index, 1);
+const handleCheckboxChange = (event) => {
+  checkedItems.value = event.detail.value;
+}
+
+// option2.value.push(
+//             { text: option.fullname, value: option.tkid }
+//           );
+
+const naviToTopicByParam = () => {
+  let option = [];
+
+  // 遍历checkedItems中的所有tkid
+  checkedItems.value.forEach(tkid => {
+    // 使用find方法从items中找到匹配的item
+    let matchedItem = items.value.find(item => item.tkid === tkid);
+    if (matchedItem) {
+      // 将item的fullname和tkid组合成新的对象格式，并添加到option数组中
+      option.push({ text: matchedItem.fullname, value: matchedItem.tkid });
     }
-  }
+  });
+
+  uni.setStorageSync("menuList", option)
+
+
 }
 </script>
 
