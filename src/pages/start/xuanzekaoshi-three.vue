@@ -67,9 +67,9 @@ onLoad((options) => {
 
 const naviToTiKu = (item) => {
   console.log(item)
-  // uni.switchTab({
-  //   url: "/pages/home/topic/topic"
-  // })
+  uni.switchTab({
+    url: "/pages/home/topic/topic"
+  })
 }
 </script>
 
