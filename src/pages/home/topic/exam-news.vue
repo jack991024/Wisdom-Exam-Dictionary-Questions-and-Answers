@@ -1,6 +1,6 @@
 <template>
   <view class="list">
-    <view v-for="(item,index) in newsLists" :key="index" class="list-item">
+    <view v-for="(item, index) in newsLists" :key="index" class="list-item" @click="naviTo">
       <view>
         <view class="title">
           <text>甲是乙公司的会计，挪用本公司的货币财产，用来投资经济效益很好的丙公司。后来公司发现这一,后来公司发现这一
@@ -15,12 +15,12 @@
           <view class="right">
             <view class="like">
               <image src="./static/news/like.png" mode="widthFix"
-                     style="width: 21.98rpx;height: 23.55rpx;margin-right: 9.06rpx;"></image>
+                style="width: 21.98rpx;height: 23.55rpx;margin-right: 9.06rpx;"></image>
               <text>50</text>
             </view>
             <view class="comment">
               <image src="./static/news/comment.png" mode="widthFix"
-                     style="width: 23.55rpx;height: 23.55rpx;margin-right: 9.06rpx;"></image>
+                style="width: 23.55rpx;height: 23.55rpx;margin-right: 9.06rpx;"></image>
               <text>23</text>
             </view>
           </view>
@@ -31,7 +31,13 @@
 </template>
 
 <script setup>
-let newsLists = [1,2,3]
+let newsLists = [1, 2, 3]
+
+const naviTo = () => {
+uni.navigateTo({
+  url:'/pages/home/topic/exam-news-detail'
+})
+}
 </script>
 
 <style lang="scss">

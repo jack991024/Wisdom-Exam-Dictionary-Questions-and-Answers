@@ -375,12 +375,12 @@
         "selectedIconPath": "static/menu/13.png",
         "text": "视频"
       },
-      //      {
-      //        "pagePath": "pages/home/question",
-      //        "iconPath": "static/menu/question.png",
-      //        "selectedIconPath": "static/menu/question.png",
-      //        "text": "答疑"
-      //      },
+      {
+        "pagePath": "pages/home/question",
+        "iconPath": "static/menu/04.png",
+        "selectedIconPath": "static/menu/14.png",
+        "text": "答疑"
+      },
       {
         "pagePath": "pages/home/person/person",
         "iconPath": "static/menu/05.png",
