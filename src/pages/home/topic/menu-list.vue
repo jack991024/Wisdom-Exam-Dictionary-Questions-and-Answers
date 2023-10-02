@@ -81,9 +81,9 @@ const naviToTopicByParam = () => {
       option.push({ text: matchedItem.fullname, value: matchedItem.tkid });
     }
   });
-
+  console.log(option)
   uni.setStorageSync("menuList", option)
-
+  naviToTopic()
 
 }
 </script>

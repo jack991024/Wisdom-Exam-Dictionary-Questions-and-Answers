@@ -299,6 +299,10 @@ const change1 = (val) => {
 const isValue2Set = ref(false);
 
 const loadQuestionBanks = () => {
+   // 如果option2中已经有除默认选项外的其他元素，则直接返回，不再执行后续操作
+   if (option2.value.length > 1) {
+    return;
+  }
   uni.request({
     url: 'https://dev.zhikaodian.com/apiV2/tk/myCourse',
     method: 'GET',
@@ -308,17 +312,13 @@ const loadQuestionBanks = () => {
     },
     success: (res) => {
       if (res.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
-        // 只有当isValue2Set为false时，才设置value2
-        if (!isValue2Set.value) {
-          value2.value = res.data.data[0].tkid;
-          isValue2Set.value = true;  // 标记value2已经被设置
-        }
-
-        res.data.data.forEach(option => {
+        // 检查option2.value是否已经包含从本地存储中获取的menu数据
+        const existingOption = option2.value.find(opt => opt.value === res.data.data[0].tkid);
+        if (!existingOption) {
           option2.value.push(
-            { text: option.fullname, value: option.tkid }
+            { text: res.data.data[0].fullname, value: res.data.data[0].tkid }
           );
-        });
+        }
       }
     },
     fail: (err) => {
@@ -384,6 +384,7 @@ watch(
 );
 
 onShow(() => {
+  loadMenuListFromStorage();
   let tikuFromLocal = store.getters.getTiKu
   if (tikuFromLocal != null && tikuFromLocal !== "") {
     let tiku = JSON.parse(tikuFromLocal)
@@ -405,6 +406,16 @@ const navigateToPath = (param) => {
     url: '/pages/home/topic/' + param
   })
 }
+
+const loadMenuListFromStorage = () => {
+  const storedMenuList = uni.getStorageSync("menuList");
+  if (storedMenuList && Array.isArray(storedMenuList) && storedMenuList.length > 0) {
+    option2.value = [{ text: '请选择学习科目', value: 'a' }, ...storedMenuList];
+    value2.value = storedMenuList[0].value;  // 设置value2为storedMenuList中的第一个元素的value
+    tkid.value = value2.value
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>
