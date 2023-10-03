@@ -7,21 +7,14 @@
   <view id="body">
     <view style="display: flex; flex-direction: column; align-items: center">
       <image id="logo" src="./static/login/logo.png" />
-      <text style="font-size: 29rpx; color: #666666; margin-top: 29rpx"
-        >AI智能题库让学习更高效</text
-      >
+      <text style="font-size: 29rpx; color: #666666; margin-top: 29rpx">AI智能题库让学习更高效</text>
     </view>
 
     <view id="login">
       <view class="wechatLogin" @click="wechatLogin">
-        <image
-          src="./static/login/wechatLogin.png"
-          mode="widthFix"
-          style="width: 41.15rpx; height: 34.04rpx"
-        ></image>
+        <image src="./static/login/wechatLogin.png" mode="widthFix" style="width: 41.15rpx; height: 34.04rpx"></image>
         <text style="font-size: 33rpx; color: #ffffff; margin-left: 13rpx">
-          微信登陆</text
-        >
+          微信登陆</text>
       </view>
 
       <view style="display: flex; align-items: center; margin-top: 22rpx">
@@ -42,27 +35,26 @@
         </view>
       </view>
 
+      <view>
+        <u-modal :show="show" :title="'隐私协议'" :showCancelButton="true" @cancel="cancel" @confirm="confirm">
+          <view class="slot-content">
+            <view class="custom-html">
+              <mp-html :content="content"></mp-html>
+            </view>
+          </view>
+        </u-modal>
+
+      </view>
+
       <view class="footer">
         <u-divider text="其他登陆方式" :hairline="true"></u-divider>
         <view class="verifyCodeLogin">
           <view style="margin-right: 100rpx">
-            <u-icon
-              name="../../../../static/login/yanzhengma.png"
-              size="30"
-              color="#909399"
-              @click="verifyLoginRouter"
-              label="验证码登陆"
-              labelPos="bottom"
-            ></u-icon>
+            <u-icon name="../../../../static/login/yanzhengma.png" size="30" color="#909399" @click="verifyLoginRouter"
+              label="验证码登陆" labelPos="bottom"></u-icon>
           </view>
-          <u-icon
-            name="../../../../static/login/mima.png"
-            size="30"
-            color="#909399"
-            @click="passwordLoginRouter"
-            label="密码登陆"
-            labelPos="bottom"
-          ></u-icon>
+          <u-icon name="../../../../static/login/mima.png" size="30" color="#909399" @click="passwordLoginRouter"
+            label="密码登陆" labelPos="bottom"></u-icon>
         </view>
       </view>
     </view>
@@ -72,10 +64,31 @@
 <script setup>
 import { ref } from "vue";
 import { useStore } from "vuex";
+import { onLoad } from "@dcloudio/uni-app";
+
+const content = ref(null)
+const confirm = () => {
+  show.value = false
+}
+onLoad(() => {
+  uni.request({
+    method: 'GET',
+    url: 'https://dev.zhikaodian.com/apiV2/about/policy?key=registration_protocol&model=html',
+    success: function (response) {
+      content.value = response.data
+    },
+    fail: function (error) {
+      console.log(error);
+    }
+  });
+
+})
 
 const store = useStore();
 
 const isRadioSelected = ref(false);
+
+const show = ref(true)
 
 const wechatLogin = () => {
   let code = "";
@@ -156,6 +169,17 @@ function loginIndex(code) {
     },
   });
 }
+
+const cancel = () => {
+  uni.exitMiniProgram({
+    success: function () {
+      console.log('退出小程序成功');
+    },
+    fail: function (err) {
+      console.log('退出小程序失败', err);
+    }
+  })
+}
 </script>
 
 <style lang="scss">
@@ -221,5 +245,10 @@ function loginIndex(code) {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.custom-html {
+  max-height: 400rpx;
+  overflow-y: auto;
 }
 </style>
