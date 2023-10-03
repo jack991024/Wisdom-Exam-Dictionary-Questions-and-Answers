@@ -8,7 +8,11 @@
             border="bottom"
             v-model="register.userInfo.phone"
             prefixIconStyle="font-size: 22px;color: #909399"
-        ></up-input>
+        >
+        <template #prefix>
+            <u-icon name="../../../../static/login/account.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
+        </up-input>
       </view>
       <view id="verify">
         <t-captcha
@@ -26,6 +30,9 @@
             v-model="register.userInfo.verify"
             prefixIconStyle="font-size: 22px;color: #909399"
         >
+        <template #prefix>
+            <u-icon name="../../../../static/login/password.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
           <template #suffix>
             <u-link href="" :text="buttonText" @click="getCode"></u-link>
           </template>
@@ -41,6 +48,9 @@
             prefixIconStyle="font-size: 22px;color: #909399"
             type="password"
         >
+        <template #prefix>
+            <u-icon name="../../../../static/login/password.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
         </up-input>
       </view>
       <view id="submit">

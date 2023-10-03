@@ -1,7 +1,7 @@
 <template>
   <view>
     <view id="register">
-      <u-link text="立即注册" @click="registerRouter" mpTips=""></u-link>
+      <u-link text="立即注册" @click="registerRouter" mpTips="" color="#000000"></u-link>
     </view>
   </view>
   <view id="body">

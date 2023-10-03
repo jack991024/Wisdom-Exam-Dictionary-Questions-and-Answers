@@ -1,7 +1,7 @@
 <template>
   <view>
     <view id="register">
-      <u-link text="立即注册" @click="registerRouter" mpTips=""></u-link>
+      <u-link text="立即注册" @click="registerRouter" mpTips="" color="#000000"></u-link>
     </view>
   </view>
   <view id="body">
@@ -36,7 +36,7 @@
       </view>
 
       <view>
-        <u-modal :show="show" :title="'隐私协议'" :showCancelButton="true" @cancel="cancel" @confirm="confirm">
+        <u-modal :show="show" :title="'隐私协议'" :showCancelButton="true" @cancel="cancel" @confirm="confirm" confirmText="同意" cancelText="不同意">
           <view class="slot-content">
             <view class="custom-html">
               <mp-html :content="content"></mp-html>

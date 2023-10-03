@@ -3,30 +3,20 @@
 
     <view id="login">
       <view id="mobile">
-        <up-input
-            placeholder="请输入手机号"
-            prefixIcon="phone"
-            border="bottom"
-            v-model="login.userInfo.phone"
-            prefixIconStyle="font-size: 22px;color: #909399"
-        ></up-input>
+        <up-input placeholder="请输入手机号" prefixIcon="" border="bottom" v-model="login.userInfo.phone"
+          prefixIconStyle="font-size: 22px;color: #909399">
+          <template #prefix>
+            <u-icon name="../../../../static/login/account.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template></up-input>
       </view>
       <view id="verify">
-        <t-captcha
-            ref="captchaComponent"
-            id="captcha"
-            app-id="193939886"
-            @verify="handlerVerify"
-            @ready="handlerReady"
-            @close="handlerClose"
-            @error="handlerError"/>
-        <up-input
-            placeholder="验证码"
-            prefixIcon="lock"
-            border="bottom"
-            v-model="login.userInfo.verify"
-            prefixIconStyle="font-size: 22px;color: #909399"
-        >
+        <t-captcha ref="captchaComponent" id="captcha" app-id="193939886" @verify="handlerVerify" @ready="handlerReady"
+          @close="handlerClose" @error="handlerError" />
+        <up-input placeholder="验证码" prefixIcon="lock" border="bottom" v-model="login.userInfo.verify"
+          prefixIconStyle="font-size: 22px;color: #909399">
+          <template #prefix>
+            <u-icon name="../../../../static/login/password.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
           <template #suffix>
             <view class="butt">
               <u-link href="" :text="buttonText" @click="getCode"></u-link>
@@ -35,14 +25,11 @@
         </up-input>
       </view>
       <view id="password">
-        <up-input
-            placeholder="请输入密码"
-            prefixIcon="lock"
-            border="bottom"
-            v-model="login.userInfo.password"
-            prefixIconStyle="font-size: 22px;color: #909399"
-            type="password"
-        >
+        <up-input placeholder="请输入密码" prefixIcon="lock" border="bottom" v-model="login.userInfo.password"
+          prefixIconStyle="font-size: 22px;color: #909399" type="password">
+          <template #prefix>
+            <u-icon name="../../../../static/login/password.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
         </up-input>
       </view>
       <view id="submit">
@@ -53,7 +40,7 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 
 const login = ref({
   userInfo: {
@@ -257,6 +244,7 @@ const navigateToServiceAgreement = () => {
 
 .butt {
   .custom-button {
+
     &,
     button {
       border: none;

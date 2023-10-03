@@ -1,7 +1,7 @@
 <template>
   <view>
     <view id="register">
-      <u-link text="立即注册" @click="registerRouter" mpTips=""></u-link>
+      <u-link text="立即注册" @click="registerRouter" mpTips="" color="#000000"></u-link>
     </view>
   </view>
   <view id="body">
@@ -75,8 +75,10 @@ import { useStore } from 'vuex'
 const store = useStore()
 const login = ref({
   userInfo: {
-    phoneMobile: "15827619648",
-    password: "123qwe@"
+    // phoneMobile: "15827619648",
+    phoneMobile: "13600000000",
+    // password: "123qwe@"
+    password: "ABC123"
   }
 })
 
@@ -118,7 +120,7 @@ function loginIndex() {
     success: function (response) {
       store.commit('updateToken', response.data.data.token)
       let flag = uni.getStorageSync("flag")
-      if (true) {
+      if (!flag) {
         uni.navigateTo({
           url: "/pages/start/xuanzekaoshi-one"
         })
