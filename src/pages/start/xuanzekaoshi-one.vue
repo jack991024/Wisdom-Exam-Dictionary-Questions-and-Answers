@@ -106,7 +106,7 @@ onLoad(() => {
 
 const navigateToTwo = (item) => {
   uni.setStorageSync("xuanzekaoshi-item-children", item.children)
-  uni.navigateTo({
+  uni.reLaunch({
     url: "/pages/start/xuanzekaoshi-two"
   })
 }

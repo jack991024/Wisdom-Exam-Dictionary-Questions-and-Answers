@@ -333,14 +333,14 @@
 		{
 			"path": "pages/start/xuanzekaoshi-two",
 			"style": {
-				"navigationBarTitleText": "选择考试",
+				"navigationBarTitleText": "",
 				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/start/xuanzekaoshi-three",
 			"style": {
-				"navigationBarTitleText": "选择考试",
+				"navigationBarTitleText": "",
 				"enablePullDownRefresh": true
 			}
 		},

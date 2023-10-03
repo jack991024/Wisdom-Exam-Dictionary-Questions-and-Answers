@@ -1,16 +1,17 @@
 <template>
   <view>
+    <u-navbar leftText="" title="选择考试" :border="true" :safeAreaInsetTop="false" @leftClick="naviToOne()"></u-navbar>
     <view class="header">
       <view class="search">
         <u-search placeholder="搜索考试科目" v-model="keyword" action-style="color: #3C7BFB;"
-                  @custom="searchByKeyWords(keyword)"></u-search>
+          @custom="searchByKeyWords(keyword)"></u-search>
       </view>
     </view>
 
     <view class="body">
       <view class="item">
         <u-cell-group>
-          <view v-for="(item,index) in lists" :key="index" @click="navigateToThree(item)">
+          <view v-for="(item, index) in lists" :key="index" @click="navigateToThree(item)">
             <u-cell :title="item.name" :is-link="true" size="large"></u-cell>
           </view>
         </u-cell-group>
@@ -20,8 +21,8 @@
 </template>
 
 <script setup>
-import {onLoad} from "@dcloudio/uni-app";
-import {ref} from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import { ref } from "vue";
 
 let keyword = ""
 
@@ -48,21 +49,28 @@ const searchByKeyWords = (keyword) => {
 
 const lists = ref()
 onLoad(() => {
+  uni.hideHomeButton()
   lists.value = uni.getStorageSync("xuanzekaoshi-item-children")
 })
 
 const navigateToThree = (item) => {
   uni.setStorageSync("flag", true)
-  uni.navigateTo({
+  uni.reLaunch({
     url: "/pages/start/xuanzekaoshi-three?coid=" + item.coid
+  })
+}
+
+const naviToOne = () => {
+  uni.reLaunch({
+    url: "/pages/start/xuanzekaoshi-one"
   })
 }
 </script>
 
 <style lang="scss">
-
 .header {
   height: 115rpx;
+  margin-top: 100rpx;
 
   .search {
     margin: 28rpx;

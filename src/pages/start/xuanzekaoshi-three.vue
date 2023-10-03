@@ -1,18 +1,32 @@
 <template>
+  <u-navbar leftText="" title="选择考试" :border="true" :safeAreaInsetTop="false" @leftClick="naviToTwo()"
+    @rightClick="naviToTiKu()">
+    <template #right>
+      <text>提交</text>
+    </template>
+  </u-navbar>
   <view>
     <view class="header">
       <view class="search">
         <u-search placeholder="搜索考试科目" v-model="keyword" action-style="color: #3C7BFB;"
-                  @custom="searchByKeyWords(keyword)"></u-search>
+          @custom="searchByKeyWords(keyword)"></u-search>
       </view>
     </view>
 
     <view class="body">
       <view class="item">
         <u-cell-group>
-          <view v-for="(item,index) in lists" :key="index" @click="naviToTiKu(item)">
-            <u-cell :title="item.name" :is-link="true" size="large"></u-cell>
-          </view>
+          <!-- todo 多选怎么解决 -->
+          <checkbox-group @change="handleCheckboxChange">
+            <view v-for="(item, index) in lists" :key="index">
+              <u-cell :title="item.name" size="large">
+                <template #value>
+                  <label>
+                    <checkbox :value="item.tksuid" color="blue" />
+                  </label>
+                </template></u-cell>
+            </view>
+          </checkbox-group>
         </u-cell-group>
       </view>
     </view>
@@ -20,10 +34,18 @@
 </template>
 
 <script setup>
-import {onLoad} from "@dcloudio/uni-app";
-import {ref} from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import { ref } from "vue";
+import { useStore } from "vuex";
 
+const store = useStore()
 let keyword = ""
+const checkedItems = ref([]);
+
+// 添加 handleCheckboxChange 函数
+const handleCheckboxChange = (event) => {
+  checkedItems.value = event.detail.value;
+}
 
 const searchByKeyWords = (keyword) => {
   let subjects = []
@@ -48,6 +70,7 @@ const searchByKeyWords = (keyword) => {
 
 const lists = ref()
 onLoad((options) => {
+  uni.hideHomeButton()
   let coid = options.coid
   uni.request({
     url: "https://dev.zhikaodian.com/apiV2/tk/subject",
@@ -65,10 +88,33 @@ onLoad((options) => {
   })
 })
 
-const naviToTiKu = (item) => {
-  console.log(item)
-  uni.switchTab({
-    url: "/pages/home/topic/topic"
+const naviToTiKu = () => {
+  uni.request({
+    url: 'https://dev.zhikaodian.com/apiV2/tk/evaluateTksuid',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json',
+      "Authorization": store.getters.getToken
+    },
+    data: {
+      tksuids: checkedItems.value
+    },
+    success: (response) => {
+      uni.switchTab({
+        url: "/pages/home/topic/topic"
+      })
+    },
+    fail: (error) => {
+      console.log('error', error);
+    }
+  });
+
+
+}
+
+const naviToTwo = () => {
+  uni.reLaunch({
+    url: "/pages/start/xuanzekaoshi-two"
   })
 }
 </script>
@@ -76,6 +122,7 @@ const naviToTiKu = (item) => {
 <style lang="scss">
 .header {
   height: 115rpx;
+  margin-top: 100rpx;
 
   .search {
     margin: 28rpx;
