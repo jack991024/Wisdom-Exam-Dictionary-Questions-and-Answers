@@ -400,12 +400,12 @@
 				"selectedIconPath": "static/menu/12.png",
 				"text": "题目"
 			},
-			{
-				"pagePath": "pages/home/video/video",
-				"iconPath": "static/menu/03.png",
-				"selectedIconPath": "static/menu/13.png",
-				"text": "视频"
-			},
+			// {
+			// 	"pagePath": "pages/home/video/video",
+			// 	"iconPath": "static/menu/03.png",
+			// 	"selectedIconPath": "static/menu/13.png",
+			// 	"text": "视频"
+			// },
 			// {
 			// 	"pagePath": "pages/home/question",
 			// 	"iconPath": "static/menu/04.png",
