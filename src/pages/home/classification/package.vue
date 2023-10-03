@@ -101,7 +101,7 @@ const modalContent = '添加成功！';  // 模态框的内容
 const goToHome = () => {
   // 在这里添加跳转到首页的代码
   showModal.value = false;  // 关闭模态框
-  uni.switchTab({ url: "/pages/home/classification/classificationRegions" })
+  uni.switchTab({ url: "/pages/home/classification/classificationMain" })
 };
 
 // 立即试用的函数
@@ -150,18 +150,20 @@ const isSelected = (item) => {
 };
 
 const shiyong = () => {
-  const tksuids = selectedItems.value.map(item => item.tksuid);
+  console.log(selectedItems.value)
+  const tkids = selectedItems.value.map(item => item.tkid);
   uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/tk/evaluateTksuid',
+    url: 'https://dev.zhikaodian.com/apiV2/tk/evaluate',
     method: 'POST',
     header: {
       'Content-Type': 'application/json',
       "Authorization": store.getters.getToken
     },
     data: {
-      "tksuids": tksuids
+      tkids: tkids
     },
     success: (response) => {
+      console.log(response)
       showModal.value = true;
     },
     fail: (error) => {

@@ -516,13 +516,18 @@ const loadMenuListFromStorage = () => {
   align-items: center;
   width: 100%;
   margin-top: 20px;
+  justify-content: flex-start; // 从左侧开始排列
 
   .menu-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-right: 74rpx;
+    margin-right: 65rpx; // 为每个元素添加右边距
+
+    &:last-child {
+      margin-right: 0; // 移除最后一个元素的右边距
+    }
 
     .menu-image {
       width: 35px;
