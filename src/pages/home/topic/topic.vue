@@ -327,6 +327,8 @@ const loadQuestionBanks = () => {
             { text: res.data.data[0].fullname, value: res.data.data[0].tkid }
           );
           deduplicateOption2();
+          value2.value = res.data.data[0].tkid;  // 设置value2为storedMenuList中的第一个元素的value
+          tkid.value = value2.value
         }
       }
     },
