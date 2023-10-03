@@ -374,6 +374,12 @@
 			"style": {
 				"navigationBarTitleText": "FreeMaterialsItem"
 			}
+		},
+		{
+			"path": "pages/home/person/setup",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
 		}
 	],
 	"tabBar": {

@@ -1,5 +1,12 @@
 <template>
-  <view class="background-view"></view>
+  <view class="background-view">
+    <view class="setup" @click="navigateToSetup">
+      <image src="../../../static/person/setup.png" mode="widthFix" style="width: 36.23rpx;height: 32.61rpx;" />
+    </view>
+  </view>
+
+
+
   <view id="app">
     <view class="swiper" indicator-active-color="#fff">
       <view class="header">
@@ -136,6 +143,12 @@ onLoad(() => {
     }
   })
 })
+
+const navigateToSetup = () => {
+  uni.navigateTo({
+    url: '/pages/home/person/setup'
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -149,6 +162,11 @@ onLoad(() => {
   top: 0;
   left: 0;
   z-index: 1; // 使背景位于其他内容下方
+}
+
+.setup {
+  margin-top: 36rpx;
+  margin-left: 680rpx;
 }
 
 #app {
