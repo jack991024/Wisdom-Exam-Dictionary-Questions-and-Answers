@@ -6,29 +6,18 @@
   </view>
   <view id="body">
     <view style="display: flex;flex-direction: column;align-items: center;">
-      <image id="logo" src="./static/login/logo.png"/>
+      <image id="logo" src="./static/login/logo.png" />
       <text style="font-size: 29rpx;color: #666666;margin-top: 29rpx;">AI智能题库让学习更高效</text>
     </view>
 
     <view id="login">
       <view id="mobile">
-        <up-input
-            placeholder="请输入手机号"
-            prefixIcon="phone"
-            border="bottom"
-            v-model="login.userInfo.phoneMobile"
-            prefixIconStyle="font-size: 22px;color: #909399"
-        ></up-input>
+        <up-input placeholder="请输入手机号" prefixIcon="phone" border="bottom" v-model="login.userInfo.phoneMobile"
+          prefixIconStyle="font-size: 22px;color: #909399"></up-input>
       </view>
       <view id="password">
-        <up-input
-            placeholder="请输入密码"
-            prefixIcon="lock"
-            border="bottom"
-            v-model="login.userInfo.password"
-            prefixIconStyle="font-size: 22px;color: #909399"
-            type="password"
-        >
+        <up-input placeholder="请输入密码" prefixIcon="lock" border="bottom" v-model="login.userInfo.password"
+          prefixIconStyle="font-size: 22px;color: #909399" type="password">
           <template #suffix>
             <u-link href="" text="忘记密码？" @click="lostPasswordRouter"></u-link>
           </template>
@@ -38,26 +27,43 @@
         <up-button type="primary" text="登陆" @click="loginIndex"></up-button>
       </view>
 
+      <view style="display: flex; align-items: center; margin-top: 22rpx">
+        <u-radio-group v-model="isRadioSelected">
+          <u-radio shape="square" />
+        </u-radio-group>
+        <view>
+          <text style="color: rgba(197, 200, 207, 1); font-size: 12px">
+            点击"按钮勾选"即同意
+            <text @click="navigateToPrivacyPolicy" class="link-text">
+              《智考典隐私政策》
+            </text>
+            及
+            <text @click="navigateToServiceAgreement" class="link-text">
+              《智考典用户服务协议》
+            </text>
+          </text>
+        </view>
+      </view>
+
       <view class="footer">
         <u-divider text="其他登陆方式" :hairline="true"></u-divider>
         <view class="verifyCodeLogin">
-          <u-icon
-              name="../../../../static/login/yanzhengma.png"
-              size="30"
-              color="#909399"
-              @click="verifyLoginRouter"
-              label="验证码"
-              labelPos="bottom"
-          ></u-icon>
+          <view style="margin-right: 100rpx">
+            <u-icon name="../../../../static/login/wechatLogin-01.png" size="30" color="#909399"
+              @click="wechatLoginRouter" label="微信登录" labelPos="bottom"></u-icon>
+          </view>
+          <u-icon name="../../../../static/login/yanzhengma.png" size="30" color="#909399" @click="verifyLoginRouter"
+            label="验证码登陆" labelPos="bottom"></u-icon>
         </view>
       </view>
     </view>
+
   </view>
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {useStore} from 'vuex'
+import { ref } from "vue";
+import { useStore } from 'vuex'
 
 const store = useStore()
 const login = ref({
@@ -66,6 +72,8 @@ const login = ref({
     password: ""
   }
 })
+
+const isRadioSelected = ref(false);
 
 function registerRouter() {
   uni.navigateTo({
@@ -103,7 +111,7 @@ function loginIndex() {
     success: function (response) {
       store.commit('updateToken', response.data.data.token)
       let flag = uni.getStorageSync("flag")
-      if (!flag) {
+      if (true) {
         uni.navigateTo({
           url: "/pages/start/xuanzekaoshi-one"
         })
@@ -116,6 +124,26 @@ function loginIndex() {
     fail: function (error) {
       console.log(error);
     }
+  });
+}
+
+const navigateToPrivacyPolicy = () => {
+  // 使用uni.navigateTo或其他导航方法跳转到隐私政策页面
+  uni.navigateTo({
+    url: "/pages/register/policy",
+  });
+};
+
+const navigateToServiceAgreement = () => {
+  // 使用uni.navigateTo或其他导航方法跳转到用户服务协议页面
+  uni.navigateTo({
+    url: "/pages/register/FAQ",
+  });
+};
+
+const wechatLoginRouter = () => {
+  uni.navigateTo({
+    url: "/pages/weChatLogin/weChatLogin",
   });
 }
 </script>
@@ -160,12 +188,15 @@ function loginIndex() {
 
     #submit {
       display: block;
-      margin-bottom: 80px;
     }
 
     .footer {
+      margin-top: 300rpx;
+
       .verifyCodeLogin {
         text-align: center;
+        display: flex;
+        justify-content: center;
       }
     }
   }
@@ -176,5 +207,14 @@ function loginIndex() {
   }
 }
 
-
+.link-text {
+  color: rgba(60, 123, 251, 1);
+  // 如果需要加下划线效果，可以添加下面的样式
+  // text-decoration: underline;
+  // text-decoration-color: rgba(60, 123, 251, 1);
+  // text-decoration-style: solid;
+  // text-decoration-thickness: 1px;
+  // text-underline-offset: 3px;
+  cursor: pointer;
+}
 </style>

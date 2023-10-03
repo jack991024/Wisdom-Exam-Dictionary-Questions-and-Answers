@@ -51,7 +51,7 @@
               size="30"
               color="#909399"
               @click="verifyLoginRouter"
-              label="验证码"
+              label="验证码登陆"
               labelPos="bottom"
             ></u-icon>
           </view>
@@ -60,7 +60,7 @@
             size="30"
             color="#909399"
             @click="passwordLoginRouter"
-            label="密码"
+            label="密码登陆"
             labelPos="bottom"
           ></u-icon>
         </view>
@@ -214,7 +214,7 @@ function loginIndex(code) {
 }
 
 .footer {
-  margin-top: 200rpx;
+  margin-top: 400rpx;
 }
 
 .verifyCodeLogin {

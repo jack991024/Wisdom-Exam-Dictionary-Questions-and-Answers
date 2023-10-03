@@ -360,20 +360,20 @@ const loadState = () => {
       if (res.data && res.data.data) {
         nextTick(() => {
           questionNums.value = res.data.data;
-          if(questionNums.value.total===0){
-            questionNums.value.total="0"
+          if (questionNums.value.total === 0) {
+            questionNums.value.total = "0"
           }
-          if(questionNums.value.done===0){
-            questionNums.value.done="0"
+          if (questionNums.value.done === 0) {
+            questionNums.value.done = "0"
           }
-          if(questionNums.value.correct===0){
-            questionNums.value.correct="0"
+          if (questionNums.value.correct === 0) {
+            questionNums.value.correct = "0"
           }
-          if(questionNums.value.error===0){
-            questionNums.value.error="0"
+          if (questionNums.value.error === 0) {
+            questionNums.value.error = "0"
           }
-          if(questionNums.value.progress===0){
-            questionNums.value.progress="0"
+          if (questionNums.value.progress === 0) {
+            questionNums.value.progress = "0"
           }
           console.log("首页values,", questionNums.value)
 
