@@ -380,6 +380,12 @@
 			"style": {
 				"navigationBarTitleText": "设置"
 			}
+		},
+		{
+			"path": "pages/home/person/personInfo/other-login",
+			"style": {
+				"navigationBarTitleText": "其他登录方式"
+			}
 		}
 	],
 	"tabBar": {

@@ -24,8 +24,12 @@
           </u-cell>
         </u-list-item>
         <u-list-item>
-          <u-cell title="修改密码" :isLink="true" @click="navigateToProfile('password')" size="large" customHeight="127rpx"
-            :border="false">
+          <u-cell title="修改密码" :isLink="true" @click="navigateToProfile('password')" size="large" customHeight="127rpx">
+          </u-cell>
+        </u-list-item>
+        <u-list-item>
+          <u-cell title="其他登录方式" :isLink="true" @click="navigateToProfile('other-login')" size="large"
+            customHeight="127rpx" :border="false">
           </u-cell>
         </u-list-item>
       </u-list>
@@ -102,6 +106,9 @@ const navigateToProfile = (section) => {
       break;
     case 'password':
       uni.navigateTo({ url: '/pages/home/person/personInfo/modify-password' });
+    case 'other-login':
+      uni.navigateTo({ url: '/pages/home/person/personInfo/other-login' })
+      break;
   }
 };
 
@@ -220,7 +227,7 @@ function getBase64Prefix(filePath) {
 <style scoped>
 .background {
   width: 692rpx;
-  height: 448rpx;
+  height: 522rpx;
   background: #FFFFFF;
   box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
   border-radius: 22rpx 22rpx 22rpx 22rpx;
