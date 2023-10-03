@@ -13,11 +13,18 @@
     <view id="login">
       <view id="mobile">
         <up-input placeholder="请输入手机号" prefixIcon="phone" border="bottom" v-model="login.userInfo.phoneMobile"
-          prefixIconStyle="font-size: 22px;color: #909399"></up-input>
+          prefixIconStyle="font-size: 22px;color: #909399">
+          <template #prefix>
+            <u-icon name="../../../../static/login/account.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
+        </up-input>
       </view>
       <view id="password">
         <up-input placeholder="请输入密码" prefixIcon="lock" border="bottom" v-model="login.userInfo.password"
           prefixIconStyle="font-size: 22px;color: #909399" type="password">
+          <template #prefix>
+            <u-icon name="../../../../static/login/password.png" size="30" color="#909399" labelPos="bottom"></u-icon>
+          </template>
           <template #suffix>
             <u-link href="" text="忘记密码？" @click="lostPasswordRouter"></u-link>
           </template>
@@ -68,8 +75,8 @@ import { useStore } from 'vuex'
 const store = useStore()
 const login = ref({
   userInfo: {
-    phoneMobile: "",
-    password: ""
+    phoneMobile: "15827619648",
+    password: "123qwe@"
   }
 })
 

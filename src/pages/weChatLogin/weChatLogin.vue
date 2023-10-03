@@ -214,7 +214,7 @@ function loginIndex(code) {
 }
 
 .footer {
-  margin-top: 400rpx;
+  margin-top: 350rpx;
 }
 
 .verifyCodeLogin {
