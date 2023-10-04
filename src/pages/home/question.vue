@@ -10,21 +10,12 @@
     </view>
 
     <view class="body">
-      <view v-for="(item, index) in assistantMsgLists" :key="index" class="assistant">
-        <view class="avater-assistant">
-          <up-avatar src="../../../../static/question/avata.png" size="36"></up-avatar>
+      <view v-for="(message, index) in messages" :key="index" :class="message.type">
+        <view class="avatar">
+          <up-avatar :src="message.type === 'user' ? userImg : assistantImg" size="36"></up-avatar>
         </view>
-        <view class="content-assistant">
-          <text>{{ item }}</text>
-        </view>
-      </view>
-
-      <view v-for="(item, index) in userMsgLists" :key="index" class="user">
-        <view class="content-user">
-          {{ item }}
-        </view>
-        <view class="avater-user">
-          <up-avatar :src="userImg" size="36"></up-avatar>
+        <view class="content">
+          <text>{{ message.content }}</text>
         </view>
       </view>
     </view>
@@ -37,8 +28,6 @@
         <image src="../../static/question/submit.png" mode="widthFix" style="width: 70rpx;height: 70rpx;" />
       </view>
     </view>
-
-
   </view>
 </template>
 
@@ -48,12 +37,11 @@ import { useStore } from 'vuex';
 import { onLoad } from '@dcloudio/uni-app';
 
 const store = useStore()
-const assistantMsgLists = ref(["您好，我是智考典答疑小助手“小智”，任何考试有关的内容都可以向我咨询哦～"])
-const userMsgLists = ref([])
+const messages = ref([{ type: 'assistant', content: '您好，我是智考典答疑小助手“小智”，任何考试有关的内容都可以向我咨询哦～' }])
 const inputMessage = ref("");
 const userImg = ref(null)
-const assistantImg = ref(null)
-
+const assistantImg = ref("../../../../static/question/avata.png")
+const chatId=ref(null)
 onLoad(() => {
   uni.request({
     url: "https://dev.zhikaodian.com/apiV2/chat/profile",
@@ -64,22 +52,32 @@ onLoad(() => {
     success: (res) => {
       let data = res.data.data
       userImg.value = data.user
-      assistantImg.value = data.assistant
+    },
+  }) 
+  
+  uni.request({
+    url: "https://dev.zhikaodian.com/apiV2/chat/newChat",
+    method: 'GET',
+    header: {
+      "Authorization": store.getters.getToken
+    },
+    success: (res) => {
+      let data = res.data.data
+      chatId.value = data.chat_id
     },
   })
+
+
 })
 
-
-
 const sendMessage = () => {
-  const chatId = "b4c3cf21-39d0-464c-839e-5a45010902c9"; // 请替换为您的 chat_id
-  requestChatGPT(chatId, inputMessage.value);
+  messages.value.push({ type: 'user', content: inputMessage.value });
+  requestChatGPT(chatId.value, inputMessage.value);
   inputMessage.value = "";
 };
 
 const requestChatGPT = (chatId, content) => {
-  userMsgLists.value.push(inputMessage.value)
-  const url = "https://dev.zhikaodian.com/apiV2/chat/inference"; // 请替换为您的 API 地址
+  const url = "https://dev.zhikaodian.com/apiV2/chat/inference";
   uni.request({
     url: url,
     method: 'POST',
@@ -93,30 +91,22 @@ const requestChatGPT = (chatId, content) => {
     success: (response) => {
       let answer = []
       try {
-        // 使用正则表达式全局匹配所有的data对象
         const jsonMatches = response.data.match(/data: (\{.*?\})/g);
         if (!jsonMatches) {
           throw new Error("JSON not found in response data");
         }
-        // 遍历所有的匹配项
         jsonMatches.forEach((jsonMatch) => {
-          // 提取并解析JSON部分
           const jsonData = jsonMatch.replace('data: ', '') + '}';
           const data = JSON.parse(jsonData);
-          // 检查解析后的数据是否包含result字段
           if ('result' in data) {
-            console.log("Result:", data.result);
             answer.push(data.result)
-          } else {
-            console.error("Result not found in response", data);
           }
         });
       } catch (e) {
-        // 如果提取或解析失败，打印错误和原始响应数据
+        console.log(JSON.stringify(jsonMatch))
         console.error("Failed to parse response data", e, response.data);
       }
-
-      assistantMsgLists.value.push(answer.join(" "))
+      messages.value.push({ type: 'assistant', content: answer.join(" ") })
     },
     fail: (error) => {
       console.error("Request Error:", error);
@@ -126,45 +116,65 @@ const requestChatGPT = (chatId, content) => {
 </script>
 
 <style lang="scss">
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 85rpx;
+
+
+  .title {
+    flex-grow: 1;
+    text-align: center;
+    margin-top: 20rpx;
+    margin-bottom: 20rpx;
+  }
+
+  .clear {
+    margin-left: auto;
+    margin-right: 22rpx
+  }
+}
+
+
 .body {
   background: #F6F6F6;
+  height: 100vh;
+  overflow-y: auto;
+  margin-top: 85rpx;
 
-  .assistant {
-    width: 692rpx;
-    height: 145rpx;
-    background: #FFFFFF;
-    border-radius: 7rpx;
-    opacity: 1;
-    margin: 29rpx;
-    display: flex; // 使用flex布局
-    align-items: center; // 垂直居中内容
+  &::before {
+    content: "";
+    display: block;
+    height: 15rpx;
+    background: #F6F6F6;
   }
 
+  .assistant,
   .user {
     width: 692rpx;
-    height: 145rpx;
     background: #FFFFFF;
     border-radius: 7rpx;
     opacity: 1;
-    margin: 29rpx;
-    display: flex; // 使用flex布局
-    align-items: center; // 垂直居中内容
+    margin-left: 29rpx;
+    margin-top: 15rpx;
+    font-size: 25rpx;
+    display: flex;
+    align-items: center;
   }
 
-  .avater-assistant {
-    margin-left: 28rpx; // 左侧距离
+  .avatar {
+    margin-left: 28rpx;
     margin-right: 25rpx;
   }
 
-  .avater-user {
-    margin-left: 530rpx; // 右侧距离
-    margin-right: 28rpx;
+  .content {
+    margin-left: 28rpx;
   }
-
-  .content-user {
-    margin-left: 28rpx; // 左侧距离
-  }
-
 }
 
 .input-question {
@@ -177,10 +187,8 @@ const requestChatGPT = (chatId, content) => {
   align-items: center;
 
   .input {
-    width: 500rpx;
+    width: 590rpx;
     margin: 29rpx;
   }
 }
 </style>
-
-
