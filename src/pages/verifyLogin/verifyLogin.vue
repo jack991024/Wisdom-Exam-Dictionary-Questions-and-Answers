@@ -255,7 +255,10 @@ const wechatLoginRouter = () => {
     }
 
     .footer {
-      margin-top: 350rpx;
+      position: fixed;
+      bottom: 50rpx;
+      width: 100%;
+      left: 0rpx;
 
       .verifyCodeLogin {
         text-align: center;

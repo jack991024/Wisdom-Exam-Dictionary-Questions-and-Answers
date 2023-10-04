@@ -76,9 +76,11 @@ const store = useStore()
 const login = ref({
   userInfo: {
     // phoneMobile: "15827619648",
-    phoneMobile: "13600000000",
+    // phoneMobile: "13600000000",
     // password: "123qwe@"
-    password: "ABC123"
+    // password: "ABC123"
+    phoneMobile: "",
+    password: ""
   }
 })
 
@@ -120,7 +122,7 @@ function loginIndex() {
     success: function (response) {
       store.commit('updateToken', response.data.data.token)
       let flag = uni.getStorageSync("flag")
-      if (!flag) {
+      if (flag != "true") {
         uni.navigateTo({
           url: "/pages/start/xuanzekaoshi-one"
         })
@@ -200,7 +202,10 @@ const wechatLoginRouter = () => {
     }
 
     .footer {
-      margin-top: 300rpx;
+      position: fixed;
+      bottom: 50rpx;
+      width: 100%;
+      left: 0rpx;
 
       .verifyCodeLogin {
         text-align: center;

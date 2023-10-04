@@ -100,6 +100,7 @@ const naviToTiKu = () => {
       tksuids: checkedItems.value
     },
     success: (response) => {
+      uni.setStorageSync("flag", "true");
       uni.switchTab({
         url: "/pages/home/topic/topic"
       })

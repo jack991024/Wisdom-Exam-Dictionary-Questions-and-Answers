@@ -36,7 +36,8 @@
       </view>
 
       <view>
-        <u-modal :show="show" :title="'隐私协议'" :showCancelButton="true" @cancel="cancel" @confirm="confirm" confirmText="同意" cancelText="不同意">
+        <u-modal :show="show" :title="'隐私协议'" :showCancelButton="true" @cancel="cancel" @confirm="confirm"
+          confirmText="同意" cancelText="不同意">
           <view class="slot-content">
             <view class="custom-html">
               <mp-html :content="content"></mp-html>
@@ -238,7 +239,10 @@ const cancel = () => {
 }
 
 .footer {
-  margin-top: 350rpx;
+  position: fixed;
+  bottom: 50rpx;
+  width: 100%;
+  left: 0rpx;
 }
 
 .verifyCodeLogin {

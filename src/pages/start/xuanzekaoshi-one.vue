@@ -112,12 +112,14 @@ const navigateToTwo = (item) => {
 }
 
 const navigateToMySubjects = () => {
+  uni.setStorageSync("flag", "true");
   uni.navigateTo({
     url: "/pages/home/person/my-kecheng"
   })
 }
 
 const navigateToMyTiKu = () => {
+  uni.setStorageSync("flag", "true");
   uni.navigateTo({
     url: "/pages/home/person/personInfo/tiku"
   })
