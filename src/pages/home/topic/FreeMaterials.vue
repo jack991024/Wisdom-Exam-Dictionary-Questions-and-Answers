@@ -1,20 +1,13 @@
 <template>
   <view class="content">
-    <uv-vtabs
-        :chain="chain"
-        :list="list"
-        :barItemBadgeStyle="{right:'20px',top:'12px'}"
-        @change="change"
-        @scrolltolower="scrolltolower">
+    <uv-vtabs :chain="chain" :list="list" :barItemBadgeStyle="{ right: '20px', top: '12px' }" @change="change"
+      @scrolltolower="scrolltolower">
       <uv-vtabs-item>
-        <view
-            class="item"
-            v-for="(item2,index2) in list2"
-            :key="index2">
+        <view class="item" v-for="(item2, index2) in list2" :key="index2" @click="navi(item2)">
           <view class="item-body">
             <view class="image">
               <image src="./static/freeMaterials/pdf.png" mode="widthFix"
-                     style="width: 38.04rpx;height: 43.48rpx;margin-top: 20rpx;margin-left: 29rpx;"></image>
+                style="width: 38.04rpx;height: 43.48rpx;margin-top: 20rpx;margin-left: 29rpx;"></image>
             </view>
             <view class="right">
               <view class="title">
@@ -41,7 +34,7 @@
 </template>
 
 <script setup>
-import {ref, computed, onMounted, reactive} from 'vue';
+import { ref, computed, onMounted, reactive } from 'vue';
 
 const getList = reactive([]);
 
@@ -73,7 +66,7 @@ onMounted(async () => {
 
   try {
     // 第一次请求获取name和fcid
-    const response1 = await uni.request({url: 'https://dev.zhikaodian.com/apiV2/resource/classify'});
+    const response1 = await uni.request({ url: 'https://dev.zhikaodian.com/apiV2/resource/classify' });
     const responseData1 = response1.data.data;
     // 更新getList数组
     responseData1.forEach((data, index) => {
@@ -88,7 +81,7 @@ onMounted(async () => {
     const promises = responseData1.map((data, index) => {
       return uni.request({
         url: 'https://dev.zhikaodian.com/apiV2/resource/search',
-        data: {fcid: data.fcid},
+        data: { fcid: data.fcid },
         method: 'POST',
       }).then(response2 => {
         if (getList[index]) {
@@ -109,6 +102,9 @@ onMounted(async () => {
   }
 });
 
+const navi = (item2) => {
+  uni.navigateTo({ url: '/pages/home/topic/FreeMaterialsItem?fid='+item2.fid })
+}
 </script>
 
 <style scoped lang="scss">
@@ -150,7 +146,9 @@ onMounted(async () => {
         flex-direction: row; // 使.bottom的子元素水平排列
         justify-content: space-between; // 使子元素平分空间
 
-        .download-num, .page-num, .size {
+        .download-num,
+        .page-num,
+        .size {
           text-align: center; // 使文本居中
           font-size: 18rpx;
           color: #898989;
@@ -159,6 +157,7 @@ onMounted(async () => {
       }
     }
   }
+
   .gap {
     height: 2rpx;
     border-top: 2rpx solid #E5E5E5; // 使用border-top来创建一个顶部边框
@@ -168,5 +167,4 @@ onMounted(async () => {
 .gap {
   padding: 0 30rpx;
 }
-
 </style>
