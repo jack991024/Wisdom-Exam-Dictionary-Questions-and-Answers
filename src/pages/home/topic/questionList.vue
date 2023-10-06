@@ -1,12 +1,14 @@
 <template>
+  <u-modal :show="show" title="" content="还没购买课程，立即购买？" confirmText="去购买" cancelText="取消" showConfirmButton
+    showCancelButton @confirm="clickToKeCheng" @cancel="show = false"></u-modal>
   <view class="container">
-    <view v-for="(item,index) in questionLists" :key="index" class="question-item"
-          :style="item.depth === 2 ? {'background-image': 'url(../../../static/topic/five-stars.png)'} : {}">
+    <view v-for="(item, index) in questionLists" :key="index" class="question-item" :class="{ 'not-free': !item.free }"
+      :style="item.depth === 2 ? { 'background-image': 'url(../../../static/topic/five-stars.png)' } : {}">
       <view class="question-content" @click="jumpQuestion(item)">
         <text class="question-name">{{ item.name }}</text>
         <view v-if="item.depth > 2" style="display: flex;align-items: center;">
           <view style="width: 318.84rpx;margin-right: 15rpx">
-            <u-line-progress :percentage="computePercentage(item)" :showText="false" activeColor="#3C7BFB" height="4.5"/>
+            <u-line-progress :percentage="computePercentage(item)" :showText="false" activeColor="#3C7BFB" height="4.5" />
           </view>
           <view class="done-info" style="font-size: 24.74rpx;color: #262626;">
             {{ item.done }}/{{ item.total }}
@@ -21,8 +23,8 @@
 </template>
 
 <script setup>
-import {onLoad} from '@dcloudio/uni-app';
-import {ref, computed} from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
+import { ref, computed } from 'vue';
 
 const computePercentage = (item) => {
   const done = item.done || 0;
@@ -39,6 +41,8 @@ const computePercentage = (item) => {
 
 const questionLists = ref([])
 let correct = ref(0);
+let itemQuestion = {}
+const show = ref(false)
 onLoad((options) => {
   questionLists.value = JSON.parse(options.arrayParam);
 })
@@ -58,18 +62,34 @@ const computedCorrect = computed(() => {
 });
 
 const jumpQuestion = (item) => {
-  if (item.children && item.children.length > 0) {
-    // 如果有子节点，继续跳转到当前页面
-    uni.navigateTo({
-      url: '/pages/home/topic/questionList?arrayParam=' + JSON.stringify(item.children)
-    })
-  } else {
-    // 否则跳转到做题页面
-    let param = item.chid
-    uni.reLaunch({
-      url: '/pages/home/topic/question?param=' + param
-    })
+  console.log(item)
+  if (item.free === false) {
+    show.value = true;
+    itemQuestion = item
   }
+  else if (item.free === true) {
+    if (item.children && item.children.length > 0) {
+      // 如果有子节点，继续跳转到当前页面
+      uni.navigateTo({
+        url: '/pages/home/topic/questionList?arrayParam=' + JSON.stringify(item.children)
+      })
+    }
+    else {
+      // 否则跳转到做题页面
+      let param = item.chid
+      uni.reLaunch({
+        url: '/pages/home/topic/question?param=' + param
+      })
+    }
+  }
+}
+
+const clickToKeCheng = () => {
+  let tkid = itemQuestion.tkid
+  console.log(tkid)
+  uni.navigateTo({
+    url:'/pages/home/classification/package?tkid='+tkid
+  })
 }
 </script>
 
@@ -91,6 +111,11 @@ const jumpQuestion = (item) => {
   padding: 15px; // 内部填充，使内容不紧贴边缘
   background-repeat: no-repeat;
   background-position: right center;
+
+  &.not-free {
+    opacity: 0.5; // 或者你想要的任何灰色
+    // 你可以在这里添加其他你想要的样式更改
+  }
 
   .question-content {
     display: flex;

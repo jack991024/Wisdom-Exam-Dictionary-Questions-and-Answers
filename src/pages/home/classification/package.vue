@@ -118,20 +118,36 @@ const sectionChange = (index) => {
 let item = reactive({})
 const courses = ref([])
 onLoad((option) => {
-  Object.assign(item, JSON.parse(option.item));
+  let tkid = option.tkid
+  if (!(typeof (tkid) == "undefined")) {
+    uni.request({
+      url: "https://dev.zhikaodian.com/apiV2/tk/course",
+      data: { tkid: tkid },
+      method: "POST",
+      success: (response) => {
+        courses.value = response.data.data.courses
+        item = response.data.data.subject
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  } else {
+    Object.assign(item, JSON.parse(option.item));
 
-  let tksuid = item.tksuid
-  uni.request({
-    url: "https://dev.zhikaodian.com/apiV2/tk/course",
-    data: { tksuid: tksuid },
-    method: "POST",
-    success: (response) => {
-      courses.value = response.data.data.courses
-    },
-    error: (err) => {
-      console.log(err)
-    }
-  })
+    let tksuid = item.tksuid
+    uni.request({
+      url: "https://dev.zhikaodian.com/apiV2/tk/course",
+      data: { tksuid: tksuid },
+      method: "POST",
+      success: (response) => {
+        courses.value = response.data.data.courses
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
 })
 
 const selectedItems = ref([]);  // 新增：用于存储选中的项

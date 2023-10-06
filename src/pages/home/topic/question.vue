@@ -668,7 +668,7 @@ function selectMode(mode) {
 }
 
 const back = () => {
-  uni.reLaunch({
+  uni.switchTab({
     url: '/pages/home/topic/topic'
   });
 }
