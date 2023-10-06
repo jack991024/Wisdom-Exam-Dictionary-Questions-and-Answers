@@ -18,9 +18,11 @@
       </view>
 
       <view style="display: flex; align-items: center; margin-top: 22rpx">
-        <u-radio-group v-model="isRadioSelected">
-          <u-radio shape="square" />
-        </u-radio-group>
+        <checkbox-group @change="handleCheckboxChange">
+          <label>
+            <checkbox :checked="isChecked" />
+          </label>
+        </checkbox-group>
         <view>
           <text style="color: rgba(197, 200, 207, 1); font-size: 12px">
             点击"按钮勾选"即同意
@@ -87,7 +89,11 @@ onLoad(() => {
 
 const store = useStore();
 
-const isRadioSelected = ref(false);
+const isChecked = ref(0);
+
+const handleCheckboxChange = (event) => {
+  isChecked.value = event.detail.value.length
+}
 
 const show = ref(true)
 
@@ -150,25 +156,31 @@ function loginIndex(code) {
     terminal: "app",
     wx_code: code,
   };
-
-  uni.request({
-    url: "https://dev.zhikaodian.com/apiV2/user/login",
-    method: "POST",
-    header: {
-      "Content-Type": "application/json",
-    },
-    data: data,
-    success: function (response) {
-      store.commit("updateToken", response.data.data.token);
-      uni.switchTab({
-        url: "/pages/home/classification/classificationMain",
-      });
-      console.log(store.getters.getToken);
-    },
-    fail: function (error) {
-      console.log(error);
-    },
-  });
+  if (isChecked.value === 0) {
+    uni.showToast({
+      title: "请先阅读并同意隐私条款",
+      icon: "none"
+    })
+  } else {
+    uni.request({
+      url: "https://dev.zhikaodian.com/apiV2/user/login",
+      method: "POST",
+      header: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+      success: function (response) {
+        store.commit("updateToken", response.data.data.token);
+        uni.switchTab({
+          url: "/pages/home/classification/classificationMain",
+        });
+        console.log(store.getters.getToken);
+      },
+      fail: function (error) {
+        console.log(error);
+      },
+    });
+  }
 }
 
 const cancel = () => {

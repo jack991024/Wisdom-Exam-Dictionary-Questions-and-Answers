@@ -39,9 +39,11 @@
       </view>
 
       <view style="display: flex; align-items: center; margin-top: 22rpx">
-        <u-radio-group v-model="isRadioSelected">
-          <u-radio shape="square" />
-        </u-radio-group>
+        <checkbox-group @change="handleCheckboxChange">
+          <label>
+            <checkbox :checked="isChecked" />
+          </label>
+        </checkbox-group>
         <view>
           <text style="color: rgba(197, 200, 207, 1); font-size: 12px">
             点击"按钮勾选"即同意
@@ -87,13 +89,16 @@ const login = ref({
     "verify": ""
   }
 })
-const isRadioSelected = ref(false);
 function registerRouter() {
   uni.redirectTo({
     url: '/pages/register/register'
   });
 }
+const isChecked = ref(0);
 
+const handleCheckboxChange = (event) => {
+  isChecked.value = event.detail.value.length
+}
 const verify = ref('');
 const countingDown = ref(false);
 const buttonText = ref('获取验证码');
@@ -165,32 +170,39 @@ const handlerError = (ev) => {
 };
 
 const submit = () => {
-  uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/user/login',
-    method: 'POST',
-    header: {
-      'Content-Type': 'application/json'
-    },
-    data: login.value.userInfo,
-    success: (response) => {
-      console.log(response.data);
-      store.commit('updateToken', response.data.data.token)
-      let flag = uni.getStorageSync("flag")
-      console.log("flag:", flag)
-      if (!flag) {
-        uni.navigateTo({
-          url: "/pages/start/xuanzekaoshi-one"
-        })
-      } else {
-        uni.switchTab({
-          url: '/pages/home/classification/classificationMain'
-        });
+  if (isChecked.value === 0) {
+    uni.showToast({
+      title: "请先阅读并同意隐私条款",
+      icon: "none"
+    })
+  } else {
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/user/login',
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: login.value.userInfo,
+      success: (response) => {
+        console.log(response.data);
+        store.commit('updateToken', response.data.data.token)
+        let flag = uni.getStorageSync("flag")
+        console.log("flag:", flag)
+        if (!flag) {
+          uni.navigateTo({
+            url: "/pages/start/xuanzekaoshi-one"
+          })
+        } else {
+          uni.switchTab({
+            url: '/pages/home/classification/classificationMain'
+          });
+        }
+      },
+      fail: (error) => {
+        console.log('error', error);
       }
-    },
-    fail: (error) => {
-      console.log('error', error);
-    }
-  });
+    });
+  }
 }
 
 function loginRouter() {

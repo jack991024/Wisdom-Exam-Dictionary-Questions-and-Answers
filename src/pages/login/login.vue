@@ -35,11 +35,14 @@
       </view>
 
       <view style="display: flex; align-items: center; margin-top: 22rpx">
-        <u-radio-group v-model="isRadioSelected">
-          <u-radio shape="square" />
-        </u-radio-group>
+        <checkbox-group @change="handleCheckboxChange">
+          <label>
+            <checkbox :checked="isChecked" />
+          </label>
+        </checkbox-group>
+
         <view>
-          <text style="color: rgba(197, 200, 207, 1); font-size: 12px">
+          <text style=" color: rgba(197, 200, 207, 1); font-size: 12px">
             点击"按钮勾选"即同意
             <text @click="navigateToPrivacyPolicy" class="link-text">
               《智考典隐私政策》
@@ -76,15 +79,19 @@ const store = useStore()
 const login = ref({
   userInfo: {
     // phoneMobile: "15827619648",
-    // phoneMobile: "13600000000",
+    phoneMobile: "13600000000",
     // password: "123qwe@"
-    // password: "ABC123"
-    phoneMobile: "",
-    password: ""
+    password: "ABC123"
+    // phoneMobile: "",
+    // password: ""
   }
 })
 
-const isRadioSelected = ref(false);
+const isChecked = ref(0);
+
+const handleCheckboxChange = (event) => {
+  isChecked.value = event.detail.value.length
+}
 
 function registerRouter() {
   uni.navigateTo({
@@ -105,37 +112,44 @@ function verifyLoginRouter() {
 }
 
 function loginIndex() {
-  let data = JSON.stringify({
-    "phone": login.value.userInfo.phoneMobile,
-    "password": login.value.userInfo.password,
-    "loginType": "pwd",
-    "terminal": "wx"
-  });
+  if (isChecked.value === 0) {
+    uni.showToast({
+      title: "请先阅读并同意隐私条款",
+      icon: "none"
+    })
+  } else {
+    let data = JSON.stringify({
+      "phone": login.value.userInfo.phoneMobile,
+      "password": login.value.userInfo.password,
+      "loginType": "pwd",
+      "terminal": "wx"
+    });
 
-  uni.request({
-    url: 'https://dev.zhikaodian.com/apiV2/user/login',
-    method: 'POST',
-    header: {
-      'Content-Type': 'application/json'
-    },
-    data: data,
-    success: function (response) {
-      store.commit('updateToken', response.data.data.token)
-      let flag = uni.getStorageSync("flag")
-      if (flag != "true") {
-        uni.navigateTo({
-          url: "/pages/start/xuanzekaoshi-one"
-        })
-      } else {
-        uni.switchTab({
-          url: '/pages/home/classification/classificationMain'
-        });
+    uni.request({
+      url: 'https://dev.zhikaodian.com/apiV2/user/login',
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json'
+      },
+      data: data,
+      success: function (response) {
+        store.commit('updateToken', response.data.data.token)
+        let flag = uni.getStorageSync("flag")
+        if (flag != "true") {
+          uni.navigateTo({
+            url: "/pages/start/xuanzekaoshi-one"
+          })
+        } else {
+          uni.switchTab({
+            url: '/pages/home/classification/classificationMain'
+          });
+        }
+      },
+      fail: function (error) {
+        console.log(error);
       }
-    },
-    fail: function (error) {
-      console.log(error);
-    }
-  });
+    });
+  }
 }
 
 const navigateToPrivacyPolicy = () => {
