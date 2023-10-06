@@ -90,6 +90,7 @@ const jumpQuestion = (item) => {
   margin-bottom: 10px; // 一些底部边距，以分隔各个项目
   padding: 15px; // 内部填充，使内容不紧贴边缘
   background-repeat: no-repeat;
+  background-position: right center;
 
   .question-content {
     display: flex;
