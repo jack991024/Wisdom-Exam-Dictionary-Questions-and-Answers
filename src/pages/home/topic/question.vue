@@ -138,8 +138,20 @@
 
           <view class="question-friend-interaction"
             v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode === 'recite'">
-            <view class="question-friend-interaction-title"><text>题友互动</text></view>
+            <view class="question-friend-interaction-title">
+              <view>
+                <text>题友互动</text>
+              </view>
+
+              <view style="text-align: center;
+  font-size: 26rpx;
+  color: #7a7a7a;">
+                <text>暂无题友互动</text>
+              </view>
+
+            </view>
           </view>
+
           <view class="catalog">
             <!-- 遮罩层 -->
             <div v-show="isMenu" class="overlay" @click="isMenu = false"></div>
@@ -889,7 +901,7 @@ function timestampToDate(timestamp) {
     opacity: 1;
     margin-left: 29rpx;
     margin-top: 32rpx;
-    height: 500rpx;
+    height: 200rpx;
 
     .question-friend-interaction-title {
       margin-top: 32rpx;
@@ -899,6 +911,7 @@ function timestampToDate(timestamp) {
       font-weight: bold;
       color: #262626;
       height: 45rpx;
+      flex-direction: column;
     }
   }
 
