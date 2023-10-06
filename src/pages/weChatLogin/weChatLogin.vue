@@ -20,7 +20,7 @@
       <view style="display: flex; align-items: center; margin-top: 22rpx">
         <checkbox-group @change="handleCheckboxChange">
           <label>
-            <checkbox :checked="isChecked" />
+            <checkbox :checked="isChecked" color="blue"/>
           </label>
         </checkbox-group>
         <view>

@@ -37,7 +37,7 @@
       <view style="display: flex; align-items: center; margin-top: 22rpx">
         <checkbox-group @change="handleCheckboxChange">
           <label>
-            <checkbox :checked="isChecked" />
+            <checkbox :checked="isChecked" color="blue"/>
           </label>
         </checkbox-group>
 
@@ -79,11 +79,11 @@ const store = useStore()
 const login = ref({
   userInfo: {
     // phoneMobile: "15827619648",
-    phoneMobile: "13600000000",
+    // phoneMobile: "13600000000",
     // password: "123qwe@"
-    password: "ABC123"
-    // phoneMobile: "",
-    // password: ""
+    // password: "ABC123"
+    phoneMobile: "",
+    password: ""
   }
 })
 

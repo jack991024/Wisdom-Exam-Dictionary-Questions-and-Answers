@@ -167,7 +167,6 @@ const clear = () => {
 
 .body {
   background: #F6F6F6;
-  height: 100vh;
   overflow-y: auto;
   margin-top: 85rpx;
 
