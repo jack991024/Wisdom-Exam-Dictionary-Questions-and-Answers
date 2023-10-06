@@ -106,35 +106,40 @@
               </view>
             </view>
 
-            <view v-if="true">
-              <view class="my-note"
-                v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode==='recite'">
-                <view><text>我的笔记</text></view>
-                <view v-if="myNoteData">
-                  <view class="info">
-                    <image :src="myNoteData.user.avatar" mode="widthFix" style="width: 72.46rpx;height: 72.46rpx;" />
-                    <view>
-                      <view class="name"><text>{{ myNoteData.user.username }}</text></view>
-                      <view class="date"><text>{{ timestampToDate(myNoteData.update_at) }}</text></view>
-                    </view>
-                  </view>
-                  <view class="body">
-                    <text>{{ myNoteData.comment }}</text>
+
+          </view>
+
+          <view v-if="true">
+            <view class="my-note"
+              v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode === 'recite'">
+              <view class="title"><text>我的笔记</text></view>
+              <view v-if="myNoteData">
+                <view class="info">
+                  <image :src="myNoteData.user.avatar" mode="widthFix"
+                    style="width: 72.46rpx;height: 72.46rpx;border-radius: 50%;" />
+                  <view style="margin-left:20rpx">
+                    <view class="name"><text>{{ myNoteData.user.username }}</text></view>
+                    <view class="date"><text>{{ timestampToDate(myNoteData.update_at) }}</text></view>
                   </view>
                 </view>
-                <view class="button">
+                <view class="body">
+                  <text>{{ myNoteData.comment }}</text>
+                </view>
+              </view>
+              <view style="display: flex;
+    justify-content: center;">
+                <view class="button" @click="isPingLun = true">
                   <text>添加笔记</text>
-                </view>
-
-
-                <view class="question-friend-interaction"
-                  v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode==='recite'">
-                  <view>题友互动</view>
                 </view>
               </view>
             </view>
           </view>
 
+
+          <view class="question-friend-interaction"
+            v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode === 'recite'">
+            <view class="question-friend-interaction-title"><text>题友互动</text></view>
+          </view>
           <view class="catalog">
             <!-- 遮罩层 -->
             <div v-show="isMenu" class="overlay" @click="isMenu = false"></div>
@@ -177,6 +182,36 @@
       <ExamInfoCard :groupedData="groupedData" @changeQuestion="updateCurrentQuestion" />
     </scroll-view>
   </div>
+
+
+  <!-- 遮罩层写评论 -->
+  <div v-show="isPingLun" class="overlay" @click="isPingLun = false"></div>
+
+  <!-- 弹出层写评论 -->
+  <view v-show="isPingLun" class="custom-popup" style="background: #F3F3F3;height: 368rpx;">
+    <view style="    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;">
+      <view class="cancel" style="margin: 29rpx;color:#262626;" @click="isPingLun = false"><text>取消</text></view>
+      <view class="sumbit" style="margin: 29rpx;color: #262626;" @click="fabiaopinglun"><text>发表</text></view>
+    </view>
+    <view class="input">
+      <up-input placeholder="请输入内容" border="surround" v-model="pinglun" fontSize="22rpx" customStyle="
+        width: 650rpx;
+        height: 152rpx;
+        background: #FFFFFF;
+        border- radius: 7rpx 7rpx 7rpx 7rpx;
+      opacity: 1;
+      margin-left: 29rpx
+      "></up-input>
+    </view>
+    <view style="margin-left: 29rpx;">
+      <u-radio-group v-model="isRadioSelected">
+        <u-radio shape="square" label="公开" name="公开" />
+      </u-radio-group>
+    </view>
+  </view>
 </template>
 
 <script setup>
@@ -191,7 +226,31 @@ const questionLists = ref([])
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
+const isPingLun = ref(false)
 let jiandaAnswer = ""
+const isRadioSelected = ref(true)
+const pinglun = ref("")
+
+const fabiaopinglun = () => {
+  uni.request({
+    url: "https://dev.zhikaodian.com/apiV2/tk/pushComment",
+    method: 'POST',
+    data: {
+      chid: questionLists.value.result[currentIndex.value].chid,
+      qid: questionLists.value.result[currentIndex.value].qid,
+      comment: pinglun.value
+    },
+    header: {
+      "Content-Type": "application/json",
+      "Authorization": store.getters.getToken
+    },
+    success: (res) => {
+      console.log(res)
+    },
+    error: (error) => { }
+  })
+}
+
 const open = () => {
 
   show.value = true
@@ -334,7 +393,9 @@ function fetchMyNoteData(chid, qid) {
       qid: qid
     },
     success: (response) => {
+      console.log(1)
       if (response.data && response.data.data && response.data.data.my) {
+        console.log(2)
         myNoteData.value = response.data.data.my;
       }
     },
@@ -625,11 +686,18 @@ function timestampToDate(timestamp) {
   }
 
   .question {
-    background-color: #fff; // 白色背景
-    padding: 15px; // 内部填充
-    border-radius: 10px; // 圆角边框
+    width: 693rpx;
+    background: #FFFFFF;
+    box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
+    margin-left: 29rpx;
+    display: flex;
+    flex-direction: column;
 
     .question-description {
+      margin-top: 27rpx;
+      margin-left: 29rpx;
       display: flex;
       align-items: flex-start; // 更改为flex-start以使其与第一行对齐
       font-size: 16px;
@@ -753,6 +821,87 @@ function timestampToDate(timestamp) {
     }
   }
 
+  .my-note {
+    display: flex;
+    flex-direction: column;
+    width: 692rpx;
+    background: #FFFFFF;
+    box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
+    margin-left: 29rpx;
+
+    .title {
+      margin-top: 32rpx;
+      display: flex;
+      justify-content: center;
+      font-size: 33rpx;
+      font-weight: bold;
+      color: #262626;
+      height: 45rpx;
+    }
+
+    .info {
+      margin-left: 29rpx;
+      display: flex;
+
+      .name {
+        font-size: 29rpx;
+        color: #636363;
+      }
+
+      .date {
+        font-size: 20rpx;
+        color: #AEAEB2;
+      }
+    }
+
+    .body {
+      margin-top: 14rpx;
+      margin-left: 120rpx;
+      font-size: 25rpx;
+    }
+
+    .button {
+      width: 174rpx;
+      height: 62rpx;
+      background: #3C7BFB;
+      border-radius: 7rpx 7rpx 7rpx 7rpx;
+      opacity: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFF;
+      font-size: 28rpx;
+      margin-top: 24rpx;
+      margin-bottom: 29rpx;
+    }
+  }
+
+  .question-friend-interaction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 692rpx;
+    background: #FFFFFF;
+    box-shadow: 0rpx 0rpx 11rpx 2rpx rgba(0, 0, 0, 0.08);
+    border-radius: 22rpx 22rpx 22rpx 22rpx;
+    opacity: 1;
+    margin-left: 29rpx;
+    margin-top: 32rpx;
+    height: 500rpx;
+
+    .question-friend-interaction-title {
+      margin-top: 32rpx;
+      display: flex;
+      justify-content: center;
+      font-size: 33rpx;
+      font-weight: bold;
+      color: #262626;
+      height: 45rpx;
+    }
+  }
+
   .answer {
     background-color: #ffffff; // 设置背景颜色
     border-radius: 10px; // 设置边框半径
@@ -761,17 +910,21 @@ function timestampToDate(timestamp) {
       font-size: 14px; // 设置字体大小
       color: #b4dcab; // 设置字体颜色
       margin-bottom: 5px; // 设置下边距
+      margin-left: 29rpx;
     }
 
     .incorrect-answer {
       font-size: 14px; // 设置字体大小
       color: #ec5c4e; // 设置字体颜色
       margin-bottom: 5px; // 设置下边距
+      margin-left: 29rpx;
     }
 
     .answer-key {
       display: block; // 设置为弹性布局
       align-items: flex-start; // 设置垂直对齐方式
+      margin-left: 29rpx;
+      margin-right: 20rpx;
 
       .analysis {
         display: block; // 设置为块级元素，占据整行
@@ -826,7 +979,7 @@ rich-text {
 }
 
 .my-note {
-  margin-top: 12px;
+  margin-top: 32rpx;
 
   .note {
     margin-top: 16px;
