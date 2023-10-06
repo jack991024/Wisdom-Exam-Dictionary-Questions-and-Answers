@@ -169,22 +169,6 @@
     </swiper-item>
   </swiper>
 
-  <view class="tarBar">
-    <u-tabbar value="" @change="" :fixed="true" :placeholder="true" :safeAreaInsetBottom="true">
-      <u-tabbar-item text="目录" icon="../../../../static/topic/menu.png" @click="toggleMenu"></u-tabbar-item>
-      <u-tabbar-item text="题卡" icon="../../../../static/topic/tika.png" @click="toggleTiKa"></u-tabbar-item>
-      <u-tabbar-item text="收藏" v-if="!isFavorited.value" icon="../../../../static/topic/fav.png"
-        @click="toggleFavorite"></u-tabbar-item>
-      <u-tabbar-item text="模式" icon="../../../../static/topic/mode.png" @click="changeMode"></u-tabbar-item>
-    </u-tabbar>
-
-    <view v-if="isModeModalOpen" class="mode-modal">
-      <u-button :plain="true" icon="edit-pen" text="练习模式" @click="selectMode('practice')"></u-button>
-      <u-button :plain="true" icon="search" text="检测模式" @click="selectMode('exam')"></u-button>
-      <u-button :plain="true" icon="grid" text="背题模式" @click="selectMode('recite')"></u-button>
-    </view>
-  </view>
-
   <!-- 遮罩层 -->
   <div v-show="isTiKa" class="overlay" @click="isTiKa = false"></div>
 

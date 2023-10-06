@@ -1,6 +1,6 @@
 <template>
   <u-navbar leftText="" :title="currentModeTitle" :border="true" :safeAreaInsetTop="false" :autoBack="true"
-    @rightClick="jiaojuan1" bgColor="#FFF">
+    @leftClick="back" @rightClick="jiaojuan1" bgColor="#FFF">
     <template #right>
       <text v-if="currentMode === 'exam'">交卷</text>
     </template>
@@ -660,12 +660,19 @@ function selectMode(mode) {
   }
 }
 
-const jiaojuan1 = () => {
+const back = () => {
+  uni.reLaunch({
+    url: '/pages/home/topic/topic'
+  });
+}
 
+const jiaojuan1 = () => {
+  show_jiaojuan.value = true
 }
 
 const jiaojuan2 = () => {
   handleSubmitPaper()
+  show_jiaojuan.value = false
 }
 
 function handleSubmitPaper() {

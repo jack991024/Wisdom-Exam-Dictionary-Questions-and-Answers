@@ -201,7 +201,7 @@ function calculateStatistics(param, questionList) {
   const answeredCorrectly = Object.values(param).filter(item => item.isCorrect).length;
   const notAnswered = totalQuestions - Object.keys(param).length;
   const answeredIncorrectly = totalQuestions - answeredCorrectly - notAnswered;
-  const correctRate = (answeredCorrectly / totalQuestions) * 100;
+  const correctRate = (answeredCorrectly / (answeredCorrectly + answeredIncorrectly)) * 100.00;
   const chapterName = questionList[0].chapter_name;
 
   return {
