@@ -12,7 +12,8 @@
       <u-loading-page :loading="loading" loading-text="loading..."></u-loading-page>
     </view>
     <view class="header-swiper">
-      <u-swiper v-if="swiperLists.length > 0" :list="swiperLists" indicator indicatorMode="dot" circular></u-swiper>
+      <u-swiper v-if="swiperLists.length > 0" :list="swiperLists" indicator indicatorMode="dot" circular
+        @click="naviToBannerView"></u-swiper>
     </view>
 
     <view class="question-menu" v-if="menus.length">
@@ -163,6 +164,12 @@ const onShareAppMessage = (res) => {
     title: '智考典题库',
     path: '/pages/login/login'//分享的页面路径
   }
+}
+
+const naviToBannerView = () => {
+  uni.navigateTo({
+    url: '/pages/home/topic/banner-view'
+  })
 }
 
 function deduplicateOption2() {

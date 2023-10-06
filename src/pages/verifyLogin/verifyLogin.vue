@@ -184,7 +184,13 @@ const submit = () => {
       },
       data: login.value.userInfo,
       success: (response) => {
-        console.log(response.data);
+        if (response.data.code === -1) {
+          uni.showToast({
+            title: "登陆失败",
+            icon: "error"
+          })
+          return;
+        }
         store.commit('updateToken', response.data.data.token)
         let flag = uni.getStorageSync("flag")
         console.log("flag:", flag)

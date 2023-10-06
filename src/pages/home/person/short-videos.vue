@@ -2,16 +2,14 @@
   <view>
     <view class="header">
       <view class="avatar">
-        <up-avatar
-            src="https://vod.zhikaodian.com/6cbdfa1cvodcq1500024941/974781b75576678020665569951/5576678020665571249.jpg"
-            :size="60"></up-avatar>
+        <up-avatar :src="userInfo.avatar" :size="60"></up-avatar>
       </view>
       <view class="info">
         <view class="name">
-          <text>Shinn</text>
+          <text>{{ userInfo.username }}</text>
         </view>
         <view class="xuehao">
-          <text>学号：{{ 12345 }}</text>
+          <text>学号：{{ userInfo.number }}</text>
         </view>
       </view>
     </view>
@@ -22,8 +20,8 @@
 
     <view class="list">
       <!-- 使用 :style 绑定来动态设置背景图 -->
-      <view class="item" v-for="(item,index) in likeList" :key="index"
-            :style="{ backgroundImage: `url(${item.media.cover_url})` }">
+      <view class="item" v-for="(item, index) in likeList" :key="index"
+        :style="{ backgroundImage: `url(${item.media.cover_url})` }">
         <view class="num">{{ 220 }}</view>
       </view>
     </view>
@@ -32,11 +30,12 @@
 
 <script setup>
 import zySegmented from "@/uni_modules/zy-segmented-control/components/zy-segmented-control/zy-segmented-control.vue"
-import {ref} from "vue";
-import {onLoad} from "@dcloudio/uni-app";
-import {useStore} from "vuex";
+import { ref, reactive } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import { useStore } from "vuex";
 
 const store = useStore()
+const userInfo = reactive(uni.getStorageSync("userInfo"));
 
 const list = ref(['赞过', '收藏']);
 const curNow = ref(0);
@@ -125,8 +124,10 @@ onLoad(() => {
 
   .item {
     margin-right: 5rpx;
-    background-size: cover; /* 使背景图填充整个元素 */
-    background-position: center; /* 使背景图居中 */
+    background-size: cover;
+    /* 使背景图填充整个元素 */
+    background-position: center;
+    /* 使背景图居中 */
     width: 232rpx;
     height: 308rpx;
     position: relative;

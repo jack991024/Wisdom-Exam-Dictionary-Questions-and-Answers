@@ -106,9 +106,9 @@
               </view>
             </view>
 
-            <view v-if="false">
+            <view v-if="true">
               <view class="my-note"
-                v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])">
+                v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode==='recite'">
                 <view><text>我的笔记</text></view>
                 <view v-if="myNoteData">
                   <view class="info">
@@ -128,7 +128,7 @@
 
 
                 <view class="question-friend-interaction"
-                  v-if="currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])">
+                  v-if="(currentMode === 'practice' && userAnswers[itemIndex] && (item.qType !== 2 || confirmedAnswers[itemIndex])) || currentMode==='recite'">
                   <view>题友互动</view>
                 </view>
               </view>

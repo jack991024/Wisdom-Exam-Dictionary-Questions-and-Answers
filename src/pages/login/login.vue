@@ -133,6 +133,13 @@ function loginIndex() {
       },
       data: data,
       success: function (response) {
+        if (response.data.code === -1) {
+          uni.showToast({
+            title: "登陆失败",
+            icon: "error"
+          })
+          return;
+        }
         store.commit('updateToken', response.data.data.token)
         let flag = uni.getStorageSync("flag")
         if (flag != "true") {

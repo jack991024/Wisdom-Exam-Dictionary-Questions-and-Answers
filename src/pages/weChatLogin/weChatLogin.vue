@@ -170,6 +170,13 @@ function loginIndex(code) {
       },
       data: data,
       success: function (response) {
+        if (response.data.code === -1) {
+          uni.showToast({
+            title: "登陆失败",
+            icon: "error"
+          })
+          return;
+        }
         store.commit("updateToken", response.data.data.token);
         uni.switchTab({
           url: "/pages/home/classification/classificationMain",
