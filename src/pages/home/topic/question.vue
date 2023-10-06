@@ -1,4 +1,10 @@
 <template>
+  <u-navbar leftText="" :title="currentModeTitle" :border="true" :safeAreaInsetTop="false" :autoBack="true"
+    @rightClick="jiaojuan1" bgColor="#FFF">
+    <template #right>
+      <text v-if="currentMode === 'exam'">交卷</text>
+    </template>
+  </u-navbar>
   <swiper class="swiper-container" :indicator-dots="false" :current="currentIndex" @change="onSwiperChange">
     <swiper-item style="overflow: auto" v-for="(item, index, itemIndex) in questionLists.result" :key="index">
       <scroll-view scroll-y style="height: 100%">
@@ -61,10 +67,10 @@
                 @click="validateAnswer(itemIndex, itemIndex, item, 'true')">
                 确认答案
               </text>
-              <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
+              <!-- <view v-if="currentMode.value === 'exam' && index === questionLists.result.length - 1"
                 class="submit-button-container">
                 <text class="check-answer" @click="handleSubmitPaper">提交试卷</text>
-              </view>
+              </view> -->
             </view>
             <view v-if="currentMode === 'recite'" class="answer">
               <view class="answer">
@@ -224,6 +230,10 @@
       </u-radio-group>
     </view>
   </view>
+
+
+  <u-modal :show="show_jiaojuan" title="" content='是否立即交卷？' :showCancelButton="true" @cancel="show_jiaojuan = false"
+    @confirm="jiaojuan2"></u-modal>
 </template>
 
 <script setup>
@@ -238,6 +248,7 @@ const questionLists = ref([])
 const selectedOptions = reactive({});
 const componentHeight = ref(200); // 新增一个变量来存储组件的高度
 let show = ref(false); // 初始化为未收藏状态
+const show_jiaojuan = ref(false)
 const isPingLun = ref(false)
 let jiandaAnswer = ""
 const isRadioSelected = ref(true)
@@ -320,6 +331,7 @@ const myQuestions = ref([])
 const myNoteData = ref(null);
 onLoad((options) => {
 
+  uni.hideHomeButton()
   myQuestions.value = uni.getStorageSync("myQuestions")
   let chid = options.param
   let data = {
@@ -503,7 +515,7 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
 
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
-          handleSubmitPaper(userAnswers);
+          // handleSubmitPaper(userAnswers);
         }
       },
       fail: (error) => {
@@ -529,7 +541,7 @@ function validateAnswer(questionIndex, optionIndex, item, clickButton) {
 
         // 如果当前模式是“检测模式”并且这是最后一题，则跳转到另一页面
         if (currentMode.value === 'exam' && questionIndex === questionLists.value.result.length - 1) {
-          handleSubmitPaper(userAnswers);
+          // handleSubmitPaper(userAnswers);
         }
       },
       fail: (error) => {
@@ -632,12 +644,28 @@ function changeMode() {
 }
 
 const currentMode = ref('exam');  // 新增，用于存储当前选择的模式，默认exam
+const currentModeTitle = ref('检测模式');  // 新增，用于存储当前选择的模式，默认exam
 
 function selectMode(mode) {
 
   currentMode.value = mode;  // 更新当前模式
   isModeModalOpen.value = false;
   // 在这里添加你的模式切换逻辑...
+  if (mode === 'practice') {
+    currentModeTitle.value = '练习模式'
+  } else if (mode === 'exam') {
+    currentModeTitle.value = '检测模式'
+  } else if (mode === 'recite') {
+    currentModeTitle.value = '背题模式'
+  }
+}
+
+const jiaojuan1 = () => {
+
+}
+
+const jiaojuan2 = () => {
+  handleSubmitPaper()
 }
 
 function handleSubmitPaper() {
@@ -674,6 +702,7 @@ function timestampToDate(timestamp) {
 
   .main {
     overflow-y: auto; // 允许垂直滚动
+    margin-top: 50rpx;
   }
 
   .title-and-count {

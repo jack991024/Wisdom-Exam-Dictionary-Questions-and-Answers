@@ -66,7 +66,7 @@ const jumpQuestion = (item) => {
   } else {
     // 否则跳转到做题页面
     let param = item.chid
-    uni.navigateTo({
+    uni.reLaunch({
       url: '/pages/home/topic/question?param=' + param
     })
   }
