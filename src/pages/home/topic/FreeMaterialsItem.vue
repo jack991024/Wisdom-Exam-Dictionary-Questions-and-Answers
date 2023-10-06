@@ -1,18 +1,18 @@
 <template>
     <view class="header">
         <view class="title">
-            <text>{{ summary.summary.filename }}</text>
+            <text>{{ summary?.summary.filename }}</text>
         </view>
         <view class="detail" :class="{ expanded: isDetailExpanded }">
-            <text>{{ summary.summary.summary_text }}</text>
+            <text>{{ summary?.summary.summary_text }}</text>
         </view>
         <view class="detail-button" @click="toggleDetail">
             <text>{{ isDetailExpanded ? '收起' : '展开' }}</text>
         </view>
         <view class="footer">
-            <view><text>{{ summary.summary.page_num }}页</text></view>
-            <view><text>{{ summary.summary.download_num }}下载</text></view>
-            <view><text>{{ size(summary.summary.size) }}MB</text></view>
+            <view><text>{{ summary?.summary.page_num }}页</text></view>
+            <view><text>{{ summary?.summary.download_num }}下载</text></view>
+            <view><text>{{ size(summary?.summary.size) }}MB</text></view>
         </view>
     </view>
 
@@ -26,12 +26,12 @@
     color: #262626;
     margin-right: 195rpx;">文件预览</text>
             <text style="font-size: 29rpx;
-    color: #898989;">共计4页，预览仅显示前4页</text>
+    color: #898989;">共计{{ summary?.summary.page_num }}页，预览仅显示前4页</text>
         </view>
 
         <view>
             <view class="summary_images">
-                <view v-for="(item, index) in summary.summary_images" :key="index">
+                <view v-for="(item, index) in summary?.summary.summary_images" :key="index">
                     <image :src="item" mode="widthFix" style="margin-left: 75rpx;" />
                 </view>
             </view>
@@ -47,7 +47,7 @@
         </view>
 
         <view>
-            <view class="item" v-for="(item2, index2) in summary.recommend" :key="index2" @click="navi(item2)">
+            <view class="item" v-for="(item2, index2) in summary?.recommend" :key="index2" @click="navi(item2)">
                 <view class="item-body">
                     <view class="image">
                         <image src="./static/freeMaterials/pdf.png" mode="widthFix"
@@ -70,8 +70,17 @@
                         </view>
                     </view>
                 </view>
-               
+
             </view>
+        </view>
+    </view>
+
+    <view class="bottom-nav">
+        <view class="share">
+            <text>分享文档</text>
+        </view>
+        <view class="download" @click="download(summary?.summary.fid)">
+            <text>下载文档</text>
         </view>
     </view>
 </template>
@@ -104,7 +113,7 @@ onLoad((options) => {
         },
         success: (res) => {
             console.log(res.data)
-            summary.value = res.data
+            summary.value = res.data.data
         },
         error: (error) => { }
     })
@@ -113,6 +122,38 @@ onLoad((options) => {
 const size = (size) => {
     return (size / 1024 / 1024).toFixed(2) + ' MB';
 };
+
+const navi = (item2) => {
+    uni.navigateTo({ url: '/pages/home/topic/FreeMaterialsItem?fid=' + item2.fid })
+}
+
+const download = (fid) => {
+    console.log(fid)
+    uni.request({
+        url: 'https://dev.zhikaodian.com/apiV2/resource/download',
+        method: 'POST',
+        header: {
+            "Authorization": store.getters.getToken
+        },
+        data: {
+            fid: fid
+        },
+        success: (res) => {
+            if (res.data.data.url != null && res.data.data.url != '') {
+                uni.navigateTo({
+                    url: '/pages/home/topic/review-file?url=' + res.data.data.url
+                })
+            } else {
+                uni.showToast({
+                    title: '下载失败',
+                    icon: 'error',
+                    duration: 2000
+                })
+            }
+        },
+        error: (err) => { }
+    })
+}
 </script>
 
 <style scoped lang="scss">
@@ -122,10 +163,11 @@ const size = (size) => {
     .title {
         width: 538rpx;
         height: 51rpx;
-        font-size: 36rpx;
+        font-size: 30rpx;
         font-weight: bold;
         color: #262626;
         margin: 29rpx;
+        margin-bottom: 60rpx;
     }
 
     .detail {
@@ -182,6 +224,7 @@ const size = (size) => {
 .recommend {
     .item {
         padding: 10rpx 20rpx;
+        overflow-y: auto;
 
         .item-body {
             height: 135rpx;
@@ -228,6 +271,43 @@ const size = (size) => {
             height: 2rpx;
             border-top: 2rpx solid #E5E5E5; // 使用border-top来创建一个顶部边框
         }
+    }
+}
+
+.bottom-nav {
+    width: 750rpx;
+    height: 159rpx;
+    background: #FFFFFF;
+    border-radius: 0rpx 0rpx 0rpx 0rpx;
+    opacity: 1;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+
+    .share {
+        width: 333rpx;
+        height: 87rpx;
+        background: #FF9957;
+        border-radius: 14rpx 14rpx 14rpx 14rpx;
+        opacity: 1;
+        display: flex;
+        margin: 29rpx;
+        color: #FFF;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .download {
+        width: 333rpx;
+        height: 87rpx;
+        background: #3C7BFB;
+        border-radius: 14rpx 14rpx 14rpx 14rpx;
+        opacity: 1;
+        display: flex;
+        margin: 29rpx;
+        color: #FFF;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>

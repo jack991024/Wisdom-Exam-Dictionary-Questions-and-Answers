@@ -372,7 +372,7 @@
 		{
 			"path": "pages/home/topic/FreeMaterialsItem",
 			"style": {
-				"navigationBarTitleText": "FreeMaterialsItem"
+				"navigationBarTitleText": "文档详情"
 			}
 		},
 		{
@@ -385,6 +385,12 @@
 			"path": "pages/home/person/personInfo/other-login",
 			"style": {
 				"navigationBarTitleText": "其他登录方式"
+			}
+		},
+		{
+			"path": "pages/home/topic/review-file",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		}
 	],

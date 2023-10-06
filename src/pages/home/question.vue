@@ -4,7 +4,7 @@
       <view class="title">
         <text>考试答疑-ChatGPT</text>
       </view>
-      <view class="clear">
+      <view class="clear" @click="clear">
         <text>清空记录</text>
       </view>
     </view>
@@ -15,7 +15,9 @@
           <up-avatar :src="message.type === 'user' ? userImg : assistantImg" size="36"></up-avatar>
         </view>
         <view class="content">
-          <text>{{ message.content }}</text>
+          <view class="text-wrapper">
+            <text>{{ message.content }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -41,7 +43,7 @@ const messages = ref([{ type: 'assistant', content: '您好，我是智考典答
 const inputMessage = ref("");
 const userImg = ref(null)
 const assistantImg = ref("../../../../static/question/avata.png")
-const chatId=ref(null)
+const chatId = ref(null)
 onLoad(() => {
   uni.request({
     url: "https://dev.zhikaodian.com/apiV2/chat/profile",
@@ -53,8 +55,8 @@ onLoad(() => {
       let data = res.data.data
       userImg.value = data.user
     },
-  }) 
-  
+  })
+
   uni.request({
     url: "https://dev.zhikaodian.com/apiV2/chat/newChat",
     method: 'GET',
@@ -113,6 +115,28 @@ const requestChatGPT = (chatId, content) => {
     }
   });
 };
+
+const clear = () => {
+  uni.request({
+    url: "https://dev.zhikaodian.com/apiV2/chat/newChat",
+    method: 'GET',
+    header: {
+      "Authorization": store.getters.getToken
+    },
+    success: (res) => {
+      let data = res.data.data
+      chatId.value = data.chat_id
+      messages.value = [{ type: 'assistant', content: '您好，我是智考典答疑小助手“小智”，任何考试有关的内容都可以向我咨询哦～' }]
+
+      uni.showToast({
+        title: '清空成功',
+        icon: 'success',
+        duration: 2000
+      })
+    }
+  })
+
+}
 </script>
 
 <style lang="scss">
@@ -167,13 +191,30 @@ const requestChatGPT = (chatId, content) => {
     align-items: center;
   }
 
-  .avatar {
-    margin-left: 28rpx;
-    margin-right: 25rpx;
+  .assistant {
+    .avatar {
+      margin-left: 28rpx;
+      margin-right: 25rpx;
+    }
+
+    .content {
+      margin-left: 28rpx;
+    }
   }
 
-  .content {
-    margin-left: 28rpx;
+  .user {
+    flex-direction: row-reverse; // 这会将子元素的排列顺序反转
+
+    .avatar {
+      margin-left: 25rpx; // 调整到右边框的距离
+      margin-right: 28rpx;
+    }
+
+    .content {
+      .text-wrapper {
+        margin-right: 25rpx;
+      }
+    }
   }
 }
 
