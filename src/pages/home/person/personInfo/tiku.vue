@@ -11,15 +11,21 @@
         <text class="go-to-learning-button">点击学习</text>
       </view>
     </view>
+
+    <view class="loading">
+      <u-loading-page :loading="loading" loading-text="loading..."></u-loading-page>
+    </view>
   </view>
 </template>
 
 <script setup>
-import {reactive} from 'vue';
-import {onLoad} from "@dcloudio/uni-app";
-import {useStore} from "vuex";
+import { reactive } from 'vue';
+import { onLoad } from "@dcloudio/uni-app";
+import { useStore } from "vuex";
+import { ref } from 'vue';
 
 const store = useStore()
+const loading = ref(true)
 const getProgress = (correct, total) => {
   return correct / total === 0 ? '未学习' : `${((correct / total) * 100).toFixed(2)}%`;
 };
@@ -28,7 +34,7 @@ let data = reactive([]);
 
 const goToLearn = (item) => {
   store.commit('updateTiKu', JSON.stringify(item))
-  uni.switchTab({url: '/pages/home/topic/topic'})
+  uni.switchTab({ url: '/pages/home/topic/topic' })
 };
 
 const loadQuestionBanks = () => {
@@ -44,7 +50,7 @@ const loadQuestionBanks = () => {
         data.length = 0; // 首先清空数组
         res.data.data.forEach(item => data.push(item)); // 然后将新数据推送到数组中
       }
-
+      loading.value = false
     },
     fail: (err) => {
       console.log('error', err);
@@ -64,8 +70,10 @@ onLoad(() => {
   align-items: flex-start;
   padding: 10px;
   background-color: #f0f0f0;
-  min-height: 100vh; /* 修改此行 */
-  overflow-y: auto; /* 允许垂直滚动 */
+  min-height: 100vh;
+  /* 修改此行 */
+  overflow-y: auto;
+  /* 允许垂直滚动 */
 }
 
 .tab {

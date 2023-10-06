@@ -5,7 +5,9 @@
       <text>提交</text>
     </template>
   </u-navbar>
-
+  <view class="loading">
+    <u-loading-page :loading="loading" loading-text="loading..."></u-loading-page>
+  </view>
   <view class="body">
     <u-cell-group>
       <checkbox-group @change="handleCheckboxChange">
@@ -32,8 +34,11 @@ const checked = ref(false)
 
 const checkedItems = ref([]);
 
+const loading = ref(true)
+
 let items = ref([]);
 onShow(() => {
+  console.time('global')
   uni.hideHomeButton();
 
   uni.request({
@@ -48,12 +53,15 @@ onShow(() => {
         items.length = 0; // 首先清空数组
         res.data.data.forEach(item => items.value.push(item)); // 然后将新数据推送到数组中
       }
-
+      loading.value = false
     },
     fail: (err) => {
       console.log('error', err);
     }
   });
+
+  console.timeEnd('global')
+
 })
 
 const naviToTopic = () => {

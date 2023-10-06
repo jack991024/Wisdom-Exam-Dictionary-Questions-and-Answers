@@ -8,7 +8,9 @@
         </zb-dropdown-menu>
       </view>
     </view>
-
+    <view class="loading">
+      <u-loading-page :loading="loading" loading-text="loading..."></u-loading-page>
+    </view>
     <view class="header-swiper">
       <u-swiper v-if="swiperLists.length > 0" :list="swiperLists" indicator indicatorMode="dot" circular></u-swiper>
     </view>
@@ -130,6 +132,7 @@ const store = useStore()
 const activePanels = ref([]); // 默认只有面板1展开
 const menus = ref([]);
 let tkid = ref("")
+const loading = ref(true)
 
 const panelContentMaxHeight = computed(() => {
   return activePanels.value.includes('panel1') ? '100vh' : '0';
@@ -331,6 +334,7 @@ const loadQuestionBanks = () => {
           tkid.value = value2.value
         }
       }
+      loading.value = false
     },
     fail: (err) => {
       console.log('error', err);
@@ -377,7 +381,6 @@ const loadState = () => {
           if (questionNums.value.progress === 0) {
             questionNums.value.progress = "0"
           }
-          console.log("首页values,", questionNums.value)
 
           doneRate.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2) + '%';
           done.value = ((questionNums.value.done / questionNums.value.total) * 100).toFixed(2);
