@@ -134,7 +134,7 @@
               </view>
               <view style="display: flex;
     justify-content: center;">
-                <view class="button" @click="isPingLun = true">
+                <view class="button" @click="isPingLun = true" v-if="myNoteData.length === 0">
                   <text>添加笔记</text>
                 </view>
               </view>
@@ -269,6 +269,12 @@ const fabiaopinglun = () => {
     },
     success: (res) => {
       console.log(res)
+      // 获取新的chid和qid
+      const chid = questionLists.value.result[currentIndex.value].chid;
+      const qid = questionLists.value.result[currentIndex.value].qid;
+
+      // 重新请求笔记数据
+      fetchMyNoteData(chid, qid);
     },
     error: (error) => { }
   })
@@ -400,6 +406,7 @@ function onSwiperChange(event) {
   const chid = questionLists.value.result[currentIndex.value].chid;
   const qid = questionLists.value.result[currentIndex.value].qid;
 
+  console.log(currentIndex.value, chid, qid)
   // 重新请求笔记数据
   fetchMyNoteData(chid, qid);
 }
@@ -417,10 +424,10 @@ function fetchMyNoteData(chid, qid) {
       qid: qid
     },
     success: (response) => {
-      console.log(1)
+      myNoteData.value = {};
       if (response.data && response.data.data && response.data.data.my) {
-        console.log(2)
         myNoteData.value = response.data.data.my;
+        console.log(" myNoteData.value", myNoteData.value)
       }
     },
     fail: (error) => {
@@ -887,6 +894,7 @@ function timestampToDate(timestamp) {
       font-weight: bold;
       color: #262626;
       height: 45rpx;
+      margin-bottom: 22rpx;
     }
 
     .info {
