@@ -68,7 +68,7 @@
         </view>
       </view>
       <view class="shiyong" @click="shiyong">点击试用</view>
-      <view class="buy">立即购买</view>
+      <view class="buy" @click="goumai">立即购买</view>
     </view>
 
     <u-modal :show="showModal" :showConfirmButton="false" :showCancelButton="false" width="507.25rpx" height="362.32rpx">
@@ -187,6 +187,14 @@ const shiyong = () => {
     }
   });
 
+}
+
+const goumai = () => {
+  uni.showToast({
+    title: "请联系管理员试用激活码激活题库",
+    icon: 'info',
+    duration: 2000
+  })
 }
 
 const kefu0 = () => {
